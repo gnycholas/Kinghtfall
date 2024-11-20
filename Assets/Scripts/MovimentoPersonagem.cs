@@ -11,10 +11,10 @@ public class MovimentoPersonagem : MonoBehaviour
 
     private bool estaOrando;
 
-    // Invent·rio do personagem
+    // Invent√°rio do personagem
     public List<string> inventario = new List<string>(); // Lista simples armazenando nomes de itens
 
-    // Start È chamado antes da primeira atualizaÁ„o
+    // Start √© chamado antes da primeira atualiza√ß√£o
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -24,14 +24,14 @@ public class MovimentoPersonagem : MonoBehaviour
         estaOrando = false;
     }
 
-    // MÈtodo para adicionar itens ao invent·rio
+    // M√©todo para adicionar itens ao invent√°rio
     public void AdicionarAoInventario(string nomeItem)
     {
         inventario.Add(nomeItem);
-        Debug.Log("Item adicionado ao invent·rio: " + nomeItem);
+        Debug.Log("Item adicionado ao invent√°rio: " + nomeItem);
     }
 
-    // Update È chamado uma vez por frame
+    // Update √© chamado uma vez por frame
     void Update()
     {
         float movimentoHorizontal = Input.GetAxis("Horizontal");
@@ -42,17 +42,17 @@ public class MovimentoPersonagem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
         {
             estaOrando = true;
-        }
-        else if (Input.GetKeyUp(KeyCode.C))
+            animator.SetBool("Orando", true);
         {
             estaOrando = false;
+            animator.SetBool("Orando", false);
         }
 
         if (!estaOrando)
         {
-            if (movimento != Vector3.zero) // Se est· movimentando...
+            if (movimento != Vector3.zero) // Se est√° movimentando...
             {
-                if (Input.GetKey(KeyCode.LeftShift)) // Se est· pressionando Shift...
+                if (Input.GetKey(KeyCode.LeftShift)) // Se est√° pressionando Shift...
                 {
                     velocidade = 4f; // Velocidade de corrida
                 }
@@ -73,7 +73,7 @@ public class MovimentoPersonagem : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.I))
             {
-                Debug.Log("Invent·rio:");
+                Debug.Log("Invent√°rio:");
                 foreach (string item in inventario)
                 {
                     Debug.Log("- " + item);
@@ -82,11 +82,11 @@ public class MovimentoPersonagem : MonoBehaviour
 
             characterController.Move(gravidade * Time.deltaTime); // Aplica gravidade
 
-            // Atualiza animaÁıes
+            // Atualiza anima√ß√µes
             animator.SetBool("Parado", velocidade <= 0f);
             animator.SetBool("Andando", velocidade > 0f && velocidade <= 2f);
             animator.SetBool("Correndo", velocidade > 2f);
         }
-       // Debug.Log("Est· orando: " + estaOrando);
+       // Debug.Log("Est√° orando: " + estaOrando);
     }
 }
