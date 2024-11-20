@@ -32,9 +32,11 @@ public class MovimentoPersonagem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
         {
             estaOrando = true;
+            animator.SetBool("Orando", true);
         } else if (Input.GetKeyUp(KeyCode.C))
         {
             estaOrando = false;
+            animator.SetBool("Orando", false);
         }
 
         if (!estaOrando)
