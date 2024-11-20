@@ -1,10 +1,11 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ItemColetavel : MonoBehaviour
 {
     private bool jogadorPerto = false;
     public GameObject mensagemUI; // Referência à mensagem UI
+
+    private MovimentoPersonagem playerMovement; // Referência ao script do personagem
 
     void Start()
     {
@@ -20,6 +21,9 @@ public class ItemColetavel : MonoBehaviour
             jogadorPerto = true;
             if (mensagemUI != null)
                 mensagemUI.SetActive(true); // Mostra a mensagem
+
+            // Obtém a referência ao script do personagem
+            playerMovement = other.GetComponent<MovimentoPersonagem>();
         }
     }
 
@@ -30,6 +34,8 @@ public class ItemColetavel : MonoBehaviour
             jogadorPerto = false;
             if (mensagemUI != null)
                 mensagemUI.SetActive(false); // Oculta a mensagem
+
+            playerMovement = null; // Remove a referência ao personagem
         }
     }
 
@@ -37,8 +43,15 @@ public class ItemColetavel : MonoBehaviour
     {
         if (jogadorPerto && Input.GetKeyDown(KeyCode.E))
         {
+            if (playerMovement != null)
+            {
+                // Adiciona o item ao inventário do personagem
+                string nomeItem = gameObject.name; // Usa o nome do GameObject como identificador
+                playerMovement.AdicionarAoInventario(nomeItem);
+            }
+
             // Ação ao coletar o item
-            Debug.Log("Item coletado!");
+            Debug.Log("Item coletado: " + gameObject.name);
 
             // Destrói o item
             Destroy(gameObject);
