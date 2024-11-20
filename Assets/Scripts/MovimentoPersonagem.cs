@@ -1,17 +1,20 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class MovimentoPersonagem : MonoBehaviour
 {
-
     private CharacterController characterController;
     private Animator animator;
 
     private float velocidade;
-    private Vector3 gravidade = new Vector3 (0f, -9.81f, 0f);
+    private Vector3 gravidade = new Vector3(0f, -9.81f, 0f);
 
     private bool estaOrando;
 
-    // Start is called before the first frame update
+    // Invent√°rio do personagem
+    public List<string> inventario = new List<string>(); // Lista simples armazenando nomes de itens
+
+    // Start √© chamado antes da primeira atualiza√ß√£o
     void Start()
     {
         characterController = GetComponent<CharacterController>();
@@ -21,19 +24,25 @@ public class MovimentoPersonagem : MonoBehaviour
         estaOrando = false;
     }
 
-    // Update is called once per frame
+    // M√©todo para adicionar itens ao invent√°rio
+    public void AdicionarAoInventario(string nomeItem)
+    {
+        inventario.Add(nomeItem);
+        Debug.Log("Item adicionado ao invent√°rio: " + nomeItem);
+    }
+
+    // Update √© chamado uma vez por frame
     void Update()
     {
         float movimentoHorizontal = Input.GetAxis("Horizontal");
         float movimentoVertical = Input.GetAxis("Vertical");
 
-        Vector3 movimento = new Vector3 (movimentoHorizontal, 0, movimentoVertical);
+        Vector3 movimento = new Vector3(movimentoHorizontal, 0, movimentoVertical);
 
         if (Input.GetKeyDown(KeyCode.C))
         {
             estaOrando = true;
             animator.SetBool("Orando", true);
-        } else if (Input.GetKeyUp(KeyCode.C))
         {
             estaOrando = false;
             animator.SetBool("Orando", false);
@@ -41,33 +50,43 @@ public class MovimentoPersonagem : MonoBehaviour
 
         if (!estaOrando)
         {
-            if (movimento != Vector3.zero) // Caso esteja pressionando algum bot„o de movimentaÁ„o...
+            if (movimento != Vector3.zero) // Se est√° movimentando...
             {
-                if (Input.GetKey(KeyCode.LeftShift)) // Se estiver pressionando a tecla shift...
+                if (Input.GetKey(KeyCode.LeftShift)) // Se est√° pressionando Shift...
                 {
-                    velocidade = 4f; // Aumenta a velocidade para a corrida...
+                    velocidade = 4f; // Velocidade de corrida
                 }
                 else
                 {
-                    velocidade = 2f; // Do contr·rio, mantÈm a velocidade de caminhada...
+                    velocidade = 2f; // Velocidade de caminhada
                 }
 
-                characterController.Move(movimento.normalized * velocidade * Time.deltaTime); // Invoca o componente Character controller para mover o personagem, conforme a direÁ„o e velocidade atual...
+                characterController.Move(movimento.normalized * velocidade * Time.deltaTime); // Move o personagem
 
                 Quaternion rotacaoAlvo = Quaternion.LookRotation(movimento);
-                transform.rotation = Quaternion.Slerp(transform.rotation, rotacaoAlvo, Time.deltaTime * 10f); // Altera a direÁ„o que o personagem est· olhando...
+                transform.rotation = Quaternion.Slerp(transform.rotation, rotacaoAlvo, Time.deltaTime * 10f); // Rotaciona o personagem
             }
             else
             {
-                velocidade = 0f; // Caso n„o esteja pressionando nenhum bot„o de movimentaÁ„o, ent„o sua velocidade È zero...
+                velocidade = 0f; // Sem movimento
             }
 
-            characterController.Move(gravidade * Time.deltaTime); // Aplica a gravidade...
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                Debug.Log("Invent√°rio:");
+                foreach (string item in inventario)
+                {
+                    Debug.Log("- " + item);
+                }
+            }
 
+            characterController.Move(gravidade * Time.deltaTime); // Aplica gravidade
+
+            // Atualiza anima√ß√µes
             animator.SetBool("Parado", velocidade <= 0f);
             animator.SetBool("Andando", velocidade > 0f && velocidade <= 2f);
             animator.SetBool("Correndo", velocidade > 2f);
         }
-        Debug.Log(estaOrando);
+       // Debug.Log("Est√° orando: " + estaOrando);
     }
 }
