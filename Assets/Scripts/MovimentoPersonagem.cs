@@ -39,10 +39,22 @@ public class MovimentoPersonagem : MonoBehaviour
 
         Vector3 movimento = new Vector3(movimentoHorizontal, 0, movimentoVertical);
 
+        characterController.Move(gravidade * Time.deltaTime); // Aplica gravidade
+
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Debug.Log("Inventário:");
+            foreach (string item in inventario)
+            {
+                Debug.Log("- " + item);
+            }
+        }
+
         if (Input.GetKeyDown(KeyCode.C))
         {
             estaOrando = true;
             animator.SetBool("Orando", true);
+        } else if (Input.GetKeyUp(KeyCode.C))
         {
             estaOrando = false;
             animator.SetBool("Orando", false);
@@ -71,22 +83,11 @@ public class MovimentoPersonagem : MonoBehaviour
                 velocidade = 0f; // Sem movimento
             }
 
-            if (Input.GetKeyDown(KeyCode.I))
-            {
-                Debug.Log("Inventário:");
-                foreach (string item in inventario)
-                {
-                    Debug.Log("- " + item);
-                }
-            }
-
-            characterController.Move(gravidade * Time.deltaTime); // Aplica gravidade
-
             // Atualiza animações
             animator.SetBool("Parado", velocidade <= 0f);
             animator.SetBool("Andando", velocidade > 0f && velocidade <= 2f);
             animator.SetBool("Correndo", velocidade > 2f);
         }
-       // Debug.Log("Está orando: " + estaOrando);
+        // Debug.Log("Está orando: " + estaOrando);
     }
 }
