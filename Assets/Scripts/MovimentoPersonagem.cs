@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections; //TODO: Avaliar mudança para a Unity.Collection;
 
 public class MovimentoPersonagem : MonoBehaviour
 {
@@ -10,6 +12,11 @@ public class MovimentoPersonagem : MonoBehaviour
     private Vector3 gravidade = new Vector3(0f, -9.81f, 0f);
 
     private bool estaOrando;
+
+    [SerializeField] public Image staminaBar;
+    [SerializeField] public float stamina, maxStamina, runCost, chargeRate;
+
+    private Coroutine recharge;
 
     // Inventário do personagem
     public List<string> inventario = new List<string>(); // Lista simples armazenando nomes de itens
@@ -64,9 +71,16 @@ public class MovimentoPersonagem : MonoBehaviour
         {
             if (movimento != Vector3.zero) // Se está movimentando...
             {
-                if (Input.GetKey(KeyCode.LeftShift)) // Se está pressionando Shift...
+                if (Input.GetKey(KeyCode.LeftShift) && stamina > 0f) // Se está pressionando Shift...
                 {
                     velocidade = 4f; // Velocidade de corrida
+
+                    stamina -= runCost * Time.deltaTime; // Consome a estamina ao correr...
+                    if (stamina < 0) stamina = 0;
+                    staminaBar.fillAmount = stamina / maxStamina;
+
+                    if (recharge != null) StopCoroutine(recharge); // Garante que a barra aguarde um segundo para que recarregue e que apenas uma corrotina seja executada por vez...
+                    recharge = StartCoroutine(rechargeStamina());
                 }
                 else
                 {
@@ -88,6 +102,18 @@ public class MovimentoPersonagem : MonoBehaviour
             animator.SetBool("Andando", velocidade > 0f && velocidade <= 2f);
             animator.SetBool("Correndo", velocidade > 2f);
         }
-        // Debug.Log("Está orando: " + estaOrando);
+    }
+
+    private IEnumerator rechargeStamina()
+    {
+        yield return new WaitForSeconds(1f);
+
+        while (stamina < maxStamina)
+        {
+            stamina += chargeRate / 10f;
+            if (stamina > maxStamina) stamina = maxStamina;
+            staminaBar.fillAmount = stamina / maxStamina;
+            yield return new WaitForSeconds(.1f);
+        }
     }
 }
