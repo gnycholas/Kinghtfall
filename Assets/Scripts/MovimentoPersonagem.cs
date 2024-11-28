@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using System.Collections; //TODO: Avaliar mudança para a Unity.Collection;
+using System.Collections;
+using System.Runtime.CompilerServices; //TODO: Avaliar mudança para a Unity.Collection;
 
 public class MovimentoPersonagem : MonoBehaviour
 {
@@ -117,3 +118,4 @@ public class MovimentoPersonagem : MonoBehaviour
         }
     }
 }
+
