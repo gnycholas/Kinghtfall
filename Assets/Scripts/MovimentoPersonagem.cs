@@ -17,7 +17,9 @@ public class MovimentoPersonagem : MonoBehaviour
     [SerializeField] public Image staminaBar;
     [SerializeField] public float stamina, maxStamina, runCost, chargeRate;
     [SerializeField] private AudioSource passosAudioSource;
-    [SerializeField] private AudioClip[] passosAudioClips; 
+    [SerializeField] private AudioClip[] passosAudioClips;
+    [SerializeField] private AudioSource correrAudioSource;
+    [SerializeField] private AudioClip[] correrAudioClips; 
 
     private Coroutine recharge;
 
@@ -124,6 +126,15 @@ public class MovimentoPersonagem : MonoBehaviour
     {
        int index = Random.Range(0, passosAudioClips.Length);
        passosAudioSource.PlayOneShot(passosAudioClips[index]);
+    }
+
+    private void RunPassos()
+    {
+        if (correrAudioClips.Length > 0)
+        {
+            int index = Random.Range(0, correrAudioClips.Length);
+            correrAudioSource.PlayOneShot(correrAudioClips[index]);
+        }
     }
 }
 
