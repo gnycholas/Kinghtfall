@@ -531,6 +531,38 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 65507879ee055e648b1de3581c284cca, type: 3}
   - {fileID: 8300000, guid: 8a2c7093236272043805ca942d893d01, type: 3}
   - {fileID: 8300000, guid: 5e0fe368d9a158a46b0fe96e660e78cc, type: 3}
+  correrAudioSource: {fileID: 157121391}
+  correrAudioClips:
+  - {fileID: 8300000, guid: b25225c72201cd740b16b95b86d57940, type: 3}
+  - {fileID: 8300000, guid: 5e8e6e435e65fe146b588b8a9d2df461, type: 3}
+  - {fileID: 8300000, guid: 8900ae4b297a017448ddb78ea0c2d4da, type: 3}
+  - {fileID: 8300000, guid: be6f9c5983062b9488c5423a7e1fd1e0, type: 3}
+  - {fileID: 8300000, guid: 2244aa424da7d2f439f4c53fa73e8b53, type: 3}
+  - {fileID: 8300000, guid: 2c7ab9bda8ff6364ba31cc57a90a16d5, type: 3}
+  - {fileID: 8300000, guid: b16b005ddc0977b4aa402b5abce3205f, type: 3}
+  - {fileID: 8300000, guid: 150e70d1ee30a0547ab9ded90647ad8d, type: 3}
+  - {fileID: 8300000, guid: afe5e23d02afb5142bc95bacc1e287c0, type: 3}
+  - {fileID: 8300000, guid: f7c73eb9b5b8af24b87031b591566444, type: 3}
+  - {fileID: 8300000, guid: 52c5e1808bea0b34e8abeab31591f4cc, type: 3}
+  - {fileID: 8300000, guid: 520f55c41638a0d408571ddf515810d0, type: 3}
+  - {fileID: 8300000, guid: 9a47b64b8d432b94eb7317d268127b1d, type: 3}
+  - {fileID: 8300000, guid: e2b868994c062864eaa867681aeac0d8, type: 3}
+  - {fileID: 8300000, guid: 034986a81cc0be546a288ff268b8783e, type: 3}
+  - {fileID: 8300000, guid: 3e299b9129329f24692bb63f57f33d19, type: 3}
+  - {fileID: 8300000, guid: 38f0c96f5fc9ad54bb7f70129602e268, type: 3}
+  - {fileID: 8300000, guid: 72b37684ac7a413499d259a0a9be50e6, type: 3}
+  - {fileID: 8300000, guid: 5da9a1fac751fd544933656ba7cdb367, type: 3}
+  - {fileID: 8300000, guid: 83e12fcd809c9444192c377fe18a65e5, type: 3}
+  - {fileID: 8300000, guid: 6056a660bb0897e4ea25a31889075437, type: 3}
+  - {fileID: 8300000, guid: af104ebdf73bf7a4ba6013021dd458cb, type: 3}
+  - {fileID: 8300000, guid: e968240fec458e24a862c16541a528c6, type: 3}
+  - {fileID: 8300000, guid: 72854b6a8fde5e54eb8ae2eb10155f45, type: 3}
+  - {fileID: 8300000, guid: 22dffeeb60f8846499a8c08a2c0e6f80, type: 3}
+  - {fileID: 8300000, guid: 642f9eb7b8ea3f14e9fc48dff8f8e34b, type: 3}
+  - {fileID: 8300000, guid: 90754431c63071d48b2bfa8dc2472b9d, type: 3}
+  - {fileID: 8300000, guid: d51df139d4e50794993d2130348b08d9, type: 3}
+  - {fileID: 8300000, guid: 39ca7e88dc461e8458d02a2284708c0d, type: 3}
+  - {fileID: 8300000, guid: d772d1b334ef5f148bf1308d5fb3e4b0, type: 3}
   inventario: []
 --- !u!4 &79064170 stripped
 Transform:
@@ -761,6 +793,134 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1650148350}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &157121389
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 157121390}
+  - component: {fileID: 157121391}
+  m_Layer: 0
+  m_Name: SonsCorrida
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &157121390
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157121389}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 79064170}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &157121391
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 157121389}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 10
+  MaxDistance: 30
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &203752500
 GameObject:
   m_ObjectHideFlags: 0
@@ -2513,6 +2673,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1398359282}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: ab8fd0cd09c9c5542871a135a46bc550,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 157121390}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: ab8fd0cd09c9c5542871a135a46bc550,
         type: 3}
@@ -5134,7 +5298,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 9a7f88af3e25b95459238835590169bd, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.6
   m_Pitch: 1
   Loop: 1
   Mute: 0
