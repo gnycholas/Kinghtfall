@@ -1,26 +1,34 @@
 using UnityEngine;
 using Cinemachine;
 
-public class CameraSwitcher : MonoBehaviour
+public class CameraTrigger : MonoBehaviour
 {
-    public CinemachineVirtualCamera cameraParaAtivar;
-    public CinemachineVirtualCamera cameraParaDesativar;
+    [SerializeField] private CinemachineVirtualCamera targetCamera;
+    [SerializeField] private int priorityIncrease = 10;
 
-    void OnTriggerEnter(Collider other)
+    private int originalPriority;
+
+    private void Start()
     {
-        if (other.CompareTag("Player"))
+        if (targetCamera != null)
         {
-            cameraParaAtivar.Priority = 15;
-            cameraParaDesativar.Priority = 5;
+            originalPriority = targetCamera.Priority;
         }
     }
 
-    void OnTriggerExit(Collider other)
+    private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && targetCamera != null)
         {
-            cameraParaAtivar.Priority = 5;
-            cameraParaDesativar.Priority = 15;
+            targetCamera.Priority += priorityIncrease;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player") && targetCamera != null)
+        {
+            targetCamera.Priority = originalPriority;
         }
     }
 }
