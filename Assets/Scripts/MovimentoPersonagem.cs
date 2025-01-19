@@ -12,8 +12,6 @@ public class MovimentoPersonagem : MonoBehaviour
     private float velocidade;
     private Vector3 gravidade = new Vector3(0f, -9.81f, 0f);
 
-    private bool estaOrando;
-
     [SerializeField] public Image staminaBar;
     [SerializeField] public float stamina, maxStamina, runCost, chargeRate;
     [SerializeField] private AudioSource passosAudioSource;
@@ -26,6 +24,13 @@ public class MovimentoPersonagem : MonoBehaviour
     // Inventário do personagem
     public List<string> inventario = new List<string>(); // Lista simples armazenando nomes de itens
 
+    // Método para adicionar itens ao inventário
+    public void AdicionarAoInventario(string nomeItem)
+    {
+        inventario.Add(nomeItem);
+        Debug.Log("Item adicionado ao inventário: " + nomeItem);
+    }
+
     // Start é chamado antes da primeira atualização
     void Start()
     {
@@ -33,14 +38,6 @@ public class MovimentoPersonagem : MonoBehaviour
         animator = GetComponent<Animator>();
 
         velocidade = 0f;
-        estaOrando = false;
-    }
-
-    // Método para adicionar itens ao inventário
-    public void AdicionarAoInventario(string nomeItem)
-    {
-        inventario.Add(nomeItem);
-        Debug.Log("Item adicionado ao inventário: " + nomeItem);
     }
 
     // Update é chamado uma vez por frame
@@ -62,51 +59,38 @@ public class MovimentoPersonagem : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.C))
+        if (movimento != Vector3.zero) // Se está movimentando...
         {
-            estaOrando = true;
-            animator.SetBool("Orando", true);
-        } else if (Input.GetKeyUp(KeyCode.C))
-        {
-            estaOrando = false;
-            animator.SetBool("Orando", false);
-        }
-
-        if (!estaOrando)
-        {
-            if (movimento != Vector3.zero) // Se está movimentando...
+            if (Input.GetKey(KeyCode.LeftShift) && stamina > 0f) // Se está pressionando Shift...
             {
-                if (Input.GetKey(KeyCode.LeftShift) && stamina > 0f) // Se está pressionando Shift...
-                {
-                    velocidade = 4f; // Velocidade de corrida
+                velocidade = 4f; // Velocidade de corrida
 
-                    stamina -= runCost * Time.deltaTime; // Consome a estamina ao correr...
-                    if (stamina < 0) stamina = 0;
-                    staminaBar.fillAmount = stamina / maxStamina;
+                stamina -= runCost * Time.deltaTime; // Consome a estamina ao correr...
+                if (stamina < 0) stamina = 0;
+                staminaBar.fillAmount = stamina / maxStamina;
 
-                    if (recharge != null) StopCoroutine(recharge); // Garante que a barra aguarde um segundo para que recarregue e que apenas uma corrotina seja executada por vez...
-                    recharge = StartCoroutine(rechargeStamina());
-                }
-                else
-                {
-                    velocidade = 2f; // Velocidade de caminhada
-                }
-
-                characterController.Move(movimento.normalized * velocidade * Time.deltaTime); // Move o personagem
-
-                Quaternion rotacaoAlvo = Quaternion.LookRotation(movimento);
-                transform.rotation = Quaternion.Slerp(transform.rotation, rotacaoAlvo, Time.deltaTime * 10f); // Rotaciona o personagem
+                if (recharge != null) StopCoroutine(recharge); // Garante que a barra aguarde um segundo para que recarregue e que apenas uma corrotina seja executada por vez...
+                recharge = StartCoroutine(rechargeStamina());
             }
             else
             {
-                velocidade = 0f; // Sem movimento
+                velocidade = 2f; // Velocidade de caminhada
             }
 
-            // Atualiza animações
-            animator.SetBool("Parado", velocidade <= 0f);
-            animator.SetBool("Andando", velocidade > 0f && velocidade <= 2f);
-            animator.SetBool("Correndo", velocidade > 2f);
+            characterController.Move(movimento.normalized * velocidade * Time.deltaTime); // Move o personagem
+
+            Quaternion rotacaoAlvo = Quaternion.LookRotation(movimento);
+            transform.rotation = Quaternion.Slerp(transform.rotation, rotacaoAlvo, Time.deltaTime * 10f); // Rotaciona o personagem
         }
+        else
+        {
+            velocidade = 0f; // Sem movimento
+        }
+
+        // Atualiza animações
+        animator.SetBool("Parado", velocidade <= 0f);
+        animator.SetBool("Andando", velocidade > 0f && velocidade <= 2f);
+        animator.SetBool("Correndo", velocidade > 2f);
     }
 
     private IEnumerator rechargeStamina()
