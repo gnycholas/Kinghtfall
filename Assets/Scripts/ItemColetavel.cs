@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ItemColetavel : MonoBehaviour
@@ -5,24 +6,25 @@ public class ItemColetavel : MonoBehaviour
     private bool jogadorPerto = false;
     public GameObject mensagemUI; // Referência à mensagem UI
 
-    private MovimentoPersonagem playerMovement; // Referência ao script do personagem
+    private MovimentoPersonagem playerMovement; // Referencia ao script do personagem
 
     void Start()
     {
-        // Garante que a mensagem está oculta no início
+        // Garante que a mensagem esta oculta no início
         if (mensagemUI != null)
             mensagemUI.SetActive(false);
+
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player")) 
         {
             jogadorPerto = true;
             if (mensagemUI != null)
                 mensagemUI.SetActive(true); // Mostra a mensagem
 
-            // Obtém a referência ao script do personagem
+            // Obtém a referencia ao script do personagem
             playerMovement = other.GetComponent<MovimentoPersonagem>();
         }
     }
