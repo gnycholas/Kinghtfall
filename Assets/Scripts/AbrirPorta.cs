@@ -5,7 +5,7 @@ using UnityEngine;
 public class AbrirPorta : MonoBehaviour
 {
     [SerializeField] private Animator animatorPorta;
-    [SerializeField] private string itemNecessario = "key";
+    [SerializeField] private string itemNecessario;
 
     private bool jogadorPerto = false;
     private MovimentoPersonagem playerMovement;
