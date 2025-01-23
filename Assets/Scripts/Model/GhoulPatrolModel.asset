@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a21c50c3a39c21848921c592fa5b67f1, type: 3}
   m_Name: GhoulPatrolModel
   m_EditorClassIdentifier: 
-  walkSpeed: 2
-  idleTime: 2
-  minRandomDistance: 3
+  walkSpeed: 1.5
+  idleTime: 8
+  minRandomDistance: 6
   maxRandomDistance: 8
   patrolCenter: {fileID: 0}

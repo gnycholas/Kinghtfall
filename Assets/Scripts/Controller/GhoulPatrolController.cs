@@ -45,6 +45,7 @@ public class GhoulPatrolController : MonoBehaviour
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
             // Inicia a lógica de ficar parado
+            Debug.Log("Estou em Idle (Chamando Idle no Método Update)");
             StartCoroutine(IdleRoutine());
         }
     }
@@ -67,6 +68,7 @@ public class GhoulPatrolController : MonoBehaviour
         if (NavMesh.SamplePosition(randomDirection, out hit, model.maxRandomDistance, NavMesh.AllAreas))
         {
             // Se encontrou uma posição válida, manda o agente para lá
+            Debug.Log("Encontrei uma posíção em " + randomDirection + "... Vou me movimentar.");
             _isIdle = false;
             agent.SetDestination(hit.position);
 
@@ -76,6 +78,7 @@ public class GhoulPatrolController : MonoBehaviour
         else
         {
             // Se não encontrou, tenta novamente (cuidado para não cair em loop infinito)
+            Debug.Log("Estou buscando uma nova direção...");
             ChooseNewDestination();
         }
     }
