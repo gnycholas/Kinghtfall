@@ -2,100 +2,239 @@ using UnityEngine;
 using UnityEngine.AI;
 using System.Collections;
 
+public enum GhoulState
+{
+    Patrol,     // Patrulhando aleatoriamente
+    Idle,       // Parado esperando algum tempo
+    Screaming,  // Em animação de grito antes de correr
+    Chasing     // Correndo atrás do jogador
+}
+
 public class GhoulPatrolController : MonoBehaviour
 {
     [Header("Referências MVC")]
-    [SerializeField] private GhoulPatrolModel model; // ScriptableObject com configs
-    [SerializeField] private GhoulPatrolView view;   // Controla as animações
-    [SerializeField] private NavMeshAgent agent;     // Referência ao NavMeshAgent
+    [SerializeField] private GhoulPatrolModel model;
+    // Uma property para acessar de fora
+    public GhoulPatrolModel Model => model;
 
-    private bool _isIdle;                            // Flag para indicar se está parado
+    [SerializeField] private GhoulPatrolView view;
+    [SerializeField] private NavMeshAgent agent;
 
-    // Se quiser limitar a patrulha a uma área, você pode armazenar aqui a pos. inicial
+    [Header("Referência ao Player")]
+    [Tooltip("Arraste o transform do jogador aqui (ou encontre dinamicamente).")]
+    [SerializeField] private Transform playerTransform;
+
+    private GhoulState _currentState = GhoulState.Patrol;
+    private float _chaseTimer;  // Contador para o tempo de perseguição
+
+    // Para controle de patrulha
     private Vector3 _patrolCenterPosition;
 
     private void Start()
     {
-        // Garante que temos um agent associado
         if (agent == null) agent = GetComponent<NavMeshAgent>();
-
-        // Ajusta a velocidade do agent com base no Model
-        agent.speed = model.walkSpeed;
-
-        // Define o centro da patrulha
         if (model.patrolCenter != null)
-        {
             _patrolCenterPosition = model.patrolCenter.position;
-        }
         else
-        {
-            // Se não tiver um "patrolCenter" definido, usamos a posição inicial do Ghoul
             _patrolCenterPosition = transform.position;
-        }
 
-        // Escolhe o primeiro destino de patrulha
-        ChooseNewDestination();
+        // Inicia no estado de patrulha
+        EnterPatrolState();
     }
 
     private void Update()
     {
-        if (_isIdle) return;
+        // Atualiza de acordo com o estado atual
+        switch (_currentState)
+        {
+            case GhoulState.Patrol:
+                PatrolUpdate();
+                DetectPlayer();
+                break;
 
-        // Se o agente não estiver processando o caminho e tiver chegado ao destino
+            case GhoulState.Idle:
+                // no Idle, normalmente está rodando uma coroutine que controla o tempo
+                DetectPlayer();
+                break;
+
+            case GhoulState.Screaming:
+                // Fica parado ou aguarda a coroutine do scream
+                // Pode verificar se player ainda está visível para continuar
+                break;
+
+            case GhoulState.Chasing:
+                ChaseUpdate();
+                break;
+        }
+    }
+
+    #region Patrol & Idle
+    private void EnterPatrolState()
+    {
+        _currentState = GhoulState.Patrol;
+        agent.speed = model.walkSpeed;
+        view.PlayWalkAnimation();
+        ChooseNewDestination();
+    }
+
+    private void PatrolUpdate()
+    {
+        // Se chegou no destino
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            // Inicia a lógica de ficar parado
-            Debug.Log("Estou em Idle (Chamando Idle no Método Update)");
+            // Entra em Idle
             StartCoroutine(IdleRoutine());
         }
     }
 
-    /// <summary>
-    /// Escolhe um ponto aleatório no NavMesh dentro de um raio e manda o agente para lá.
-    /// </summary>
+    private IEnumerator IdleRoutine()
+    {
+        _currentState = GhoulState.Idle;
+        view.PlayIdleAnimation();
+
+        yield return new WaitForSeconds(model.idleTime);
+
+        EnterPatrolState(); // volta a patrulhar
+    }
+
     private void ChooseNewDestination()
     {
-        // Gera um ponto aleatório na esfera (ou círculo no plano) entre min e max
-        var randomRadius = Random.Range(model.minRandomDistance, model.maxRandomDistance);
-        var randomDirection = Random.insideUnitSphere * randomRadius;
-
-        // Ajusta a altura e desloca em relação ao centro
-        randomDirection += _patrolCenterPosition;
-        randomDirection.y = _patrolCenterPosition.y; // mantém o y consistente (se desejar)
+        float randomRadius = Random.Range(model.minRandomDistance, model.maxRandomDistance);
+        Vector3 randomDirection = Random.insideUnitSphere * randomRadius + _patrolCenterPosition;
+        randomDirection.y = _patrolCenterPosition.y;
 
         NavMeshHit hit;
-        // Tenta encontrar uma posição válida no NavMesh
         if (NavMesh.SamplePosition(randomDirection, out hit, model.maxRandomDistance, NavMesh.AllAreas))
         {
-            // Se encontrou uma posição válida, manda o agente para lá
-            Debug.Log("Encontrei uma posíção em " + randomDirection + "... Vou me movimentar.");
-            _isIdle = false;
             agent.SetDestination(hit.position);
-
-            // Toca a animação de caminhada
-            view.PlayWalkAnimation();
         }
         else
         {
-            // Se não encontrou, tenta novamente (cuidado para não cair em loop infinito)
-            Debug.Log("Estou buscando uma nova direção...");
+            // Se não encontrou, tenta de novo
             ChooseNewDestination();
+        }
+    }
+    #endregion
+
+    #region Detection & Scream
+    /// <summary>
+    /// Verifica se o jogador está dentro do raio e sem obstáculos bloqueando a visão.
+    /// </summary>
+    private void DetectPlayer()
+    {
+        if (playerTransform == null) return;
+
+        // 1) Verifica distância
+        float dist = Vector3.Distance(transform.position, playerTransform.position);
+        if (dist <= model.detectionRadius)
+        {
+            // 2) (Opcional) Verifica ângulo de visão
+            if (model.fieldOfViewAngle > 0)
+            {
+                Vector3 directionToPlayer = (playerTransform.position - transform.position).normalized;
+                float angle = Vector3.Angle(transform.forward, directionToPlayer);
+                if (angle > model.fieldOfViewAngle * 0.5f)
+                {
+                    // jogador está fora do cone de visão
+                    return;
+                }
+            }
+
+            // 3) Verifica se há algum obstáculo entre o monstro e o jogador
+            if (HasLineOfSightToPlayer())
+            {
+                // Se está em Patrol ou Idle, muda para Scream
+                if (_currentState == GhoulState.Patrol || _currentState == GhoulState.Idle)
+                {
+                    StartCoroutine(ScreamRoutine());
+                }
+            }
         }
     }
 
     /// <summary>
-    /// Rotina de Idle (ficar parado) por alguns segundos antes de definir nova rota.
+    /// Faz um raycast (ou linecast) até o jogador para verificar obstrução.
     /// </summary>
-    private IEnumerator IdleRoutine()
+    private bool HasLineOfSightToPlayer()
     {
-        _isIdle = true;
-        // Toca animação de Idle
-        view.PlayIdleAnimation();
+        Vector3 origin = transform.position + Vector3.up * 1.2f; // “olhos” do ghoul
+        Vector3 target = playerTransform.position + Vector3.up * 1.2f;
 
-        // Espera pelo tempo configurado no Model
-        yield return new WaitForSeconds(model.idleTime);
+        // Se o raycast bate em algo que não seja o player, considera sem visão
+        if (Physics.Linecast(origin, target, out RaycastHit hit))
+        {
+            if (hit.transform == playerTransform)
+                return true; // Tem visão
+            else
+                return false; // Algum objeto bloqueia
+        }
 
-        // Após o tempo, escolhe outro ponto
-        ChooseNewDestination();
+        // Se não bateu em nada, provavelmente tem visão livre
+        return true;
     }
+
+    /// <summary>
+    /// Inicia a animação de scream e aguarda o tempo configurado antes de iniciar a perseguição.
+    /// </summary>
+    private IEnumerator ScreamRoutine()
+    {
+        _currentState = GhoulState.Screaming;
+        view.PlayScreamAnimation();
+        agent.SetDestination(transform.position); // fica parado
+
+        // Opcional: olha para o jogador
+        LookAtPlayer();
+
+        // Aguarda a duração do scream
+        yield return new WaitForSeconds(model.screamDuration);
+
+        // Passa para o chase
+        EnterChaseState();
+    }
+
+    private void LookAtPlayer()
+    {
+        if (playerTransform == null) return;
+        Vector3 lookPos = playerTransform.position - transform.position;
+        lookPos.y = 0;
+        transform.rotation = Quaternion.LookRotation(lookPos);
+    }
+    #endregion
+
+    #region Chase
+    private void EnterChaseState()
+    {
+        _currentState = GhoulState.Chasing;
+        agent.speed = model.runSpeed;
+        view.PlayRunAnimation();
+
+        // Reseta timer
+        _chaseTimer = 0f;
+    }
+
+    private void ChaseUpdate()
+    {
+        // Se não há player, sai
+        if (playerTransform == null) return;
+
+        // Continua atualizando o destino para o player
+        agent.SetDestination(playerTransform.position);
+
+        // Se perdemos a linha de visão, incrementamos um timer
+        if (!HasLineOfSightToPlayer())
+        {
+            _chaseTimer += Time.deltaTime;
+            // Se passou do tempo máximo, voltar para patrulha
+            if (_chaseTimer >= model.chaseTimeout)
+            {
+                EnterPatrolState();
+            }
+        }
+        else
+        {
+            // Se voltamos a ver o jogador, zera o timer
+            _chaseTimer = 0f;
+        }
+    }
+    #endregion
 }
