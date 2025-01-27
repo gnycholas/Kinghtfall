@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: PlayerModel
   m_EditorClassIdentifier: 
   walkSpeed: 2
-  runSpeed: 4
+  runSpeed: 3
   isWalking: 0
   isRunning: 0

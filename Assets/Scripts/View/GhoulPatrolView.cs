@@ -7,36 +7,38 @@ public class GhoulPatrolView : MonoBehaviour
     private static readonly int IsWalkingHash = Animator.StringToHash("isWalking");
     private static readonly int IsRunningHash = Animator.StringToHash("isRunning");
     private static readonly int ScreamTriggerHash = Animator.StringToHash("screamTrigger");
+    private static readonly int AttackTriggerHash = Animator.StringToHash("attackTrigger");
 
-    // Idle
     public void PlayIdleAnimation()
     {
-        if (animator == null) return;
+        if (!animator) return;
         animator.SetBool(IsWalkingHash, false);
         animator.SetBool(IsRunningHash, false);
     }
 
-    // Walk
     public void PlayWalkAnimation()
     {
-        if (animator == null) return;
+        if (!animator) return;
         animator.SetBool(IsWalkingHash, true);
         animator.SetBool(IsRunningHash, false);
     }
 
-    // Run
     public void PlayRunAnimation()
     {
-        if (animator == null) return;
+        if (!animator) return;
         animator.SetBool(IsWalkingHash, false);
         animator.SetBool(IsRunningHash, true);
     }
 
-    // Scream
     public void PlayScreamAnimation()
     {
-        if (animator == null) return;
-        // Exemplo: um trigger que inicia a animação de scream
+        if (!animator) return;
         animator.SetTrigger(ScreamTriggerHash);
+    }
+
+    public void PlayAttackAnimation()
+    {
+        if (!animator) return;
+        animator.SetTrigger(AttackTriggerHash);
     }
 }
