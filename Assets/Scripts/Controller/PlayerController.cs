@@ -40,7 +40,6 @@ public class PlayerController : MonoBehaviour
         }
 
         // Atualiza o estado "injured" (se estiver morto, isInjured será false).
-
         playerModel.isInjured = (!playerModel.isDead && (playerModel.currentHealth < 3));
 
         // Exemplo: Pressionar a tecla H aciona o hit (ou representa receber dano).

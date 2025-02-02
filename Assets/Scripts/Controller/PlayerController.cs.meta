@@ -3,7 +3,11 @@ guid: 1476e512dbc961242bec8eec3cef0187
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - playerModel: {fileID: 11400000, guid: a38b726ae316b0b43aa4a7f19162e1c4, type: 2}
+  - characterController: {instanceID: 0}
+  - hitAnimationClip: {fileID: -203655887218126122, guid: dfd0b36a6dd31a74dbe8af585d0ce449,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
