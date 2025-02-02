@@ -17,9 +17,9 @@ MonoBehaviour:
   isWalking: 0
   isRunning: 0
   maxHealth: 5
-  currentHealth: 2
-  isInjured: 1
+  currentHealth: 5
+  isInjured: 0
   isDead: 0
   isKnifeEquiped: 0
   isHit: 0
-  hitDuration: 0.5
+  hitDuration: 1
