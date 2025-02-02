@@ -16,3 +16,10 @@ MonoBehaviour:
   runSpeed: 3
   isWalking: 0
   isRunning: 0
+  maxHealth: 5
+  currentHealth: 2
+  isInjured: 1
+  isDead: 0
+  isKnifeEquiped: 0
+  isHit: 0
+  hitDuration: 0.5
