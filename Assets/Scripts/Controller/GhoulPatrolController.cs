@@ -33,6 +33,9 @@ public class GhoulPatrolController : MonoBehaviour
     // Controle de chase
     private float _chaseTimer;
 
+    // Controle do ataque contínuo
+    private Coroutine damageCoroutine;  // Corrotina que aplica dano enquanto o player estiver no attackRange
+
     private void Start()
     {
         if (!agent) agent = GetComponent<NavMeshAgent>();
@@ -243,58 +246,55 @@ public class GhoulPatrolController : MonoBehaviour
     }
     #endregion
 
-    #region Attack
+    #region Attack (Continuous Damage via AttackRange)
+    /// <summary>
+    /// Verifica se o player está dentro do attackRange e, se sim, inicia (ou mantém) a aplicação de dano.
+    /// </summary>
     private void AttackCheck()
     {
-        // Checa a distância para ver se pode atacar
         if (!playerTransform) return;
 
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-        if (distanceToPlayer <= model.attackRange)
+        // Se o player estiver dentro do attackRange e ainda não estivermos aplicando dano
+        if (distanceToPlayer <= model.attackRange && damageCoroutine == null)
         {
-            EnterAttackState();
+            damageCoroutine = StartCoroutine(ContinuousDamage());
+        }
+        // Se o player saiu do range e a coroutine estiver rodando, para-a
+        else if (distanceToPlayer > model.attackRange && damageCoroutine != null)
+        {
+            StopCoroutine(damageCoroutine);
+            damageCoroutine = null;
         }
     }
 
-    private void EnterAttackState()
+    /// <summary>
+    /// Coroutine que, enquanto o player permanecer dentro do attackRange, dispara a animação de ataque,
+    /// aguarda 1 segundo e aplica o dano, repetindo o ciclo a cada (attackCooldown) segundos.
+    /// </summary>
+    private IEnumerator ContinuousDamage()
     {
-        _currentState = GhoulState.Attacking;
-
-        // Parar de se mover
-        if (agent)
+        while (Vector3.Distance(transform.position, playerTransform.position) <= model.attackRange)
         {
-            agent.SetDestination(transform.position);
-            agent.velocity = Vector3.zero;
+            // Dispara a animação de ataque (para feedback visual)
+            if (view) view.PlayAttackAnimation();
+            LookAtPlayer();
+
+            // Aguarda 1 segundo antes de aplicar o dano
+            yield return new WaitForSeconds(1f);
+
+            // Aplica dano (se o player ainda estiver no range)
+            if (Vector3.Distance(transform.position, playerTransform.position) <= model.attackRange)
+            {
+                var playerHealth = playerTransform.GetComponent<PlayerHealthController>();
+                if (playerHealth != null)
+                    playerHealth.TakeDamage((int)model.attackDamage);
+            }
+
+            // Aguarda o restante do cooldown (se attackCooldown for 2s, espera mais 1s)
+            yield return new WaitForSeconds(model.attackCooldown - 1f);
         }
-
-        // Toca animação de ataque
-        if (view) view.PlayAttackAnimation();
-
-        // Opcional: Olhar para o jogador
-        LookAtPlayer();
-
-        // Podemos iniciar uma corrotina para aplicar dano ou esperar a animação
-        StartCoroutine(AttackRoutine());
-    }
-
-    private IEnumerator AttackRoutine()
-    {
-        // Exemplo: espera 1s antes de aplicar dano (frame de impacto)
-        // Ajuste para o timing da sua animação
-        yield return new WaitForSeconds(1.0f);
-
-        // Se ainda está no estado de Attacking, pode aplicar dano
-        if (_currentState == GhoulState.Attacking)
-        {
-            // Exemplo: se tiver script de vida no player
-            // playerTransform.GetComponent<PlayerHealth>()?.TakeDamage(model.attackDamage);
-        }
-
-        // Espera o resto do tempo da animação de ataque
-        yield return new WaitForSeconds(0.5f);
-
-        // Depois disso, volta para chase ou outro estado
-        EnterChaseState();
+        damageCoroutine = null;
     }
     #endregion
 }
