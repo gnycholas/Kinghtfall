@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 [CreateAssetMenu(menuName = "Ghoul/GhoulPatrolModel")]
 public class GhoulPatrolModel : ScriptableObject
@@ -10,17 +10,17 @@ public class GhoulPatrolModel : ScriptableObject
     public float maxRandomDistance = 8f;
     public Transform patrolCenter;
 
-    [Header("Detecção do jogador")]
+    [Header("Deteccao do jogador")]
     public float detectionRadius = 10f;
     public float fieldOfViewAngle = 120f;
     public float screamDuration = 2f;
 
-    [Header("Chase (Perseguição)")]
+    [Header("Chase (Perseguicao)")]
     public float runSpeed = 4f;
     public float chaseTimeout = 5f;
 
     [Header("Ataque")]
     public float attackRange = 1.5f;
-    public float attackDamage = 10f;        // Se quiser causar dano
+    public float attackDamage = 1f;        // Se quiser causar dano
     public float attackCooldown = 2f;       // Ex: tempo entre ataques
 }

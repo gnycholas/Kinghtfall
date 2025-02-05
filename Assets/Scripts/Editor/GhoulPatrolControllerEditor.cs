@@ -1,34 +1,31 @@
-using UnityEditor;
+Ôªøusing UnityEditor;
 using UnityEngine;
 
 /// <summary>
-/// Custom Editor para desenhar gizmos de debug (raio de detecÁ„o, FOV etc.)
+/// Custom Editor para desenhar gizmos de debug (raio de detec√ß√£o, FOV e attackRange como arco)
 /// </summary>
 [CustomEditor(typeof(GhoulPatrolController))]
 public class GhoulPatrolControllerEditor : Editor
 {
     private void OnSceneGUI()
     {
-        // "target" È o objeto que estamos inspecionando
+        // "target" √© o objeto que estamos inspecionando
         GhoulPatrolController controller = (GhoulPatrolController)target;
         if (controller == null) return;
         if (controller.Model == null) return; // caso seu script use: public GhoulPatrolModel Model => model;
 
-        // Vamos desenhar o raio de detecÁ„o
-        Handles.color = Color.yellow;
-        Handles.DrawWireDisc(controller.transform.position, Vector3.up, controller.Model.detectionRadius);
+        Vector3 centerPos = controller.transform.position;
+        Vector3 forward = controller.transform.forward;
 
-        // Se tiver FOV, desenha um arco
+        // Desenha o raio de detec√ß√£o (amarelo)
+        Handles.color = Color.yellow;
+        Handles.DrawWireDisc(centerPos, Vector3.up, controller.Model.detectionRadius);
+
+        // Desenha o FOV (arco ciano)
         if (controller.Model.fieldOfViewAngle > 0)
         {
-            // Ponto central e direÁ„o
-            Vector3 centerPos = controller.transform.position;
-            Vector3 forward = controller.transform.forward;
             float halfFov = controller.Model.fieldOfViewAngle * 0.5f;
-
-            // Cor do arco
             Handles.color = Color.cyan;
-            // Desenha um arco no plano Y
             Handles.DrawWireArc(
                 centerPos,
                 Vector3.up,
@@ -37,12 +34,36 @@ public class GhoulPatrolControllerEditor : Editor
                 controller.Model.detectionRadius
             );
 
-            // Desenha linhas atÈ as extremidades do arco
             Vector3 leftDir = Quaternion.Euler(0, -halfFov, 0) * forward * controller.Model.detectionRadius;
             Vector3 rightDir = Quaternion.Euler(0, halfFov, 0) * forward * controller.Model.detectionRadius;
-
             Handles.DrawLine(centerPos, centerPos + leftDir);
             Handles.DrawLine(centerPos, centerPos + rightDir);
+        }
+
+        // Desenha o attackRange como um arco (vermelho)
+        if (controller.Model.fieldOfViewAngle > 0)
+        {
+            float halfFov = controller.Model.fieldOfViewAngle * 0.5f;
+            Handles.color = Color.red;
+            Handles.DrawWireArc(
+                centerPos,
+                Vector3.up,
+                Quaternion.Euler(0, -halfFov, 0) * forward,
+                controller.Model.fieldOfViewAngle,
+                controller.Model.attackRange
+            );
+
+            // Opcional: desenha linhas para as extremidades do arco do attack range
+            Vector3 leftAttackDir = Quaternion.Euler(0, -halfFov, 0) * forward * controller.Model.attackRange;
+            Vector3 rightAttackDir = Quaternion.Euler(0, halfFov, 0) * forward * controller.Model.attackRange;
+            Handles.DrawLine(centerPos, centerPos + leftAttackDir);
+            Handles.DrawLine(centerPos, centerPos + rightAttackDir);
+        }
+        else
+        {
+            // Caso o fieldOfViewAngle seja 0, desenha um c√≠rculo (fallback)
+            Handles.color = Color.red;
+            Handles.DrawWireDisc(centerPos, Vector3.up, controller.Model.attackRange);
         }
     }
 }

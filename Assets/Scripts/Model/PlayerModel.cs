@@ -20,6 +20,15 @@ public class PlayerModel : ScriptableObject
 
     [Header("Estado de Hit")]
     public bool isHit;
-    // Valor padrão (caso o clip não seja atribuído); será substituído pelo comprimento do clip de hit.
     public float hitDuration = 1f;
+
+    /// <summary>
+    /// Atualiza os dados de saúde com base no dano recebido.
+    /// </summary>
+    public void ApplyDamage(int damage)
+    {
+        currentHealth = Mathf.Max(currentHealth - damage, 0);
+        isInjured = (currentHealth < 3 && currentHealth > 0);
+        isDead = (currentHealth <= 0);
+    }
 }
