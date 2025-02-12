@@ -8,6 +8,10 @@ public class PlayerView : MonoBehaviour
     [Header("Referência ao GameObject da Faca (opcional)")]
     [SerializeField] private GameObject knifeGameObject;
 
+    private static readonly int AttackTriggerHash = Animator.StringToHash("Attack");
+    private static readonly int HitTriggerHash = Animator.StringToHash("Hit");
+    private static readonly int CombatHitTriggerHash = Animator.StringToHash("CombatHit");
+
     public void UpdateAnimations(bool isWalking, bool isRunning, bool isInjured)
     {
         animator.SetBool("isWalking", isWalking);
@@ -17,8 +21,14 @@ public class PlayerView : MonoBehaviour
 
     public void TriggerHit()
     {
-        animator.SetTrigger("Hit");
+        animator.SetTrigger(HitTriggerHash);
         animator.SetBool("isHit", true);
+    }
+
+    // Dispara a animação de hit quando em combate (idle de combate)
+    public void TriggerCombatHit()
+    {
+        animator.SetTrigger(CombatHitTriggerHash);
     }
 
     public void ResetHitAnimation()
@@ -31,12 +41,24 @@ public class PlayerView : MonoBehaviour
         animator.SetBool("isDead", isDead);
     }
 
-    public void UpdateKnifeEquip(bool isKnifeEquiped)
+    // Atualiza o estado da faca (e, consequentemente, do combate) no Animator e ativa/desativa o objeto visual
+    public void UpdateKnifeEquip(bool isKnifeEquipped)
     {
-        animator.SetBool("isKnifeEquiped", isKnifeEquiped);
+        animator.SetBool("isKnifeEquipped", isKnifeEquipped); // Use "isKnifeEquipped" conforme definido no Animator
         if (knifeGameObject != null)
         {
-            knifeGameObject.SetActive(isKnifeEquiped);
+            knifeGameObject.SetActive(isKnifeEquipped);
         }
     }
+
+    public void TriggerAttack()
+    {
+        animator.SetTrigger("Attack");
+    }
+
+    public void SetAttacking(bool attacking)
+    {
+        animator.SetBool("isAttacking", attacking);
+    }
+
 }

@@ -286,7 +286,7 @@ public class GhoulPatrolController : MonoBehaviour
             // Aplica dano (se o player ainda estiver no range)
             if (Vector3.Distance(transform.position, playerTransform.position) <= model.attackRange)
             {
-                var playerHealth = playerTransform.GetComponent<PlayerHealthController>();
+                var playerHealth = playerTransform.GetComponent<PlayerController>();
                 if (playerHealth != null)
                     playerHealth.TakeDamage((int)model.attackDamage);
             }

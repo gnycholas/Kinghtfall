@@ -16,11 +16,14 @@ public class PlayerModel : ScriptableObject
     public int currentHealth = 5;
     public bool isInjured;
     public bool isDead;
-    public bool isKnifeEquiped;
+    public bool isKnifeEquipped;
 
     [Header("Estado de Hit")]
     public bool isHit;
     public float hitDuration = 1f;
+
+    [Header("Estado de Ataque")]
+    public bool isAttacking;
 
     /// <summary>
     /// Atualiza os dados de saúde com base no dano recebido.
