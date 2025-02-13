@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 2
   runSpeed: 3
-  isWalking: 0
-  isRunning: 0
+  isWalking: 1
+  isRunning: 1
   maxHealth: 5
   currentHealth: 5
   isInjured: 0

@@ -10,11 +10,16 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CharacterController characterController;
 
     [Header("Referências a Objetos de Cena")]
-    [SerializeField] private GameObject daggerGameObject; // Referência ao GameObject da faca (dagger)
+    [SerializeField] private GameObject daggerGameObject; // Objeto da faca
 
     [Header("Configurações de Animação")]
     [SerializeField] private AnimationClip hitAnimationClip;    // Animação de hit (ao receber dano)
     [SerializeField] private AnimationClip attackAnimationClip; // Animação de ataque
+
+    [Header("Configurações de Ataque")]
+    [SerializeField] private Transform attackPoint;           // Ponto de origem do ataque
+    [SerializeField] private float attackRange = 1.5f;          // Alcance do ataque
+    [SerializeField] private LayerMask enemyLayer;            // Layer dos inimigos
 
     // Utilizada para orientar o jogador durante a movimentação (não interfere no ataque)
     private Vector3 lastMovementDirection;
@@ -94,9 +99,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             playerModel.isKnifeEquipped = !playerModel.isKnifeEquipped;
-            // Ativa ou desativa o objeto da faca conforme o estado
             daggerGameObject.SetActive(playerModel.isKnifeEquipped);
-            // Se desejar, atualize também o Animator via PlayerView:
             playerView.UpdateKnifeEquip(playerModel.isKnifeEquipped);
         }
 
@@ -107,17 +110,28 @@ public class PlayerController : MonoBehaviour
             {
                 playerModel.isAttacking = true;
                 playerView.SetAttacking(true);
-                Debug.Log("Triggering Attack");
+                //Debug.Log("Triggering Attack");
                 playerView.TriggerAttack();
 
-                // Define a duração do ataque com base no clipe (ou 1.3 segundo padrão) e reseta o estado após a animação
                 float attackDuration = (attackAnimationClip != null) ? attackAnimationClip.length : 1.3f;
                 StartCoroutine(ResetAttack(attackDuration));
             }
         }
     }
 
-    // Coroutine para resetar o estado de ataque após a duração da animação
+    // Método chamado pela Animation Event no clipe de ataque
+    public void PerformAttack()
+    {
+        // Verifica os inimigos na área de ataque
+        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
+        //Debug.Log("Quantidade de inimigos detectados: " + hitEnemies.Length);
+        foreach (Collider enemy in hitEnemies)
+        {
+            Debug.Log("Inimigo acertado: " + enemy.name);
+        }
+
+    }
+
     private IEnumerator ResetAttack(float duration)
     {
         yield return new WaitForSeconds(duration);
@@ -144,7 +158,6 @@ public class PlayerController : MonoBehaviour
         {
             playerModel.isHit = true;
 
-            // Ao receber dano, dispara o trigger de combat hit se a faca estiver equipada; caso contrário, o trigger normal de hit
             if (playerModel.isKnifeEquipped)
                 playerView.TriggerCombatHit();
             else
@@ -176,4 +189,14 @@ public class PlayerController : MonoBehaviour
         return playerTransform.GetComponent<PlayerController>();
     }
     #endregion
+
+    // Opcional: Visualizar o alcance do ataque no Scene View
+    private void OnDrawGizmosSelected()
+    {
+        if (attackPoint == null)
+            return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+    }
 }
