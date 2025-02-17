@@ -8,7 +8,8 @@ public enum GhoulState
     Idle,
     Screaming,
     Chasing,
-    Attacking
+    Attacking,
+    Dead  // Novo estado para quando o ghoul morrer
 }
 
 public class GhoulPatrolController : MonoBehaviour
@@ -21,20 +22,17 @@ public class GhoulPatrolController : MonoBehaviour
     [SerializeField] private NavMeshAgent agent;
 
     [Header("Player")]
-    [Tooltip("Arraste o Transform do jogador aqui ou busque dinamicamente.")]
+    [Tooltip("Arraste o Transform do jogador aqui.")]
     [SerializeField] private Transform playerTransform;
 
-    private GhoulState _currentState = GhoulState.Patrol;
+    [Tooltip("Offset para o alvo de ataque (ex.: para atingir os pés do player).")]
+    [SerializeField] private Vector3 attackTargetOffset = new Vector3(0, -1f, 0);
 
-    // Para controle de patrulha
+    private GhoulState _currentState = GhoulState.Patrol;
     private Vector3 _patrolCenter;
     private Coroutine _idleCoroutine;
-
-    // Controle de chase
     private float _chaseTimer;
-
-    // Controle do ataque contínuo
-    private Coroutine damageCoroutine;  // Corrotina que aplica dano enquanto o player estiver no attackRange
+    private Coroutine damageCoroutine;  // Corrotina que gerencia o ataque contínuo
 
     private void Start()
     {
@@ -42,46 +40,37 @@ public class GhoulPatrolController : MonoBehaviour
 
         // Define o centro de patrulha
         if (model && model.patrolCenter)
-        {
             _patrolCenter = model.patrolCenter.position;
-        }
         else
-        {
-            // Se não houver um "patrolCenter" definido, usa posição inicial
             _patrolCenter = transform.position;
-        }
 
-        // Inicia no estado de Patrol
         EnterPatrolState();
     }
 
     private void Update()
     {
+        // Se o ghoul estiver morto, não processa nenhuma lógica adicional.
+        if (_currentState == GhoulState.Dead)
+            return;
+
         switch (_currentState)
         {
             case GhoulState.Patrol:
                 PatrolUpdate();
                 DetectPlayer();
                 break;
-
             case GhoulState.Idle:
-                // Idle é controlado por Coroutine, mas ainda podemos checar se o player apareceu
                 DetectPlayer();
                 break;
-
             case GhoulState.Screaming:
-                // Nesse estado, o monstro está parado gritando (ScreamRoutine)
-                // A detecção já ocorreu antes; você pode checar novamente se quiser
+                // O ghoul está parado gritando
                 break;
-
             case GhoulState.Chasing:
                 ChaseUpdate();
-                AttackCheck();    // Verifica se pode atacar
+                AttackCheck();
                 break;
-
             case GhoulState.Attacking:
-                // Dependendo do design, ficamos parados na animação de ataque
-                // ou rodamos alguma lógica extra (ver AttackUpdate se necessário)
+                // Durante o ataque, o movimento está bloqueado
                 break;
         }
     }
@@ -90,36 +79,31 @@ public class GhoulPatrolController : MonoBehaviour
     private void EnterPatrolState()
     {
         _currentState = GhoulState.Patrol;
-
-        if (agent) agent.speed = model.walkSpeed;
+        if (agent)
+        {
+            agent.speed = model.walkSpeed;
+            agent.isStopped = false;
+        }
         if (view) view.PlayWalkAnimation();
-
         ChooseNewDestination();
     }
 
     private void PatrolUpdate()
     {
-        // Checa se chegamos ao destino
         if (!agent.pathPending && agent.remainingDistance <= agent.stoppingDistance)
         {
-            // Entrar em Idle
             if (_idleCoroutine == null)
-            {
                 _idleCoroutine = StartCoroutine(IdleRoutine());
-            }
         }
     }
 
     private IEnumerator IdleRoutine()
     {
         _currentState = GhoulState.Idle;
-
         if (view) view.PlayIdleAnimation();
-
         yield return new WaitForSeconds(model.idleTime);
-
         _idleCoroutine = null;
-        EnterPatrolState(); // Volta a patrulhar
+        EnterPatrolState();
     }
 
     private void ChooseNewDestination()
@@ -131,43 +115,32 @@ public class GhoulPatrolController : MonoBehaviour
 
         NavMeshHit hit;
         if (NavMesh.SamplePosition(randomDir, out hit, model.maxRandomDistance, NavMesh.AllAreas))
-        {
             agent.SetDestination(hit.position);
-        }
         else
-        {
-            // Se falhar, tenta novamente (cuidado com possível loop infinito)
             ChooseNewDestination();
-        }
     }
     #endregion
 
     #region Detection
     private void DetectPlayer()
     {
-        if (!playerTransform || !model) return;
+        if (!playerTransform || model == null) return;
 
-        // 1) Distância
         float dist = Vector3.Distance(transform.position, playerTransform.position);
         if (dist > model.detectionRadius) return;
 
-        // 2) Ângulo de visão (opcional)
         if (model.fieldOfViewAngle > 0)
         {
             Vector3 dirToPlayer = (playerTransform.position - transform.position).normalized;
             float angle = Vector3.Angle(transform.forward, dirToPlayer);
             if (angle > model.fieldOfViewAngle * 0.5f)
-                return; // Fora do cone
+                return;
         }
 
-        // 3) Linha de visão (Raycast/Linecast)
         if (HasLineOfSightToPlayer())
         {
-            // Se está em Patrol ou Idle, inicia o Scream
             if (_currentState == GhoulState.Patrol || _currentState == GhoulState.Idle)
-            {
                 StartCoroutine(ScreamRoutine());
-            }
         }
     }
 
@@ -175,12 +148,9 @@ public class GhoulPatrolController : MonoBehaviour
     {
         Vector3 origin = transform.position + Vector3.up * 1.2f;
         Vector3 target = playerTransform.position + Vector3.up * 1.2f;
-
         if (Physics.Linecast(origin, target, out RaycastHit hit))
-        {
             return (hit.transform == playerTransform);
-        }
-        return true; // Se não bateu em nada, assumimos que tem visão livre
+        return true;
     }
     #endregion
 
@@ -188,28 +158,24 @@ public class GhoulPatrolController : MonoBehaviour
     private IEnumerator ScreamRoutine()
     {
         _currentState = GhoulState.Screaming;
-
-        // Parar movimento
         agent.SetDestination(transform.position);
         agent.velocity = Vector3.zero;
 
-        // Toca animação
         if (view) view.PlayScreamAnimation();
-
-        // Olha para o player
         LookAtPlayer();
 
         yield return new WaitForSeconds(model.screamDuration);
-
         EnterChaseState();
     }
 
     private void LookAtPlayer()
     {
         if (!playerTransform) return;
-        Vector3 dir = (playerTransform.position - transform.position);
-        dir.y = 0;
-        transform.rotation = Quaternion.LookRotation(dir);
+        Vector3 targetPos = playerTransform.position + attackTargetOffset;
+        Vector3 direction = targetPos - transform.position;
+        direction.y = 0;
+        if (direction != Vector3.zero)
+            transform.rotation = Quaternion.LookRotation(direction);
     }
     #endregion
 
@@ -218,83 +184,108 @@ public class GhoulPatrolController : MonoBehaviour
     {
         _currentState = GhoulState.Chasing;
         _chaseTimer = 0f;
-
-        if (agent) agent.speed = model.runSpeed;
+        if (agent)
+        {
+            agent.speed = model.runSpeed;
+            agent.isStopped = false;
+        }
         if (view) view.PlayRunAnimation();
     }
 
     private void ChaseUpdate()
     {
         if (!playerTransform) return;
+        agent.SetDestination(playerTransform.position + attackTargetOffset);
 
-        agent.SetDestination(playerTransform.position);
-
-        // Se perder linha de visão, inicia contagem
         if (!HasLineOfSightToPlayer())
         {
             _chaseTimer += Time.deltaTime;
             if (_chaseTimer >= model.chaseTimeout)
-            {
-                // Volta a patrulhar
                 EnterPatrolState();
-            }
         }
         else
         {
-            _chaseTimer = 0f; // ainda vê o player
+            _chaseTimer = 0f;
         }
     }
     #endregion
 
-    #region Attack (Continuous Damage via AttackRange)
-    /// <summary>
-    /// Verifica se o player está dentro do attackRange e, se sim, inicia (ou mantém) a aplicação de dano.
-    /// </summary>
+    #region Attack
     private void AttackCheck()
     {
         if (!playerTransform) return;
-
         float distanceToPlayer = Vector3.Distance(transform.position, playerTransform.position);
-        // Se o player estiver dentro do attackRange e ainda não estivermos aplicando dano
         if (distanceToPlayer <= model.attackRange && damageCoroutine == null)
-        {
-            damageCoroutine = StartCoroutine(ContinuousDamage());
-        }
-        // Se o player saiu do range e a coroutine estiver rodando, para-a
-        else if (distanceToPlayer > model.attackRange && damageCoroutine != null)
-        {
-            StopCoroutine(damageCoroutine);
-            damageCoroutine = null;
-        }
+            damageCoroutine = StartCoroutine(ContinuousAttack());
     }
 
-    /// <summary>
-    /// Coroutine que, enquanto o player permanecer dentro do attackRange, dispara a animação de ataque,
-    /// aguarda 1 segundo e aplica o dano, repetindo o ciclo a cada (attackCooldown) segundos.
-    /// </summary>
-    private IEnumerator ContinuousDamage()
+    private IEnumerator ContinuousAttack()
     {
-        while (Vector3.Distance(transform.position, playerTransform.position) <= model.attackRange)
+        _currentState = GhoulState.Attacking;
+        agent.SetDestination(transform.position); // Bloqueia movimento durante o ataque
+
+        // Completa o ciclo atual de ataque, mesmo que o player fuja durante a animação
+        do
         {
-            // Dispara a animação de ataque (para feedback visual)
             if (view) view.PlayAttackAnimation();
             LookAtPlayer();
 
-            // Aguarda 1 segundo antes de aplicar o dano
-            yield return new WaitForSeconds(1f);
+            float attackAnimDuration = 1f; // Ajuste para a duração real da animação
+            yield return new WaitForSeconds(attackAnimDuration);
 
-            // Aplica dano (se o player ainda estiver no range)
+            // Se o player ainda estiver no range, aplica dano
             if (Vector3.Distance(transform.position, playerTransform.position) <= model.attackRange)
             {
-                var playerHealth = playerTransform.GetComponent<PlayerController>();
-                if (playerHealth != null)
-                    playerHealth.TakeDamage((int)model.attackDamage);
+                PlayerController playerCtrl = playerTransform.GetComponent<PlayerController>();
+                if (playerCtrl != null)
+                    playerCtrl.TakeDamage((int)model.attackDamage);
             }
 
-            // Aguarda o restante do cooldown (se attackCooldown for 2s, espera mais 1s)
-            yield return new WaitForSeconds(model.attackCooldown - 1f);
-        }
+            yield return new WaitForSeconds(model.attackCooldown - attackAnimDuration);
+
+        } while (Vector3.Distance(transform.position, playerTransform.position) <= model.attackRange);
+
         damageCoroutine = null;
+        _currentState = GhoulState.Chasing;
+    }
+    #endregion
+
+    #region Vida e Dano (Ghoul)
+    public void TakeDamage(int damage)
+    {
+        model.currentHealth -= damage;
+        if (model.currentHealth > 0)
+        {
+            if (view) view.TriggerHit();
+        }
+        else
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        _currentState = GhoulState.Dead;
+        // Interrompe todas as corrotinas para que nenhuma ação extra seja executada
+        StopAllCoroutines();
+        if (agent)
+        {
+            agent.isStopped = true;
+            agent.velocity = Vector3.zero;
+        }
+        if (view) view.TriggerDie();
+        // Opcional: Desative ou destrua o ghoul após um tempo
+        // Destroy(gameObject, 3f);
+    }
+    #endregion
+
+    #region Editor Gizmos
+    private void OnDrawGizmosSelected()
+    {
+        if (model == null) return;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, model.attackRange);
     }
     #endregion
 }

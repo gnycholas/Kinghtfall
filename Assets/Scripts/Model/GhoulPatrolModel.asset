@@ -22,6 +22,8 @@ MonoBehaviour:
   screamDuration: 2
   runSpeed: 4
   chaseTimeout: 5
-  attackRange: 2
+  attackRange: 1.5
   attackDamage: 1
-  attackCooldown: 5
+  attackCooldown: 2
+  maxHealth: 3
+  currentHealth: 5

@@ -110,7 +110,6 @@ public class PlayerController : MonoBehaviour
             {
                 playerModel.isAttacking = true;
                 playerView.SetAttacking(true);
-                //Debug.Log("Triggering Attack");
                 playerView.TriggerAttack();
 
                 float attackDuration = (attackAnimationClip != null) ? attackAnimationClip.length : 1.3f;
@@ -122,14 +121,16 @@ public class PlayerController : MonoBehaviour
     // Método chamado pela Animation Event no clipe de ataque
     public void PerformAttack()
     {
-        // Verifica os inimigos na área de ataque
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
-        //Debug.Log("Quantidade de inimigos detectados: " + hitEnemies.Length);
         foreach (Collider enemy in hitEnemies)
         {
-            Debug.Log("Inimigo acertado: " + enemy.name);
+            GhoulPatrolController ghoul = enemy.GetComponent<GhoulPatrolController>();
+            if (ghoul != null)
+            {
+                ghoul.TakeDamage(1); // Ajuste o valor do dano conforme necessário
+                Debug.Log("ghoul sofreu o dano");
+            }
         }
-
     }
 
     private IEnumerator ResetAttack(float duration)
@@ -158,10 +159,8 @@ public class PlayerController : MonoBehaviour
         {
             playerModel.isHit = true;
 
-            if (playerModel.isKnifeEquipped)
-                playerView.TriggerCombatHit();
-            else
-                playerView.TriggerHit();
+            // Sempre dispara o TriggerHit para a animação de hit, que irá utilizar o parâmetro isKnifeEquipped
+            playerView.TriggerHit();
 
             characterController.SimpleMove(Vector3.zero);
 

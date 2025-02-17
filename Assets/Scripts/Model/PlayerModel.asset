@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: PlayerModel
   m_EditorClassIdentifier: 
   walkSpeed: 2
-  runSpeed: 3
-  isWalking: 1
-  isRunning: 1
+  runSpeed: 5
+  isWalking: 0
+  isRunning: 0
   maxHealth: 5
   currentHealth: 5
   isInjured: 0
