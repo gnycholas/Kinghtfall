@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: PlayerModel
   m_EditorClassIdentifier: 
   walkSpeed: 2
-  runSpeed: 3
-  isWalking: 1
-  isRunning: 1
+  runSpeed: 5
+  isWalking: 0
+  isRunning: 0
   maxHealth: 5
   currentHealth: 5
   isInjured: 0
   isDead: 0
-  isKnifeEquiped: 0
+  isKnifeEquipped: 0
   isHit: 0
   hitDuration: 1
+  isAttacking: 0

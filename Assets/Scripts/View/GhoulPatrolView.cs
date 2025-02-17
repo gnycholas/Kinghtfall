@@ -8,6 +8,8 @@ public class GhoulPatrolView : MonoBehaviour
     private static readonly int IsRunningHash = Animator.StringToHash("isRunning");
     private static readonly int ScreamTriggerHash = Animator.StringToHash("screamTrigger");
     private static readonly int AttackTriggerHash = Animator.StringToHash("attackTrigger");
+    private static readonly int HitTriggerHash = Animator.StringToHash("hitTrigger");
+    private static readonly int DieTriggerHash = Animator.StringToHash("dieTrigger");
 
     public void PlayIdleAnimation()
     {
@@ -40,5 +42,17 @@ public class GhoulPatrolView : MonoBehaviour
     {
         if (!animator) return;
         animator.SetTrigger(AttackTriggerHash);
+    }
+
+    public void TriggerHit()
+    {
+        if (!animator) return;
+        animator.SetTrigger(HitTriggerHash);
+    }
+
+    public void TriggerDie()
+    {
+        if (!animator) return;
+        animator.SetTrigger(DieTriggerHash);
     }
 }
