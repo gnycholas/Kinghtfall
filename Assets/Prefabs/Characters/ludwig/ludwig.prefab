@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 8609707839557345375}
   - component: {fileID: 2177868409362718139}
   - component: {fileID: 2509474737661548839}
+  - component: {fileID: 7610411773029501924}
   m_Layer: 0
   m_Name: ludwig
   m_TagString: Untagged
@@ -94,7 +95,7 @@ Transform:
   m_GameObject: {fileID: 275734427178622016}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 16.000158, y: 0.00000023841858, z: 13.945961}
+  m_LocalPosition: {x: 16.000158, y: 0.00000023841858, z: 13.89}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -176,11 +177,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerModel: {fileID: 11400000, guid: a38b726ae316b0b43aa4a7f19162e1c4, type: 2}
-  playerView: {fileID: 0}
+  playerView: {fileID: 2177868409362718139}
   characterController: {fileID: 8609707839557345375}
   daggerGameObject: {fileID: 919132149155446097}
   hitAnimationClip: {fileID: 0}
   attackAnimationClip: {fileID: 0}
+  attackPoint: {fileID: -8679921383154817045}
+  attackRange: 0.3
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!65 &7610411773029501924
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275734427178622016}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.57, y: 1.69, z: 0.69}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &919132149155446097
 GameObject:
   m_ObjectHideFlags: 0
