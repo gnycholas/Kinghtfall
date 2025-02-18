@@ -9,7 +9,8 @@ public enum GhoulState
     Screaming,
     Chasing,
     Attacking,
-    Dead  // Novo estado para quando o ghoul morrer
+    Hit,      // Novo estado para quando o ghoul sofre dano
+    Dead
 }
 
 public class GhoulPatrolController : MonoBehaviour
@@ -49,8 +50,8 @@ public class GhoulPatrolController : MonoBehaviour
 
     private void Update()
     {
-        // Se o ghoul estiver morto, não processa nenhuma lógica adicional.
-        if (_currentState == GhoulState.Dead)
+        // Se o ghoul estiver morto ou em estado Hit, não processa outros comportamentos
+        if (_currentState == GhoulState.Dead || _currentState == GhoulState.Hit)
             return;
 
         switch (_currentState)
@@ -195,6 +196,7 @@ public class GhoulPatrolController : MonoBehaviour
     private void ChaseUpdate()
     {
         if (!playerTransform) return;
+        // Usa o offset para que o ghoul mire num ponto ajustado no player
         agent.SetDestination(playerTransform.position + attackTargetOffset);
 
         if (!HasLineOfSightToPlayer())
@@ -230,7 +232,7 @@ public class GhoulPatrolController : MonoBehaviour
             if (view) view.PlayAttackAnimation();
             LookAtPlayer();
 
-            float attackAnimDuration = 1f; // Ajuste para a duração real da animação
+            float attackAnimDuration = 1f; // Ajuste para a duração real da animação de ataque
             yield return new WaitForSeconds(attackAnimDuration);
 
             // Se o player ainda estiver no range, aplica dano
@@ -253,10 +255,18 @@ public class GhoulPatrolController : MonoBehaviour
     #region Vida e Dano (Ghoul)
     public void TakeDamage(int damage)
     {
+        // Se houver uma corrotina de ataque ativa, interrompe-a (para que o sistema de dano seja desativado)
+        if (damageCoroutine != null)
+        {
+            StopCoroutine(damageCoroutine);
+            damageCoroutine = null;
+        }
+
         model.currentHealth -= damage;
         if (model.currentHealth > 0)
         {
-            if (view) view.TriggerHit();
+            // Entra no estado Hit e executa a animação
+            StartCoroutine(HitRoutine());
         }
         else
         {
@@ -264,10 +274,24 @@ public class GhoulPatrolController : MonoBehaviour
         }
     }
 
+    private IEnumerator HitRoutine()
+    {
+        _currentState = GhoulState.Hit;
+        if (agent)
+        {
+            agent.SetDestination(transform.position);
+            agent.velocity = Vector3.zero;
+        }
+        if (view) view.TriggerHit();
+        // Aguarda a duração da animação de hit (ajuste conforme necessário)
+        yield return new WaitForSeconds(1f);
+        if (view) view.ResetHitAnimation();
+        _currentState = GhoulState.Chasing;
+    }
+
     private void Die()
     {
         _currentState = GhoulState.Dead;
-        // Interrompe todas as corrotinas para que nenhuma ação extra seja executada
         StopAllCoroutines();
         if (agent)
         {
@@ -275,7 +299,7 @@ public class GhoulPatrolController : MonoBehaviour
             agent.velocity = Vector3.zero;
         }
         if (view) view.TriggerDie();
-        // Opcional: Desative ou destrua o ghoul após um tempo
+        // Opcional: desative ou destrua o ghoul após um tempo
         // Destroy(gameObject, 3f);
     }
     #endregion

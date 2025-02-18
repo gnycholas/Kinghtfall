@@ -739,6 +739,11 @@ PrefabInstance:
       propertyPath: playerTransform
       value: 
       objectReference: {fileID: 1269340406}
+    - target: {fileID: 9074844892259192013, guid: a42ce9f9d5d030e4baf4b74038d53eca,
+        type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
