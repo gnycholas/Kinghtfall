@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerModel
   m_EditorClassIdentifier: 
   walkSpeed: 2
-  runSpeed: 5
+  runSpeed: 4
   isWalking: 0
   isRunning: 0
   maxHealth: 5
@@ -21,6 +21,8 @@ MonoBehaviour:
   isInjured: 0
   isDead: 0
   isKnifeEquipped: 0
+  inventory: []
+  isPotionEquipped: 0
   isHit: 0
   hitDuration: 1
   isAttacking: 0

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Model/PlayerModel", fileName = "PlayerModel")]
@@ -18,6 +19,11 @@ public class PlayerModel : ScriptableObject
     public bool isDead;
     public bool isKnifeEquipped;
 
+    [Header("Inventário")]
+    [Tooltip("Lista para armazenar itens coletados.")]
+    public List<GameObject> inventory = new List<GameObject>();
+    public bool isPotionEquipped;
+
     [Header("Estado de Hit")]
     public bool isHit;
     public float hitDuration = 1f;
@@ -25,8 +31,11 @@ public class PlayerModel : ScriptableObject
     [Header("Estado de Ataque")]
     public bool isAttacking;
 
+    [Header("Estado de Consumir Poção")]
+    public bool isDrinking;
+
     /// <summary>
-    /// Atualiza os dados de saúde com base no dano recebido.
+    /// Atualiza a vida do player ao sofrer dano.
     /// </summary>
     public void ApplyDamage(int damage)
     {
