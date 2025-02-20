@@ -12,8 +12,8 @@ public class CollectiblesController : MonoBehaviour
     [Tooltip("Referência ao GameObject da poção (tag 'Potion').")]
     public GameObject potion;
 
-    [Tooltip("Referência ao GameObject da chave (tag 'Key').")]
-    public GameObject key;
+    // Para a chave, vamos buscar dinamicamente os objetos com tag "Key".
+    // public GameObject key; // Não usaremos essa referência estática.
 
     [Tooltip("Raio de alcance para coletar os itens.")]
     public float collectionRadius = 2f;
@@ -25,7 +25,7 @@ public class CollectiblesController : MonoBehaviour
 
         CheckCollectible(dagger, "Dagger");
         CheckCollectible(potion, "Potion");
-        CheckCollectible(key, "Key");
+        CheckKeyCollectible();
     }
 
     private void CheckCollectible(GameObject collectible, string collectibleName)
@@ -33,7 +33,7 @@ public class CollectiblesController : MonoBehaviour
         if (collectible == null)
             return;
 
-        // Apenas verifica se o objeto estiver ativo (se já foi coletado, ele deve estar desativado)
+        // Verifica se o objeto está ativo na cena (se já foi coletado, ele estará desativado)
         if (!collectible.activeInHierarchy)
             return;
 
@@ -41,7 +41,6 @@ public class CollectiblesController : MonoBehaviour
         if (distance <= collectionRadius)
         {
             Debug.Log($"Pressione E para coletar {collectibleName}");
-
             if (Input.GetKeyDown(KeyCode.E))
             {
                 PlayerController playerController = player.GetComponent<PlayerController>();
@@ -51,6 +50,35 @@ public class CollectiblesController : MonoBehaviour
                     if (added)
                     {
                         Debug.Log($"{collectibleName} coletado!");
+                    }
+                }
+            }
+        }
+    }
+
+    private void CheckKeyCollectible()
+    {
+        // Busca todos os objetos ativos com a tag "Key" na cena
+        GameObject[] keys = GameObject.FindGameObjectsWithTag("Key");
+        foreach (GameObject key in keys)
+        {
+            if (!key.activeInHierarchy)
+                continue;
+
+            float distance = Vector3.Distance(player.transform.position, key.transform.position);
+            if (distance <= collectionRadius)
+            {
+                Debug.Log("Pressione E para coletar Key");
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    PlayerController playerController = player.GetComponent<PlayerController>();
+                    if (playerController != null)
+                    {
+                        bool added = playerController.AddItemToInventory(key);
+                        if (added)
+                        {
+                            Debug.Log("Key coletada!");
+                        }
                     }
                 }
             }

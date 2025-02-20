@@ -295,14 +295,17 @@ public class GhoulPatrolController : MonoBehaviour
         }
         if (view) view.TriggerDie();
 
-        // Instancia o drop da chave, se o prefab estiver atribuído
+        // Instancia o drop da chave e garante que ele esteja ativo
         if (keyDropPrefab != null)
         {
-            Instantiate(keyDropPrefab, transform.position, Quaternion.identity);
+            Vector3 dropPosition = transform.position + new Vector3(0, 0.2f, 0); // Ajuste o offset conforme necessário
+            GameObject droppedKey = Instantiate(keyDropPrefab, dropPosition, Quaternion.Euler(90, 90, 90));
+            droppedKey.SetActive(true);
         }
         // Opcional: destruir o ghoul após algum tempo
         // Destroy(gameObject, 3f);
     }
+
     #endregion
 
     #region Editor Gizmos
