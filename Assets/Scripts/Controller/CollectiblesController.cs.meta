@@ -3,7 +3,12 @@ guid: a7e04ee583e20b44e86830d00084d2c6
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - player: {fileID: 275734427178622016, guid: 1b3fabc35753a0d41b374be4b5a051d8, type: 3}
+  - dagger: {fileID: 919132149155446097, guid: 59c4a41fd25ce994a84bf10639cd7f80, type: 3}
+  - potion: {fileID: 5418167635440012374, guid: ae85be3c092d4f840be50cc355db5d94,
+      type: 3}
+  - key: {fileID: 919132149155446097, guid: e9bd0f7bb34ec38478711deba9bbad97, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

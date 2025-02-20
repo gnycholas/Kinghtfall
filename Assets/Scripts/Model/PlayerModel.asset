@@ -21,9 +21,9 @@ MonoBehaviour:
   isInjured: 0
   isDead: 0
   isKnifeEquipped: 0
-  inventory:
-  - {fileID: 0}
-  isPotionEquipped: 1
+  inventory: []
+  isPotionEquipped: 0
+  isKeyEquipped: 0
   isHit: 0
   hitDuration: 1
   isAttacking: 0

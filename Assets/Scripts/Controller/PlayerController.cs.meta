@@ -4,15 +4,13 @@ MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - playerModel: {fileID: 11400000, guid: a38b726ae316b0b43aa4a7f19162e1c4, type: 2}
+  - playerModel: {instanceID: 0}
   - playerView: {instanceID: 0}
   - characterController: {instanceID: 0}
-  - daggerGameObject: {fileID: 919132149155446097, guid: 59c4a41fd25ce994a84bf10639cd7f80,
-      type: 3}
-  - potionGameObject: {fileID: 5418167635440012374, guid: ae85be3c092d4f840be50cc355db5d94,
-      type: 3}
-  - hitAnimationClip: {fileID: -203655887218126122, guid: dfd0b36a6dd31a74dbe8af585d0ce449,
-      type: 3}
+  - daggerGameObject: {instanceID: 0}
+  - potionGameObject: {instanceID: 0}
+  - keyGameObject: {instanceID: 0}
+  - hitAnimationClip: {instanceID: 0}
   - attackAnimationClip: {instanceID: 0}
   - attackPoint: {instanceID: 0}
   executionOrder: 0
