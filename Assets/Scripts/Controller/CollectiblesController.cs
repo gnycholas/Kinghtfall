@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class CollectiblesController : MonoBehaviour
 {
@@ -18,29 +20,44 @@ public class CollectiblesController : MonoBehaviour
     [Tooltip("Raio de alcance para coletar os itens.")]
     public float collectionRadius = 2f;
 
+    [Header("UI")]
+    [Tooltip("Texto que exibe mensagens de coleta.")]
+    [SerializeField] private TextMeshProUGUI collectMessageText;
+    // ou private TextMeshProUGUI collectMessageText; se usar TMP
+
+    private void Start()
+    {
+        // Deixa o texto invisível ou vazio inicialmente
+        if (collectMessageText != null)
+        {
+            collectMessageText.text = "";
+            collectMessageText.gameObject.SetActive(false);
+        }
+    }
+
     private void Update()
     {
         if (player == null)
             return;
 
-        CheckCollectible(dagger, "Dagger");
-        CheckCollectible(potion, "Potion");
+        // Antes de verificar itens, esconde/limpa o texto para não ficar sempre ativo
+        HideCollectionMessage();
+
+        CheckCollectible(dagger, "<Adaga>");
+        CheckCollectible(potion, "<Poção>");
         CheckKeyCollectible();
     }
 
     private void CheckCollectible(GameObject collectible, string collectibleName)
     {
-        if (collectible == null)
-            return;
-
-        // Verifica se o objeto está ativo na cena (se já foi coletado, ele estará desativado)
-        if (!collectible.activeInHierarchy)
-            return;
+        if (collectible == null) return;
+        if (!collectible.activeInHierarchy) return;
 
         float distance = Vector3.Distance(player.transform.position, collectible.transform.position);
         if (distance <= collectionRadius)
         {
-            Debug.Log($"Pressione E para coletar {collectibleName}");
+            ShowCollectionMessage($"Pressione E para coletar {collectibleName}");
+
             if (Input.GetKeyDown(KeyCode.E))
             {
                 PlayerController playerController = player.GetComponent<PlayerController>();
@@ -50,6 +67,8 @@ public class CollectiblesController : MonoBehaviour
                     if (added)
                     {
                         Debug.Log($"{collectibleName} coletado!");
+                        // Você pode também exibir uma mensagem rápida no texto do Canvas, se quiser.
+                        // collectible.SetActive(false); se quiser desativar o item coletado na cena
                     }
                 }
             }
@@ -58,17 +77,16 @@ public class CollectiblesController : MonoBehaviour
 
     private void CheckKeyCollectible()
     {
-        // Busca todos os objetos ativos com a tag "Key" na cena
         GameObject[] keys = GameObject.FindGameObjectsWithTag("Key");
         foreach (GameObject key in keys)
         {
-            if (!key.activeInHierarchy)
-                continue;
+            if (!key.activeInHierarchy) continue;
 
             float distance = Vector3.Distance(player.transform.position, key.transform.position);
             if (distance <= collectionRadius)
             {
-                Debug.Log("Pressione E para coletar Key");
+                ShowCollectionMessage("Pressione E para coletar Key");
+
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     PlayerController playerController = player.GetComponent<PlayerController>();
@@ -78,10 +96,25 @@ public class CollectiblesController : MonoBehaviour
                         if (added)
                         {
                             Debug.Log("Key coletada!");
+                            // key.SetActive(false); se quiser desativar a key coletada
                         }
                     }
                 }
             }
         }
+    }
+
+    private void ShowCollectionMessage(string message)
+    {
+        if (collectMessageText == null) return;
+        collectMessageText.gameObject.SetActive(true);
+        collectMessageText.text = message;
+    }
+
+    private void HideCollectionMessage()
+    {
+        if (collectMessageText == null) return;
+        collectMessageText.gameObject.SetActive(false);
+        collectMessageText.text = "";
     }
 }
