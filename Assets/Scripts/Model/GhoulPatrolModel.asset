@@ -26,4 +26,4 @@ MonoBehaviour:
   attackDamage: 1
   attackCooldown: 1.5
   maxHealth: 3
-  currentHealth: 3
+  currentHealth: 0

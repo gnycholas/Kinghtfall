@@ -1,30 +1,30 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerView))]
 public class PlayerController : MonoBehaviour
 {
-    [Header("ReferÍncias ao Model e View")]
+    [Header("Refer√™ncias ao Model e View")]
     [SerializeField] private PlayerModel playerModel;
     [SerializeField] private PlayerView playerView;
     [SerializeField] private CharacterController characterController;
 
-    [Header("ReferÍncias a Objetos de Cena")]
+    [Header("Refer√™ncias a Objetos de Cena")]
     [SerializeField] private GameObject daggerGameObject; // Objeto visual da faca
-    [SerializeField] private GameObject potionGameObject; // Objeto visual da poÁ„o
+    [SerializeField] private GameObject potionGameObject; // Objeto visual da po√ß√£o
     [SerializeField] private GameObject keyGameObject;    // Objeto visual da chave
 
-    [Header("ConfiguraÁıes de AnimaÁ„o")]
-    [SerializeField] private AnimationClip hitAnimationClip;    // AnimaÁ„o de hit (ao receber dano)
-    [SerializeField] private AnimationClip attackAnimationClip; // AnimaÁ„o de ataque
+    [Header("Configura√ß√µes de Anima√ß√£o")]
+    [SerializeField] private AnimationClip hitAnimationClip;    // Anima√ß√£o de hit (ao receber dano)
+    [SerializeField] private AnimationClip attackAnimationClip; // Anima√ß√£o de ataque
 
-    [Header("ConfiguraÁıes de Ataque")]
+    [Header("Configura√ß√µes de Ataque")]
     [SerializeField] private Transform attackPoint;           // Ponto de origem do ataque
     [SerializeField] private float attackRange = 1.5f;          // Alcance do ataque
     [SerializeField] private LayerMask enemyLayer;            // Layer dos inimigos
 
-    // Utilizada para orientar o jogador durante a movimentaÁ„o
+    // Utilizada para orientar o jogador durante a movimenta√ß√£o
     private Vector3 lastMovementDirection;
 
     private void Awake()
@@ -52,10 +52,12 @@ public class PlayerController : MonoBehaviour
         HandleMovement();
     }
 
-    #region MovimentaÁ„o
+    #region Movimenta√ß√£o
     private void HandleMovement()
     {
-        if (playerModel.isDead || playerModel.isHit || playerModel.isAttacking || playerModel.isDrinking)
+        // Bloqueia o movimento totalmente apenas se estiver morto, hit ou bebendo;
+        // Se estiver atacando, vamos permitir o movimento, mas sem atualizar a rota√ß√£o.
+        if (playerModel.isDead || playerModel.isHit || playerModel.isDrinking || playerModel.isAttacking)
         {
             playerView.UpdateAnimations(false, false, false);
             characterController.SimpleMove(Vector3.zero);
@@ -64,38 +66,87 @@ public class PlayerController : MonoBehaviour
 
         playerModel.isInjured = (playerModel.currentHealth < 3 && !playerModel.isDead);
 
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-        Vector3 direction = new Vector3(horizontal, 0, vertical).normalized;
-        lastMovementDirection = direction;
+        // Obter inputs
+        float vertical = Input.GetAxis("Vertical");    // W/S ‚Äì avan√ßo ou recuo
+        float horizontal = Input.GetAxis("Horizontal"); // A/D ‚Äì usado para rota√ß√£o ou giro
 
-        bool isShiftPressed = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
-        if (direction.magnitude > 0.1f)
+        // Estados de giro
+        bool turningLeft = false;
+        bool turningRight = false;
+        bool backing = false;
+
+        // Se n√£o estiver atacando, atualiza a rota√ß√£o conforme o input:
+        if (!playerModel.isAttacking)
+        {
+            if (vertical > 0.1f)
+            {
+                // Avan√ßo: rota√ß√£o livre
+                float rotationSpeed = 150f;
+                transform.Rotate(0, horizontal * rotationSpeed * Time.deltaTime, 0);
+            }
+            else if (vertical < -0.1f)
+            {
+                // Recuo: n√£o permite rota√ß√£o (bloqueia rota√ß√£o) e marca como backing
+                backing = true;
+            }
+            else // Quando parado (vertical ‚âà 0)
+            {
+                // Permite rota√ß√£o para virar
+                float idleRotationSpeed = 150f;
+                transform.Rotate(0, horizontal * idleRotationSpeed * Time.deltaTime, 0);
+                if (horizontal < -0.1f)
+                    turningLeft = true;
+                else if (horizontal > 0.1f)
+                    turningRight = true;
+            }
+        }
+        // Se estiver atacando, ignoramos o input horizontal para rota√ß√£o
+        else
+        {
+            // Opcional: Voc√™ pode armazenar a √∫ltima rota√ß√£o ou simplesmente n√£o atualizar.
+        }
+
+        // Atualiza os estados de giro no model e view
+        playerModel.isTurningLeft = turningLeft;
+        playerModel.isTurningRight = turningRight;
+        playerModel.isBacking = backing;
+        playerView.UpdateTurning(turningLeft, turningRight, backing);
+
+        // Movimento: sempre na dire√ß√£o que o personagem est√° virado
+        Vector3 moveDirection = transform.forward * vertical;
+
+        // Define se est√° correndo (apenas quando avan√ßando)
+        bool isRunning = false;
+        if (vertical > 0.1f)
+        {
+            isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            playerModel.isWalking = true;
+        }
+        else if (Mathf.Abs(vertical) > 0.1f)
         {
             playerModel.isWalking = true;
-            playerModel.isRunning = isShiftPressed;
+            isRunning = false;
         }
         else
         {
             playerModel.isWalking = false;
-            playerModel.isRunning = false;
+            isRunning = false;
         }
+        playerModel.isRunning = isRunning;
 
-        float currentSpeed = (playerModel.isRunning ? playerModel.runSpeed : playerModel.walkSpeed);
-        Vector3 velocity = direction * currentSpeed;
-        characterController.SimpleMove(velocity);
+        float currentSpeed = isRunning ? playerModel.runSpeed : playerModel.walkSpeed;
+        characterController.SimpleMove(moveDirection * currentSpeed);
 
-        if (direction != Vector3.zero)
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(direction), 0.2f);
-
+        // Atualiza as anima√ß√µes principais (Idle, Walk, Run, etc.)
         playerView.UpdateAnimations(playerModel.isWalking, playerModel.isRunning, playerModel.isInjured);
     }
+
     #endregion
 
     #region Combate
     private void HandleCombat()
     {
-        // Toggle para a faca com Alpha1 ñ somente permite se o jogador possuir a faca no invent·rio
+        // Toggle para a faca com Alpha1 ‚Äì somente permite se o jogador possuir a faca no invent√°rio
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (HasKnifeInInventory())
@@ -106,7 +157,7 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                Debug.Log("VocÍ n„o possui a faca no invent·rio.");
+                Debug.Log("Voc√™ n√£o possui a faca no invent√°rio.");
             }
         }
 
@@ -138,7 +189,7 @@ public class PlayerController : MonoBehaviour
             GhoulPatrolController ghoul = enemy.GetComponent<GhoulPatrolController>();
             if (ghoul != null)
             {
-                ghoul.TakeDamage(1); // Ajuste o dano conforme necess·rio
+                ghoul.TakeDamage(1); // Ajuste o dano conforme necess√°rio
                 Debug.Log("ghoul sofreu o dano");
             }
         }
@@ -177,15 +228,15 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Invent·rio e Itens (PoÁ„o, Chave e Faca)
+    #region Invent√°rio e Itens (Po√ß√£o, Chave e Faca)
     private void HandleInventoryInput()
     {
-        // Toggle para equipar/desequipar a poÁ„o com Alpha2
+        // Toggle para equipar/desequipar a po√ß√£o com Alpha2
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
             if (playerModel.isPotionEquipped)
             {
-                // Desequipa a poÁ„o se j· estiver equipada
+                // Desequipa a po√ß√£o se j√° estiver equipada
                 playerModel.isPotionEquipped = false;
                 playerView.UpdatePotionEquip(false);
             }
@@ -208,7 +259,7 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Se a poÁ„o estiver equipada e o jogador clicar com o bot„o esquerdo, consome a poÁ„o
+        // Se a po√ß√£o estiver equipada e o jogador clicar com o bot√£o esquerdo, consome a po√ß√£o
         if (playerModel.isPotionEquipped && Input.GetMouseButtonDown(0))
         {
             playerModel.isDrinking = true;
@@ -222,13 +273,13 @@ public class PlayerController : MonoBehaviour
         {
             if (playerModel.isKeyEquipped)
             {
-                // Desequipa a chave se j· estiver equipada
+                // Desequipa a chave se j√° estiver equipada
                 playerModel.isKeyEquipped = false;
                 playerView.UpdateKeyEquip(false);
             }
             else if (HasKeyInInventory())
             {
-                // Se a poÁ„o ou a faca estiverem equipadas, desequipe-as antes
+                // Se a po√ß√£o ou a faca estiverem equipadas, desequipe-as antes
                 if (playerModel.isPotionEquipped)
                 {
                     playerModel.isPotionEquipped = false;
@@ -248,17 +299,17 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator ConsumePotionRoutine()
     {
-        float potionAnimDuration = 2.75f; // Ajuste conforme a duraÁ„o real da animaÁ„o de beber a poÁ„o
+        float potionAnimDuration = 2.75f; // Ajuste conforme a dura√ß√£o real da anima√ß√£o de beber a po√ß√£o
         yield return new WaitForSeconds(potionAnimDuration);
 
-        // Ao final da animaÁ„o:
+        // Ao final da anima√ß√£o:
         playerModel.currentHealth = 5;             // Restaura a vida para 5
-        playerModel.isPotionEquipped = false;        // Desativa o estado de poÁ„o equipada
-        playerModel.isDrinking = false;              // Libera a movimentaÁ„o
+        playerModel.isPotionEquipped = false;        // Desativa o estado de po√ß√£o equipada
+        playerModel.isDrinking = false;              // Libera a movimenta√ß√£o
         playerView.UpdateDrinking(false);
         playerView.UpdatePotionEquip(false);
         RemovePotionFromInventory();
-        Debug.Log("PoÁ„o consumida: vida restaurada para 5");
+        Debug.Log("Po√ß√£o consumida: vida restaurada para 5");
     }
 
     private bool HasPotionInInventory()
@@ -284,7 +335,7 @@ public class PlayerController : MonoBehaviour
             if (playerModel.inventory[i] != null && playerModel.inventory[i].CompareTag("Potion"))
             {
                 playerModel.inventory.RemoveAt(i);
-                Debug.Log("PoÁ„o removida do invent·rio.");
+                Debug.Log("Po√ß√£o removida do invent√°rio.");
                 break;
             }
         }
@@ -313,7 +364,7 @@ public class PlayerController : MonoBehaviour
             if (playerModel.inventory[i] != null && playerModel.inventory[i].CompareTag("Key"))
             {
                 playerModel.inventory.RemoveAt(i);
-                Debug.Log("Chave removida do invent·rio.");
+                Debug.Log("Chave removida do invent√°rio.");
                 break;
             }
         }
@@ -336,7 +387,7 @@ public class PlayerController : MonoBehaviour
     {
         if (item == null)
         {
-            Debug.LogWarning("Tentativa de adicionar item nulo ao invent·rio.");
+            Debug.LogWarning("Tentativa de adicionar item nulo ao invent√°rio.");
             return false;
         }
 
@@ -346,9 +397,9 @@ public class PlayerController : MonoBehaviour
         }
 
         playerModel.inventory.Add(item);
-        // Desativa o item para que ele desapareÁa do mundo apÛs a coleta
+        // Desativa o item para que ele desapare√ßa do mundo ap√≥s a coleta
         item.SetActive(false);
-        Debug.Log($"Item '{item.name}' adicionado ao invent·rio. Total de itens: {playerModel.inventory.Count}");
+        Debug.Log($"Item '{item.name}' adicionado ao invent√°rio. Total de itens: {playerModel.inventory.Count}");
         return true;
     }
     #endregion
