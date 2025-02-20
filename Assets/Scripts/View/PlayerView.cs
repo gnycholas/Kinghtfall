@@ -56,10 +56,7 @@ public class PlayerView : MonoBehaviour
     // Método para atualizar a visualização da poção na mão
     public void UpdatePotionEquip(bool isEquipped)
     {
-        // Atualiza o parâmetro do Animator (certifique-se de que o parâmetro está exatamente nomeado "isPotionEquipped")
         animator.SetBool("isPotionEquipped", isEquipped);
-
-        // Ativa ou desativa o objeto visual da poção conforme o estado
         if (potionGameObject != null)
         {
             potionGameObject.SetActive(isEquipped);

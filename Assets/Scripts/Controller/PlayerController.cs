@@ -13,6 +13,9 @@ public class PlayerController : MonoBehaviour
     [Header("Referências a Objetos de Cena")]
     [SerializeField] private GameObject daggerGameObject; // Objeto da faca
 
+    [Header("Referências a Objetos de Cena")]
+    [SerializeField] private GameObject potionGameObject; // Objeto do potion
+
     [Header("Configurações de Animação")]
     [SerializeField] private AnimationClip hitAnimationClip;    // Animação de hit (ao receber dano)
     [SerializeField] private AnimationClip attackAnimationClip; // Animação de ataque
@@ -168,6 +171,7 @@ public class PlayerController : MonoBehaviour
             if (HasPotionInInventory())
             {
                 playerModel.isPotionEquipped = true;
+                potionGameObject.SetActive(playerModel.isKnifeEquipped);
                 playerView.UpdatePotionEquip(true);
             }
         }
