@@ -6,29 +6,52 @@ public class CollectiblesController : MonoBehaviour
     [Tooltip("Referência ao GameObject do jogador (tag 'Player').")]
     public GameObject player;
 
-    [Tooltip("Referência ao GameObject da poção (tag 'Potion').")]
-    public GameObject item;
+    [Tooltip("Referência ao GameObject da faca (tag 'Knife').")]
+    public GameObject dagger;
 
-    [Tooltip("Raio de alcance para coletar a poção.")]
+    [Tooltip("Referência ao GameObject da poção (tag 'Potion').")]
+    public GameObject potion;
+
+    [Tooltip("Referência ao GameObject da chave (tag 'Key').")]
+    public GameObject key;
+
+    [Tooltip("Raio de alcance para coletar os itens.")]
     public float collectionRadius = 2f;
 
     private void Update()
     {
-        if (player == null || item == null)
+        if (player == null)
             return;
 
-        float distance = Vector3.Distance(player.transform.position, item.transform.position);
+        CheckCollectible(dagger, "Dagger");
+        CheckCollectible(potion, "Potion");
+        CheckCollectible(key, "Key");
+    }
+
+    private void CheckCollectible(GameObject collectible, string collectibleName)
+    {
+        if (collectible == null)
+            return;
+
+        // Apenas verifica se o objeto estiver ativo (se já foi coletado, ele deve estar desativado)
+        if (!collectible.activeInHierarchy)
+            return;
+
+        float distance = Vector3.Distance(player.transform.position, collectible.transform.position);
         if (distance <= collectionRadius)
         {
-            Debug.Log("Aperte a tecla E para coletar a poção");
+            Debug.Log($"Pressione E para coletar {collectibleName}");
 
             if (Input.GetKeyDown(KeyCode.E))
             {
-                // Supondo que o PlayerController tenha um método AddItemToInventory(GameObject item)
                 PlayerController playerController = player.GetComponent<PlayerController>();
                 if (playerController != null)
                 {
-                    playerController.AddItemToInventory(item);
+                    bool added = playerController.AddItemToInventory(collectible);
+                    if (added)
+                    {
+                        Debug.Log($"{collectibleName} coletado!");
+                    }
                 }
             }
         }

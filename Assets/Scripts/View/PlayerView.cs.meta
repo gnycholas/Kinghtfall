@@ -9,6 +9,8 @@ MonoImporter:
       type: 3}
   - potionGameObject: {fileID: 5418167635440012374, guid: ae85be3c092d4f840be50cc355db5d94,
       type: 3}
+  - keyGameObject: {fileID: 919132149155446097, guid: e9bd0f7bb34ec38478711deba9bbad97,
+      type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

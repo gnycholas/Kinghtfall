@@ -11,10 +11,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CharacterController characterController;
 
     [Header("Referências a Objetos de Cena")]
-    [SerializeField] private GameObject daggerGameObject; // Objeto da faca
-
-    [Header("Referências a Objetos de Cena")]
-    [SerializeField] private GameObject potionGameObject; // Objeto do potion
+    [SerializeField] private GameObject daggerGameObject; // Objeto visual da faca
+    [SerializeField] private GameObject potionGameObject; // Objeto visual da poção
+    [SerializeField] private GameObject keyGameObject;    // Objeto visual da chave
 
     [Header("Configurações de Animação")]
     [SerializeField] private AnimationClip hitAnimationClip;    // Animação de hit (ao receber dano)
@@ -36,6 +35,14 @@ public class PlayerController : MonoBehaviour
             playerView = GetComponent<PlayerView>();
         if (characterController == null)
             characterController = GetComponent<CharacterController>();
+
+        // Garante que os objetos visuais equipados comecem desativados
+        if (daggerGameObject != null)
+            daggerGameObject.SetActive(false);
+        if (potionGameObject != null)
+            potionGameObject.SetActive(false);
+        if (keyGameObject != null)
+            keyGameObject.SetActive(false);
     }
 
     private void Update()
@@ -88,11 +95,19 @@ public class PlayerController : MonoBehaviour
     #region Combate
     private void HandleCombat()
     {
+        // Toggle para a faca com Alpha1 – somente permite se o jogador possuir a faca no inventário
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            playerModel.isKnifeEquipped = !playerModel.isKnifeEquipped;
-            daggerGameObject.SetActive(playerModel.isKnifeEquipped);
-            playerView.UpdateKnifeEquip(playerModel.isKnifeEquipped);
+            if (HasKnifeInInventory())
+            {
+                playerModel.isKnifeEquipped = !playerModel.isKnifeEquipped;
+                daggerGameObject.SetActive(playerModel.isKnifeEquipped);
+                playerView.UpdateKnifeEquip(playerModel.isKnifeEquipped);
+            }
+            else
+            {
+                Debug.Log("Você não possui a faca no inventário.");
+            }
         }
 
         if (playerModel.isKnifeEquipped && !playerModel.isAttacking)
@@ -162,16 +177,33 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Inventário e Poção
+    #region Inventário e Itens (Poção, Chave e Faca)
     private void HandleInventoryInput()
     {
-        // Pressiona Alpha2 para equipar a poção, se houver no inventário
+        // Toggle para equipar/desequipar a poção com Alpha2
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            if (HasPotionInInventory())
+            if (playerModel.isPotionEquipped)
             {
+                // Desequipa a poção se já estiver equipada
+                playerModel.isPotionEquipped = false;
+                playerView.UpdatePotionEquip(false);
+            }
+            else if (HasPotionInInventory())
+            {
+                // Se a chave ou a faca estiverem equipadas, desequipe-as antes
+                if (playerModel.isKeyEquipped)
+                {
+                    playerModel.isKeyEquipped = false;
+                    playerView.UpdateKeyEquip(false);
+                }
+                if (playerModel.isKnifeEquipped)
+                {
+                    playerModel.isKnifeEquipped = false;
+                    daggerGameObject.SetActive(false);
+                    playerView.UpdateKnifeEquip(false);
+                }
                 playerModel.isPotionEquipped = true;
-                potionGameObject.SetActive(playerModel.isKnifeEquipped);
                 playerView.UpdatePotionEquip(true);
             }
         }
@@ -179,24 +211,50 @@ public class PlayerController : MonoBehaviour
         // Se a poção estiver equipada e o jogador clicar com o botão esquerdo, consome a poção
         if (playerModel.isPotionEquipped && Input.GetMouseButtonDown(0))
         {
-            // Define que o jogador está bebendo a poção (bloqueando outros movimentos)
             playerModel.isDrinking = true;
             playerView.UpdateDrinking(true);
             playerView.TriggerPotionDrink();
             StartCoroutine(ConsumePotionRoutine());
         }
+
+        // Toggle para equipar/desequipar a chave com Alpha3
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            if (playerModel.isKeyEquipped)
+            {
+                // Desequipa a chave se já estiver equipada
+                playerModel.isKeyEquipped = false;
+                playerView.UpdateKeyEquip(false);
+            }
+            else if (HasKeyInInventory())
+            {
+                // Se a poção ou a faca estiverem equipadas, desequipe-as antes
+                if (playerModel.isPotionEquipped)
+                {
+                    playerModel.isPotionEquipped = false;
+                    playerView.UpdatePotionEquip(false);
+                }
+                if (playerModel.isKnifeEquipped)
+                {
+                    playerModel.isKnifeEquipped = false;
+                    daggerGameObject.SetActive(false);
+                    playerView.UpdateKnifeEquip(false);
+                }
+                playerModel.isKeyEquipped = true;
+                playerView.UpdateKeyEquip(true);
+            }
+        }
     }
 
     private IEnumerator ConsumePotionRoutine()
     {
-        // Aguarda a duração da animação de beber a poção (ajuste conforme necessário)
-        float potionAnimDuration = 2.75f;
+        float potionAnimDuration = 2.75f; // Ajuste conforme a duração real da animação de beber a poção
         yield return new WaitForSeconds(potionAnimDuration);
 
         // Ao final da animação:
         playerModel.currentHealth = 5;             // Restaura a vida para 5
         playerModel.isPotionEquipped = false;        // Desativa o estado de poção equipada
-        playerModel.isDrinking = false;              // Libera a movimentação (não está mais bebendo)
+        playerModel.isDrinking = false;              // Libera a movimentação
         playerView.UpdateDrinking(false);
         playerView.UpdatePotionEquip(false);
         RemovePotionFromInventory();
@@ -232,6 +290,48 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private bool HasKeyInInventory()
+    {
+        if (playerModel.inventory == null)
+            return false;
+
+        foreach (GameObject item in playerModel.inventory)
+        {
+            if (item != null && item.CompareTag("Key"))
+                return true;
+        }
+        return false;
+    }
+
+    private void RemoveKeyFromInventory()
+    {
+        if (playerModel.inventory == null)
+            return;
+
+        for (int i = 0; i < playerModel.inventory.Count; i++)
+        {
+            if (playerModel.inventory[i] != null && playerModel.inventory[i].CompareTag("Key"))
+            {
+                playerModel.inventory.RemoveAt(i);
+                Debug.Log("Chave removida do inventário.");
+                break;
+            }
+        }
+    }
+
+    private bool HasKnifeInInventory()
+    {
+        if (playerModel.inventory == null)
+            return false;
+
+        foreach (GameObject item in playerModel.inventory)
+        {
+            if (item != null && item.CompareTag("Dagger"))
+                return true;
+        }
+        return false;
+    }
+
     public bool AddItemToInventory(GameObject item)
     {
         if (item == null)
@@ -246,9 +346,10 @@ public class PlayerController : MonoBehaviour
         }
 
         playerModel.inventory.Add(item);
+        // Desativa o item para que ele desapareça do mundo após a coleta
         item.SetActive(false);
         Debug.Log($"Item '{item.name}' adicionado ao inventário. Total de itens: {playerModel.inventory.Count}");
         return true;
     }
+    #endregion
 }
-#endregion

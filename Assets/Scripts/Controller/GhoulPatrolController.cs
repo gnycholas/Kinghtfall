@@ -9,7 +9,7 @@ public enum GhoulState
     Screaming,
     Chasing,
     Attacking,
-    Hit,      // Novo estado para quando o ghoul sofre dano
+    Hit,
     Dead
 }
 
@@ -28,6 +28,10 @@ public class GhoulPatrolController : MonoBehaviour
 
     [Tooltip("Offset para o alvo de ataque (ex.: para atingir os pés do player).")]
     [SerializeField] private Vector3 attackTargetOffset = new Vector3(0, -1f, 0);
+
+    [Header("Drop")]
+    [Tooltip("Prefab da chave que será dropada quando o ghoul morrer.")]
+    [SerializeField] private GameObject keyDropPrefab;
 
     private GhoulState _currentState = GhoulState.Patrol;
     private Vector3 _patrolCenter;
@@ -50,7 +54,6 @@ public class GhoulPatrolController : MonoBehaviour
 
     private void Update()
     {
-        // Se o ghoul estiver morto ou em estado Hit, não processa outros comportamentos
         if (_currentState == GhoulState.Dead || _currentState == GhoulState.Hit)
             return;
 
@@ -64,14 +67,12 @@ public class GhoulPatrolController : MonoBehaviour
                 DetectPlayer();
                 break;
             case GhoulState.Screaming:
-                // O ghoul está parado gritando
                 break;
             case GhoulState.Chasing:
                 ChaseUpdate();
                 AttackCheck();
                 break;
             case GhoulState.Attacking:
-                // Durante o ataque, o movimento está bloqueado
                 break;
         }
     }
@@ -196,7 +197,6 @@ public class GhoulPatrolController : MonoBehaviour
     private void ChaseUpdate()
     {
         if (!playerTransform) return;
-        // Usa o offset para que o ghoul mire num ponto ajustado no player
         agent.SetDestination(playerTransform.position + attackTargetOffset);
 
         if (!HasLineOfSightToPlayer())
@@ -226,7 +226,6 @@ public class GhoulPatrolController : MonoBehaviour
         _currentState = GhoulState.Attacking;
         agent.SetDestination(transform.position); // Bloqueia movimento durante o ataque
 
-        // Completa o ciclo atual de ataque, mesmo que o player fuja durante a animação
         do
         {
             if (view) view.PlayAttackAnimation();
@@ -235,7 +234,6 @@ public class GhoulPatrolController : MonoBehaviour
             float attackAnimDuration = 1f; // Ajuste para a duração real da animação de ataque
             yield return new WaitForSeconds(attackAnimDuration);
 
-            // Se o player ainda estiver no range, aplica dano
             if (Vector3.Distance(transform.position, playerTransform.position) <= model.attackRange)
             {
                 PlayerController playerCtrl = playerTransform.GetComponent<PlayerController>();
@@ -255,7 +253,6 @@ public class GhoulPatrolController : MonoBehaviour
     #region Vida e Dano (Ghoul)
     public void TakeDamage(int damage)
     {
-        // Se houver uma corrotina de ataque ativa, interrompe-a (para que o sistema de dano seja desativado)
         if (damageCoroutine != null)
         {
             StopCoroutine(damageCoroutine);
@@ -265,7 +262,6 @@ public class GhoulPatrolController : MonoBehaviour
         model.currentHealth -= damage;
         if (model.currentHealth > 0)
         {
-            // Entra no estado Hit e executa a animação
             StartCoroutine(HitRoutine());
         }
         else
@@ -283,8 +279,7 @@ public class GhoulPatrolController : MonoBehaviour
             agent.velocity = Vector3.zero;
         }
         if (view) view.TriggerHit();
-        // Aguarda a duração da animação de hit (ajuste conforme necessário)
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f); // Ajuste conforme a duração da animação de hit
         if (view) view.ResetHitAnimation();
         _currentState = GhoulState.Chasing;
     }
@@ -299,7 +294,13 @@ public class GhoulPatrolController : MonoBehaviour
             agent.velocity = Vector3.zero;
         }
         if (view) view.TriggerDie();
-        // Opcional: desative ou destrua o ghoul após um tempo
+
+        // Instancia o drop da chave, se o prefab estiver atribuído
+        if (keyDropPrefab != null)
+        {
+            Instantiate(keyDropPrefab, transform.position, Quaternion.identity);
+        }
+        // Opcional: destruir o ghoul após algum tempo
         // Destroy(gameObject, 3f);
     }
     #endregion

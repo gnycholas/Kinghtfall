@@ -23,6 +23,7 @@ public class PlayerModel : ScriptableObject
     [Tooltip("Lista para armazenar itens coletados.")]
     public List<GameObject> inventory = new List<GameObject>();
     public bool isPotionEquipped;
+    public bool isKeyEquipped; // Flag para a chave
 
     [Header("Estado de Hit")]
     public bool isHit;

@@ -8,11 +8,11 @@ public class PlayerView : MonoBehaviour
     [Header("Referência aos Objetos Visuais")]
     [SerializeField] private GameObject knifeGameObject;
     [SerializeField] private GameObject potionGameObject; // Objeto visual da poção (aparece na mão quando equipada)
+    [SerializeField] private GameObject keyGameObject;    // Objeto visual da chave (aparece na mão quando equipada)
 
     private static readonly int AttackTriggerHash = Animator.StringToHash("Attack");
     private static readonly int HitTriggerHash = Animator.StringToHash("Hit");
 
-    // Parâmetros de movimentação e estados já existentes
     public void UpdateAnimations(bool isWalking, bool isRunning, bool isInjured)
     {
         animator.SetBool("isWalking", isWalking);
@@ -53,17 +53,13 @@ public class PlayerView : MonoBehaviour
         animator.SetBool("isAttacking", attacking);
     }
 
-    // Método para atualizar a visualização da poção na mão
     public void UpdatePotionEquip(bool isEquipped)
     {
         animator.SetBool("isPotionEquipped", isEquipped);
         if (potionGameObject != null)
-        {
             potionGameObject.SetActive(isEquipped);
-        }
     }
 
-    // Novo método para disparar a animação de beber a poção
     public void TriggerPotionDrink()
     {
         animator.SetTrigger("PotionDrink");
@@ -74,4 +70,9 @@ public class PlayerView : MonoBehaviour
         animator.SetBool("isDrinking", isDrinking);
     }
 
+    public void UpdateKeyEquip(bool isEquipped)
+    {
+        if (keyGameObject != null)
+            keyGameObject.SetActive(isEquipped);
+    }
 }

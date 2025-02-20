@@ -11,7 +11,6 @@ public class GhoulPatrolView : MonoBehaviour
     private static readonly int HitTriggerHash = Animator.StringToHash("hitTrigger");
     private static readonly int DieTriggerHash = Animator.StringToHash("dieTrigger");
 
-    // Atualiza as animações de movimento
     public void PlayIdleAnimation()
     {
         if (!animator) return;
@@ -45,7 +44,6 @@ public class GhoulPatrolView : MonoBehaviour
         animator.SetTrigger(AttackTriggerHash);
     }
 
-    // Dispara o trigger de hit e seta isHit para true
     public void TriggerHit()
     {
         if (!animator) return;
@@ -53,7 +51,6 @@ public class GhoulPatrolView : MonoBehaviour
         animator.SetBool("isHit", true);
     }
 
-    // Reseta o bool isHit, permitindo que o Animator saia do estado de hit
     public void ResetHitAnimation()
     {
         if (!animator) return;
