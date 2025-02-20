@@ -7,8 +7,8 @@ public class PlayerView : MonoBehaviour
 
     [Header("Referência aos Objetos Visuais")]
     [SerializeField] private GameObject knifeGameObject;
-    [SerializeField] private GameObject potionGameObject; // Objeto visual da poção (aparece na mão quando equipada)
-    [SerializeField] private GameObject keyGameObject;    // Objeto visual da chave (aparece na mão quando equipada)
+    [SerializeField] private GameObject potionGameObject; // Objeto visual da poção (na mão quando equipada)
+    [SerializeField] private GameObject keyGameObject;    // Objeto visual da chave (na mão quando equipada)
 
     private static readonly int AttackTriggerHash = Animator.StringToHash("Attack");
     private static readonly int HitTriggerHash = Animator.StringToHash("Hit");
@@ -74,5 +74,13 @@ public class PlayerView : MonoBehaviour
     {
         if (keyGameObject != null)
             keyGameObject.SetActive(isEquipped);
+    }
+
+    // Novo método para atualizar os estados de virar e recuar
+    public void UpdateTurning(bool isTurningLeft, bool isTurningRight, bool isBacking)
+    {
+        animator.SetBool("isTurningLeft", isTurningLeft);
+        animator.SetBool("isTurningRight", isTurningRight);
+        animator.SetBool("isBacking", isBacking);
     }
 }

@@ -11,6 +11,9 @@ public class PlayerModel : ScriptableObject
     [Header("Estados de Movimento")]
     public bool isWalking;
     public bool isRunning;
+    public bool isTurningLeft;
+    public bool isTurningRight;
+    public bool isBacking;
 
     [Header("Estados do Personagem")]
     public int maxHealth = 5;
