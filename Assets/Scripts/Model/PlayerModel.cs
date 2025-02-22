@@ -38,6 +38,9 @@ public class PlayerModel : ScriptableObject
     [Header("Estado de Consumir Poção")]
     public bool isDrinking;
 
+    [Header("Estado de Coleta")]
+    public bool isCatching;
+
     /// <summary>
     /// Atualiza a vida do player ao sofrer dano.
     /// </summary>

@@ -20,16 +20,15 @@ MonoBehaviour:
   isTurningRight: 0
   isBacking: 0
   maxHealth: 5
-  currentHealth: 4
+  currentHealth: 5
   isInjured: 0
   isDead: 0
   isKnifeEquipped: 0
-  inventory:
-  - {fileID: 0}
-  - {fileID: 0}
+  inventory: []
   isPotionEquipped: 0
-  isKeyEquipped: 1
+  isKeyEquipped: 0
   isHit: 0
   hitDuration: 1
   isAttacking: 0
   isDrinking: 0
+  isCatching: 0
