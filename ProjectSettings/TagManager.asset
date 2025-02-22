@@ -7,6 +7,9 @@ TagManager:
   - Potion
   - Key
   - Dagger
+  - Lever
+  - ExitDoor
+  - Paper
   layers:
   - Default
   - TransparentFX
