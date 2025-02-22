@@ -290,7 +290,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private bool HasKeyInInventory()
+    public bool HasKeyInInventory()
     {
         if (playerModel.inventory == null)
             return false;
