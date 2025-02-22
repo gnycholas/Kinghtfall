@@ -76,11 +76,17 @@ public class PlayerView : MonoBehaviour
             keyGameObject.SetActive(isEquipped);
     }
 
-    // Novo método para atualizar os estados de virar e recuar
+    // Atualiza os estados de giro (virada) – para acionar animações Left_Turn, Right_Turn, Walking_Backward
     public void UpdateTurning(bool isTurningLeft, bool isTurningRight, bool isBacking)
     {
         animator.SetBool("isTurningLeft", isTurningLeft);
         animator.SetBool("isTurningRight", isTurningRight);
         animator.SetBool("isBacking", isBacking);
+    }
+
+    // Atualiza o estado de coleta (catching)
+    public void UpdateCatching(bool isCatching)
+    {
+        animator.SetBool("isCatching", isCatching);
     }
 }

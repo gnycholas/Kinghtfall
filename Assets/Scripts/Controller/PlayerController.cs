@@ -16,15 +16,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject keyGameObject;    // Objeto visual da chave
 
     [Header("Configurações de Animação")]
-    [SerializeField] private AnimationClip hitAnimationClip;    // Animação de hit (ao receber dano)
-    [SerializeField] private AnimationClip attackAnimationClip; // Animação de ataque
+    [SerializeField] private AnimationClip hitAnimationClip;    // Animação de hit
+    [SerializeField] private AnimationClip attackAnimationClip;   // Animação de ataque
 
     [Header("Configurações de Ataque")]
-    [SerializeField] private Transform attackPoint;           // Ponto de origem do ataque
-    [SerializeField] private float attackRange = 1.5f;          // Alcance do ataque
-    [SerializeField] private LayerMask enemyLayer;            // Layer dos inimigos
+    [SerializeField] private Transform attackPoint;       // Ponto de origem do ataque
+    [SerializeField] private float attackRange = 1.5f;      // Alcance do ataque
+    [SerializeField] private LayerMask enemyLayer;          // Layer dos inimigos
 
-    // Utilizada para orientar o jogador durante a movimentação
     private Vector3 lastMovementDirection;
 
     private void Awake()
@@ -55,9 +54,8 @@ public class PlayerController : MonoBehaviour
     #region Movimentação
     private void HandleMovement()
     {
-        // Bloqueia o movimento totalmente apenas se estiver morto, hit ou bebendo;
-        // Se estiver atacando, vamos permitir o movimento, mas sem atualizar a rotação.
-        if (playerModel.isDead || playerModel.isHit || playerModel.isDrinking || playerModel.isAttacking)
+        // Se estiver bloqueado (morto, hit, atacando, bebendo ou coletando) bloqueia o movimento
+        if (playerModel.isDead || playerModel.isHit || playerModel.isDrinking || playerModel.isAttacking || playerModel.isCatching)
         {
             playerView.UpdateAnimations(false, false, false);
             characterController.SimpleMove(Vector3.zero);
@@ -66,56 +64,40 @@ public class PlayerController : MonoBehaviour
 
         playerModel.isInjured = (playerModel.currentHealth < 3 && !playerModel.isDead);
 
-        // Obter inputs
-        float vertical = Input.GetAxis("Vertical");    // W/S – avanço ou recuo
-        float horizontal = Input.GetAxis("Horizontal"); // A/D – usado para rotação ou giro
+        // Inputs
+        float vertical = Input.GetAxis("Vertical");    // W/S – avanço/recuo
+        float horizontal = Input.GetAxis("Horizontal"); // A/D – rotação
 
-        // Estados de giro
-        bool turningLeft = false;
-        bool turningRight = false;
-        bool backing = false;
+        // Reset dos estados de giro
+        playerModel.isTurningLeft = false;
+        playerModel.isTurningRight = false;
+        playerModel.isBacking = false;
 
-        // Se não estiver atacando, atualiza a rotação conforme o input:
-        if (!playerModel.isAttacking)
+        // Rotação:
+        if (vertical > 0.1f)
         {
-            if (vertical > 0.1f)
-            {
-                // Avanço: rotação livre
-                float rotationSpeed = 150f;
-                transform.Rotate(0, horizontal * rotationSpeed * Time.deltaTime, 0);
-            }
-            else if (vertical < -0.1f)
-            {
-                // Recuo: não permite rotação (bloqueia rotação) e marca como backing
-                backing = true;
-            }
-            else // Quando parado (vertical ≈ 0)
-            {
-                // Permite rotação para virar
-                float idleRotationSpeed = 150f;
-                transform.Rotate(0, horizontal * idleRotationSpeed * Time.deltaTime, 0);
-                if (horizontal < -0.1f)
-                    turningLeft = true;
-                else if (horizontal > 0.1f)
-                    turningRight = true;
-            }
+            // Avanço: rotação livre
+            float rotationSpeed = 150f;
+            transform.Rotate(0, horizontal * rotationSpeed * Time.deltaTime, 0);
         }
-        // Se estiver atacando, ignoramos o input horizontal para rotação
+        else if (vertical < -0.1f)
+        {
+            // Recuo: bloqueia rotação; não se altera a orientação
+            playerModel.isBacking = true;
+        }
         else
         {
-            // Opcional: Você pode armazenar a última rotação ou simplesmente não atualizar.
+            // Parado: permite rotação para mudar de direção e marca os estados de giro
+            float idleRotationSpeed = 100f;
+            transform.Rotate(0, horizontal * idleRotationSpeed * Time.deltaTime, 0);
+            if (horizontal < -0.1f)
+                playerModel.isTurningLeft = true;
+            else if (horizontal > 0.1f)
+                playerModel.isTurningRight = true;
         }
 
-        // Atualiza os estados de giro no model e view
-        playerModel.isTurningLeft = turningLeft;
-        playerModel.isTurningRight = turningRight;
-        playerModel.isBacking = backing;
-        playerView.UpdateTurning(turningLeft, turningRight, backing);
-
-        // Movimento: sempre na direção que o personagem está virado
         Vector3 moveDirection = transform.forward * vertical;
 
-        // Define se está correndo (apenas quando avançando)
         bool isRunning = false;
         if (vertical > 0.1f)
         {
@@ -137,16 +119,15 @@ public class PlayerController : MonoBehaviour
         float currentSpeed = isRunning ? playerModel.runSpeed : playerModel.walkSpeed;
         characterController.SimpleMove(moveDirection * currentSpeed);
 
-        // Atualiza as animações principais (Idle, Walk, Run, etc.)
+        playerView.UpdateTurning(playerModel.isTurningLeft, playerModel.isTurningRight, playerModel.isBacking);
         playerView.UpdateAnimations(playerModel.isWalking, playerModel.isRunning, playerModel.isInjured);
     }
-
     #endregion
 
     #region Combate
     private void HandleCombat()
     {
-        // Toggle para a faca com Alpha1 – somente permite se o jogador possuir a faca no inventário
+        // Toggle para a faca (Alpha1) – apenas se houver faca no inventário
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             if (HasKnifeInInventory())
@@ -189,7 +170,7 @@ public class PlayerController : MonoBehaviour
             GhoulPatrolController ghoul = enemy.GetComponent<GhoulPatrolController>();
             if (ghoul != null)
             {
-                ghoul.TakeDamage(1); // Ajuste o dano conforme necessário
+                ghoul.TakeDamage(1);
                 Debug.Log("ghoul sofreu o dano");
             }
         }
@@ -236,13 +217,11 @@ public class PlayerController : MonoBehaviour
         {
             if (playerModel.isPotionEquipped)
             {
-                // Desequipa a poção se já estiver equipada
                 playerModel.isPotionEquipped = false;
                 playerView.UpdatePotionEquip(false);
             }
             else if (HasPotionInInventory())
             {
-                // Se a chave ou a faca estiverem equipadas, desequipe-as antes
                 if (playerModel.isKeyEquipped)
                 {
                     playerModel.isKeyEquipped = false;
@@ -259,7 +238,6 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        // Se a poção estiver equipada e o jogador clicar com o botão esquerdo, consome a poção
         if (playerModel.isPotionEquipped && Input.GetMouseButtonDown(0))
         {
             playerModel.isDrinking = true;
@@ -273,13 +251,11 @@ public class PlayerController : MonoBehaviour
         {
             if (playerModel.isKeyEquipped)
             {
-                // Desequipa a chave se já estiver equipada
                 playerModel.isKeyEquipped = false;
                 playerView.UpdateKeyEquip(false);
             }
             else if (HasKeyInInventory())
             {
-                // Se a poção ou a faca estiverem equipadas, desequipe-as antes
                 if (playerModel.isPotionEquipped)
                 {
                     playerModel.isPotionEquipped = false;
@@ -299,13 +275,12 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator ConsumePotionRoutine()
     {
-        float potionAnimDuration = 2.75f; // Ajuste conforme a duração real da animação de beber a poção
+        float potionAnimDuration = 2.75f;
         yield return new WaitForSeconds(potionAnimDuration);
 
-        // Ao final da animação:
-        playerModel.currentHealth = 5;             // Restaura a vida para 5
-        playerModel.isPotionEquipped = false;        // Desativa o estado de poção equipada
-        playerModel.isDrinking = false;              // Libera a movimentação
+        playerModel.currentHealth = 5;
+        playerModel.isPotionEquipped = false;
+        playerModel.isDrinking = false;
         playerView.UpdateDrinking(false);
         playerView.UpdatePotionEquip(false);
         RemovePotionFromInventory();
@@ -316,7 +291,6 @@ public class PlayerController : MonoBehaviour
     {
         if (playerModel.inventory == null)
             return false;
-
         foreach (GameObject item in playerModel.inventory)
         {
             if (item != null && item.CompareTag("Potion"))
@@ -329,7 +303,6 @@ public class PlayerController : MonoBehaviour
     {
         if (playerModel.inventory == null)
             return;
-
         for (int i = 0; i < playerModel.inventory.Count; i++)
         {
             if (playerModel.inventory[i] != null && playerModel.inventory[i].CompareTag("Potion"))
@@ -345,7 +318,6 @@ public class PlayerController : MonoBehaviour
     {
         if (playerModel.inventory == null)
             return false;
-
         foreach (GameObject item in playerModel.inventory)
         {
             if (item != null && item.CompareTag("Key"))
@@ -358,7 +330,6 @@ public class PlayerController : MonoBehaviour
     {
         if (playerModel.inventory == null)
             return;
-
         for (int i = 0; i < playerModel.inventory.Count; i++)
         {
             if (playerModel.inventory[i] != null && playerModel.inventory[i].CompareTag("Key"))
@@ -374,13 +345,66 @@ public class PlayerController : MonoBehaviour
     {
         if (playerModel.inventory == null)
             return false;
-
         foreach (GameObject item in playerModel.inventory)
         {
             if (item != null && item.CompareTag("Dagger"))
                 return true;
         }
         return false;
+    }
+
+    // Nova rotina de coleta: o player rotaciona para o item, ativa o estado de "catching" e, durante a rotação,
+    // verifica se está virando para a esquerda ou para a direita, atualizando os parâmetros do animator.
+    public IEnumerator CatchItemRoutine(GameObject item)
+    {
+        // Calcula a direção até o item ignorando a componente vertical
+        Vector3 direction = item.transform.position - transform.position;
+        direction.y = 0f;
+        direction.Normalize();
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        float rotationSpeed = 5f;
+
+        // Enquanto o player não estiver alinhado com o alvo
+        while (Quaternion.Angle(transform.rotation, targetRotation) > 1f)
+        {
+            // Calcula o ângulo assinado para determinar se está virando para a direita ou para a esquerda
+            float signedAngle = Vector3.SignedAngle(transform.forward, targetRotation * Vector3.forward, Vector3.up);
+            if (signedAngle > 0f)
+            {
+                playerModel.isTurningRight = true;
+                playerModel.isTurningLeft = false;
+            }
+            else if (signedAngle < 0f)
+            {
+                playerModel.isTurningLeft = true;
+                playerModel.isTurningRight = false;
+            }
+            else
+            {
+                playerModel.isTurningLeft = false;
+                playerModel.isTurningRight = false;
+            }
+            // Atualiza o animator com os parâmetros de giro
+            playerView.UpdateTurning(playerModel.isTurningLeft, playerModel.isTurningRight, false);
+
+            // Realiza a rotação suave
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            yield return null;
+        }
+        // Reseta os parâmetros de giro após a rotação
+        playerModel.isTurningLeft = false;
+        playerModel.isTurningRight = false;
+        playerView.UpdateTurning(false, false, false);
+
+        // Ativa o estado de coleta, bloqueando a movimentação
+        playerModel.isCatching = true;
+        playerView.UpdateCatching(true);
+        float catchDuration = 1f;
+        yield return new WaitForSeconds(catchDuration);
+        // Coleta o item e desativa o objeto do mundo
+        AddItemToInventory(item);
+        playerModel.isCatching = false;
+        playerView.UpdateCatching(false);
     }
 
     public bool AddItemToInventory(GameObject item)
@@ -390,14 +414,9 @@ public class PlayerController : MonoBehaviour
             Debug.LogWarning("Tentativa de adicionar item nulo ao inventário.");
             return false;
         }
-
         if (playerModel.inventory == null)
-        {
             playerModel.inventory = new List<GameObject>();
-        }
-
         playerModel.inventory.Add(item);
-        // Desativa o item para que ele desapareça do mundo após a coleta
         item.SetActive(false);
         Debug.Log($"Item '{item.name}' adicionado ao inventário. Total de itens: {playerModel.inventory.Count}");
         return true;
