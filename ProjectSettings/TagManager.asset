@@ -10,6 +10,7 @@ TagManager:
   - Lever
   - ExitDoor
   - Paper
+  - Chest
   layers:
   - Default
   - TransparentFX
