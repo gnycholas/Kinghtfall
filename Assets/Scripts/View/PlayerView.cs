@@ -11,7 +11,7 @@ public class PlayerView : MonoBehaviour
     [SerializeField] private AudioSource runningAudioSource;
     [SerializeField] private AudioClip[] runningAudioClips;
     [SerializeField] private AudioSource attackingAudioSource;
-    [SerializeField] private AudioClip attackingAudioClip;
+    [SerializeField] private AudioClip[] attackingAudioClips;
 
     [Header("Referência aos Objetos Visuais")]
     [SerializeField] private GameObject knifeGameObject;
@@ -112,6 +112,7 @@ public class PlayerView : MonoBehaviour
 
     private void AttackEvent()
     {
-        walkingAudioSource.PlayOneShot(attackingAudioClip);
+        int index = Random.Range(0, attackingAudioClips.Length);
+        walkingAudioSource.PlayOneShot(attackingAudioClips[index]);
     }
 }
