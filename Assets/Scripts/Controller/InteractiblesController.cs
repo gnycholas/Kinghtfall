@@ -20,7 +20,8 @@ public class InteractiblesController : MonoBehaviour
     public GameObject exitDoor;
     public GameObject exitDoorOppened;
     public GameObject paper;
-    public GameObject chest; // Neste campo, atribua o GameObject "Pivot", que contém o Animator.
+    public GameObject chest1;
+    public GameObject chest2;
 
     [Tooltip("Raio de alcance para interagir com os objetos.")]
     public float interactionRadius = 2f;
@@ -54,7 +55,8 @@ public class InteractiblesController : MonoBehaviour
         CheckCollectible(leverDisabled, "<Alavanca>");
         CheckCollectible(exitDoor, "<Porta de saída>");
         CheckCollectible(paper, "<Anotações>");
-        CheckCollectible(chest, "<Baú>");
+        CheckCollectible(chest1, "<Baú>");
+        CheckCollectible(chest2, "<Baú>");
     }
 
     private void CheckCollectible(GameObject interactible, string interactibleName)
