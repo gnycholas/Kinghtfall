@@ -903,7 +903,8 @@ MonoBehaviour:
   exitDoor: {fileID: 0}
   exitDoorOppened: {fileID: 0}
   paper: {fileID: 0}
-  chest: {fileID: 1261788313}
+  chest1: {fileID: 1261788313}
+  chest2: {fileID: 0}
   interactionRadius: 2
   interactiblesMessageText: {fileID: 0}
 --- !u!1 &1112315084
