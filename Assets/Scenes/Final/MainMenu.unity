@@ -1958,7 +1958,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 226968278}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 599882666}
+        m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
+        m_MethodName: OpenExitConfirmation
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &226968278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3910,6 +3922,7 @@ GameObject:
   - component: {fileID: 599882663}
   - component: {fileID: 599882665}
   - component: {fileID: 599882664}
+  - component: {fileID: 599882666}
   m_Layer: 5
   m_Name: MainMenuPanel
   m_TagString: Untagged
@@ -3977,6 +3990,22 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 599882662}
   m_CullTransparentMesh: 1
+--- !u!114 &599882666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 599882662}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca0d5b50039c78a42a004d15c1b3732d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelExitConfirmation: {fileID: 2001460223}
+  panelCredits: {fileID: 1543486416}
+  mainMenuPanel: {fileID: 599882662}
+  panelOptions: {fileID: 1988493321}
 --- !u!1 &600566046
 GameObject:
   m_ObjectHideFlags: 0
@@ -4873,7 +4902,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 799074224}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 599882666}
+        m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
+        m_MethodName: ConfirmExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &799074224
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4997,7 +5038,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 813870650}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 599882666}
+        m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
+        m_MethodName: OpenOptions
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &813870650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5633,7 +5686,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 900413732}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 599882666}
+        m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
+        m_MethodName: NewGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &900413732
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7022,7 +7087,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1128443215}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 599882666}
+        m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
+        m_MethodName: OpenCredits
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1128443215
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7881,7 +7958,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: 321}
+  m_AnchoredPosition: {x: -100, y: 290}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1241544304
@@ -7917,13 +7994,17 @@ MonoBehaviour:
     Junqueira, Luiz vale
 
 
-    Leonardo
+    Leonardo Costa
 
 
     Victor Oli.
 
 
-    Victor Oli.'
+    Victor Oli.
+
+
+    Micael
+    Victor'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e97462c4ee3f38041b59a8745274f5dd, type: 2}
   m_sharedMaterial: {fileID: 3925498758524469425, guid: e97462c4ee3f38041b59a8745274f5dd,
@@ -7987,7 +8068,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -359.37476, y: 0, z: 0, w: -632.11505}
+  m_margin: {x: -612.87933, y: 0, z: 0, w: -632.11505}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -8083,7 +8164,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1276610093}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 599882666}
+        m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
+        m_MethodName: CloseOptions
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1276610093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9840,7 +9933,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1532777726}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 599882666}
+        m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
+        m_MethodName: LoadGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1532777726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10289,7 +10394,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 100, y: 289}
+  m_AnchoredPosition: {x: 100, y: 290}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1580973652
@@ -10313,7 +10418,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "Dire\xE7\xE3o\n\nProdu\xE7\xE3o\n\nGame Design\n\nDesenvolvimento\n\nModelagem\n\nTrilha
-    sonora\n\nEfeito sonoro"
+    sonora\n\nEfeito sonoro\n\nDublagem"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 45e360eec22cc3f44bd05daa5d2f3b39, type: 2}
   m_sharedMaterial: {fileID: -5782564731167286993, guid: 45e360eec22cc3f44bd05daa5d2f3b39,
@@ -10473,7 +10578,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1588599069}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 599882666}
+        m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
+        m_MethodName: CloseCredits
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1588599069
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10982,7 +11099,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1647506257}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 599882666}
+        m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
+        m_MethodName: CancelExit
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1647506257
 MonoBehaviour:
   m_ObjectHideFlags: 0
