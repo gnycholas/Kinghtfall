@@ -5,6 +5,12 @@ public class PlayerView : MonoBehaviour
     [Header("Referência ao Animator")]
     [SerializeField] private Animator animator;
 
+    [Header("Referência aos Audio Sources")]
+    [SerializeField] private AudioSource walkingAudioSource;
+    [SerializeField] private AudioClip[] walkingAudioClips;
+    [SerializeField] private AudioSource runningAudioSource;
+    [SerializeField] private AudioClip[] runningAudioClips;
+
     [Header("Referência aos Objetos Visuais")]
     [SerializeField] private GameObject knifeGameObject;
     [SerializeField] private GameObject potionGameObject; // Objeto visual da poção (na mão quando equipada)
@@ -88,5 +94,17 @@ public class PlayerView : MonoBehaviour
     public void UpdateCatching(bool isCatching)
     {
         animator.SetBool("isCatching", isCatching);
+    }
+
+    private void PassoEvent()
+    {
+        int index = Random.Range(0, walkingAudioClips.Length);
+        walkingAudioSource.PlayOneShot(walkingAudioClips[index]);
+    }
+
+    private void CorrerEvent()
+    {
+        int index = Random.Range(0, runningAudioClips.Length);
+        walkingAudioSource.PlayOneShot(runningAudioClips[index]);
     }
 }
