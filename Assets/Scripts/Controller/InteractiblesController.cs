@@ -127,17 +127,20 @@ public class InteractiblesController : MonoBehaviour
                 ShowInteractiblesMessage($"Pressione E para abrir {interactibleName}");
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    // Obtém o componente Animator no GameObject "Pivot" (que foi atribuído no campo chest)
-                    Animator chestAnimator = interactible.GetComponentInChildren<Animator>();
-                    if (chestAnimator != null)
+                    // Busca o ChestController no GameObject do baú
+                    ChestController chestController = interactible.GetComponent<ChestController>();
+                    if (chestController != null)
                     {
-                        // Dispara o trigger que inicia a transição para a animação de abertura
-                        chestAnimator.SetTrigger("OpenChest");
+                        chestController.Interact();
+                    }
+                    else
+                    {
+                        Debug.LogWarning("ChestController não encontrado no baú!");
                     }
                     // Altera o tag para evitar nova interação
                     interactible.tag = "Untagged";
                     HideInteractiblesMessage();
-                    Debug.Log("Baú aberto!");
+                    Debug.Log("Baú acionado!");
                     StartCoroutine(HideTextForSeconds(3f));
                 }
             }

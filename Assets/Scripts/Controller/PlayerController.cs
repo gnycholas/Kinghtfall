@@ -421,5 +421,10 @@ public class PlayerController : MonoBehaviour
         Debug.Log($"Item '{item.name}' adicionado ao inventário. Total de itens: {playerModel.inventory.Count}");
         return true;
     }
+    public void SetCatching(bool state)
+    {
+        playerModel.isCatching = state;
+        playerView.UpdateCatching(state);
+    }
     #endregion
 }
