@@ -58,14 +58,14 @@ ModelImporter:
       curves: []
       events:
       - time: 0.38425925
-        functionName: CorrerEvent
+        functionName: CorrerSoundEvent
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.89351857
-        functionName: CorrerEvent
+        functionName: CorrerSoundEvent
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

@@ -58,14 +58,14 @@ ModelImporter:
       curves: []
       events:
       - time: 0.3888889
-        functionName: PassoEvent
+        functionName: PassoSoundEvent
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.8796296
-        functionName: PassoEvent
+        functionName: PassoSoundEvent
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

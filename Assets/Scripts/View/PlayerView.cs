@@ -12,6 +12,10 @@ public class PlayerView : MonoBehaviour
     [SerializeField] private AudioClip[] runningAudioClips;
     [SerializeField] private AudioSource attackingAudioSource;
     [SerializeField] private AudioClip[] attackingAudioClips;
+    [SerializeField] private AudioSource dyingAudioSource;
+    [SerializeField] private AudioClip[] dyingAudioClips;
+    [SerializeField] private AudioSource hitAudioSource;
+    [SerializeField] private AudioClip[] hitAudioClips;
 
     [Header("Referência aos Objetos Visuais")]
     [SerializeField] private GameObject knifeGameObject;
@@ -98,21 +102,34 @@ public class PlayerView : MonoBehaviour
         animator.SetBool("isCatching", isCatching);
     }
 
-    private void PassoEvent()
+    private void PassoSoundEvent()
     {
         int index = Random.Range(0, walkingAudioClips.Length);
         walkingAudioSource.PlayOneShot(walkingAudioClips[index]);
     }
 
-    private void CorrerEvent()
+    private void CorrerSoundEvent()
     {
         int index = Random.Range(0, runningAudioClips.Length);
-        walkingAudioSource.PlayOneShot(runningAudioClips[index]);
+        runningAudioSource.PlayOneShot(runningAudioClips[index]);
     }
 
-    private void AttackEvent()
+    private void AttackSoundEvent()
     {
         int index = Random.Range(0, attackingAudioClips.Length);
-        walkingAudioSource.PlayOneShot(attackingAudioClips[index]);
+        attackingAudioSource.PlayOneShot(attackingAudioClips[index]);
     }
+
+    private void DyingSoundEvent()
+    {
+        int index = Random.Range(0, dyingAudioClips.Length);
+        dyingAudioSource.PlayOneShot(dyingAudioClips[index]);
+    }
+
+    private void HitSoundEvent()
+    {
+        int index = Random.Range(0, hitAudioClips.Length);
+        hitAudioSource.PlayOneShot(hitAudioClips[index]);
+    }
+
 }
