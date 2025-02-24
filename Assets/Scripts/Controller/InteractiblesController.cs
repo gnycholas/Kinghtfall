@@ -20,6 +20,7 @@ public class InteractiblesController : MonoBehaviour
     public GameObject exitDoor;
     public GameObject exitDoorOppened;
     public GameObject paper;
+    public GameObject chest; // Neste campo, atribua o GameObject "Pivot", que contém o Animator.
 
     [Tooltip("Raio de alcance para interagir com os objetos.")]
     public float interactionRadius = 2f;
@@ -43,8 +44,7 @@ public class InteractiblesController : MonoBehaviour
     {
         if (player == null || ghoul == null) return;
 
-        // Se NÃO estamos no modo "escondendo temporariamente",
-        // então podemos limpar a mensagem antes de checar os objetos
+        // Se não estivermos no modo "escondendo temporariamente", limpa a mensagem
         if (!isHidingTemporarily)
         {
             HideInteractiblesMessage();
@@ -54,13 +54,12 @@ public class InteractiblesController : MonoBehaviour
         CheckCollectible(leverDisabled, "<Alavanca>");
         CheckCollectible(exitDoor, "<Porta de saída>");
         CheckCollectible(paper, "<Anotações>");
+        CheckCollectible(chest, "<Baú>");
     }
 
     private void CheckCollectible(GameObject interactible, string interactibleName)
     {
-        // Se estamos escondendo temporariamente, não mostramos NADA
         if (isHidingTemporarily) return;
-
         if (interactible == null) return;
         if (!interactible.activeInHierarchy) return;
 
@@ -71,19 +70,15 @@ public class InteractiblesController : MonoBehaviour
             if (interactible.CompareTag("Lever"))
             {
                 ShowInteractiblesMessage($"Pressione E para interagir com {interactibleName}");
-
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     leverPlayableDirector.Play();
                     interactible.SetActive(false);
                     leverDisabled.SetActive(true);
                     ghoul.SetActive(true);
-
-                    // Exemplo: se quiser esconder a mensagem por 5s depois de usar a alavanca
                     StartCoroutine(HideTextForSeconds(5f));
                 }
             }
-
             // PORTA
             else if (interactible.CompareTag("ExitDoor"))
             {
@@ -115,7 +110,6 @@ public class InteractiblesController : MonoBehaviour
                     }
                 }
             }
-
             // PAPEL
             else if (interactible.CompareTag("Paper"))
             {
@@ -123,8 +117,30 @@ public class InteractiblesController : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     Debug.Log("Lendo papel...");
-                    // Aqui você poderia abrir uma tela de texto etc.
-                    // Se quiser também ocultar depois de ler:
+                    // Aqui você pode abrir uma tela de texto ou outra interação
+                    StartCoroutine(HideTextForSeconds(3f));
+                }
+            }
+            // BAÚ
+            else if (interactible.CompareTag("Chest"))
+            {
+                ShowInteractiblesMessage($"Pressione E para abrir {interactibleName}");
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    // Busca o ChestController no GameObject do baú
+                    ChestController chestController = interactible.GetComponent<ChestController>();
+                    if (chestController != null)
+                    {
+                        chestController.Interact();
+                    }
+                    else
+                    {
+                        Debug.LogWarning("ChestController não encontrado no baú!");
+                    }
+                    // Altera o tag para evitar nova interação
+                    interactible.tag = "Untagged";
+                    HideInteractiblesMessage();
+                    Debug.Log("Baú acionado!");
                     StartCoroutine(HideTextForSeconds(3f));
                 }
             }
@@ -147,11 +163,9 @@ public class InteractiblesController : MonoBehaviour
 
     private IEnumerator HideTextForSeconds(float seconds)
     {
-        // Marca que estamos escondendo a mensagem por "seconds"
         isHidingTemporarily = true;
         HideInteractiblesMessage();
         yield return new WaitForSeconds(seconds);
-        // Depois do tempo, libera para voltar ao fluxo normal
         isHidingTemporarily = false;
     }
 }
