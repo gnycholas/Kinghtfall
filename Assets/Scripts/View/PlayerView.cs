@@ -19,6 +19,7 @@ public class PlayerView : MonoBehaviour
     [SerializeField] private AudioSource injuredAudioSource;
     [SerializeField] private AudioClip injuredIdleAudioClip;
     [SerializeField] private AudioClip injuredWalkAudioClip;
+    [SerializeField] private AudioClip equipKnifeAudioClip;
 
     [Header("Referência aos Objetos Visuais")]
     [SerializeField] private GameObject knifeGameObject;
@@ -56,6 +57,7 @@ public class PlayerView : MonoBehaviour
         animator.SetBool("isKnifeEquipped", isKnifeEquipped);
         if (knifeGameObject != null)
             knifeGameObject.SetActive(isKnifeEquipped);
+        hitAudioSource.PlayOneShot(equipKnifeAudioClip);
     }
 
     public void TriggerAttack()
