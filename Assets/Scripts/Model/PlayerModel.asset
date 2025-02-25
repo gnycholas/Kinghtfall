@@ -20,7 +20,7 @@ MonoBehaviour:
   isTurningRight: 0
   isBacking: 0
   maxHealth: 5
-  currentHealth: 5
+  currentHealth: 3
   isInjured: 0
   isDead: 0
   isKnifeEquipped: 0

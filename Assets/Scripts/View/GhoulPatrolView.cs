@@ -11,6 +11,13 @@ public class GhoulPatrolView : MonoBehaviour
     private static readonly int HitTriggerHash = Animator.StringToHash("hitTrigger");
     private static readonly int DieTriggerHash = Animator.StringToHash("dieTrigger");
 
+    [Header("Referência aos Audio Sources")]
+    [SerializeField] private AudioSource ghoulAudioSource;
+    [SerializeField] private AudioClip screamAudioClip;
+    [SerializeField] private AudioClip hitAudioClip;
+    [SerializeField] private AudioClip damageAudioClip;
+    [SerializeField] private AudioClip dieAudioClip;
+
     public void PlayIdleAnimation()
     {
         if (!animator) return;
@@ -62,4 +69,28 @@ public class GhoulPatrolView : MonoBehaviour
         if (!animator) return;
         animator.SetTrigger(DieTriggerHash);
     }
+
+    private void ScreamSoundEvent()
+    {
+        ghoulAudioSource.PlayOneShot(screamAudioClip);
+    }
+
+    private void GhoulHitSoundEvent()
+    {
+        ghoulAudioSource.PlayOneShot(hitAudioClip);
+    }
+
+    private void DaggerDamageSoundEffect()
+    {
+        ghoulAudioSource.PlayOneShot(damageAudioClip);
+    }
+
+    private void GhoulDieSoundEvent()
+    {
+        ghoulAudioSource.PlayOneShot(dieAudioClip);
+    }
+
+    
+
+    
 }

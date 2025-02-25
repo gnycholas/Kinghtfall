@@ -5,6 +5,22 @@ public class PlayerView : MonoBehaviour
     [Header("Referência ao Animator")]
     [SerializeField] private Animator animator;
 
+    [Header("Referência aos Audio Sources")]
+    [SerializeField] private AudioSource walkingAudioSource;
+    [SerializeField] private AudioClip[] walkingAudioClips;
+    [SerializeField] private AudioSource runningAudioSource;
+    [SerializeField] private AudioClip[] runningAudioClips;
+    [SerializeField] private AudioSource attackingAudioSource;
+    [SerializeField] private AudioClip[] attackingAudioClips;
+    [SerializeField] private AudioSource dyingAudioSource;
+    [SerializeField] private AudioClip[] dyingAudioClips;
+    [SerializeField] private AudioSource hitAudioSource;
+    [SerializeField] private AudioClip[] hitAudioClips;
+    [SerializeField] private AudioSource injuredAudioSource;
+    [SerializeField] private AudioClip injuredIdleAudioClip;
+    [SerializeField] private AudioClip injuredWalkAudioClip;
+    [SerializeField] private AudioClip equipKnifeAudioClip;
+
     [Header("Referência aos Objetos Visuais")]
     [SerializeField] private GameObject knifeGameObject;
     [SerializeField] private GameObject potionGameObject; // Objeto visual da poção (na mão quando equipada)
@@ -41,6 +57,7 @@ public class PlayerView : MonoBehaviour
         animator.SetBool("isKnifeEquipped", isKnifeEquipped);
         if (knifeGameObject != null)
             knifeGameObject.SetActive(isKnifeEquipped);
+        hitAudioSource.PlayOneShot(equipKnifeAudioClip);
     }
 
     public void TriggerAttack()
@@ -89,4 +106,45 @@ public class PlayerView : MonoBehaviour
     {
         animator.SetBool("isCatching", isCatching);
     }
+
+    private void PassoSoundEvent()
+    {
+        int index = Random.Range(0, walkingAudioClips.Length);
+        walkingAudioSource.PlayOneShot(walkingAudioClips[index]);
+    }
+
+    private void CorrerSoundEvent()
+    {
+        int index = Random.Range(0, runningAudioClips.Length);
+        runningAudioSource.PlayOneShot(runningAudioClips[index]);
+    }
+
+    private void AttackSoundEvent()
+    {
+        int index = Random.Range(0, attackingAudioClips.Length);
+        attackingAudioSource.PlayOneShot(attackingAudioClips[index]);
+    }
+
+    private void DyingSoundEvent()
+    {
+        int index = Random.Range(0, dyingAudioClips.Length);
+        dyingAudioSource.PlayOneShot(dyingAudioClips[index]);
+    }
+
+    private void HitSoundEvent()
+    {
+        int index = Random.Range(0, hitAudioClips.Length);
+        hitAudioSource.PlayOneShot(hitAudioClips[index]);
+    }
+
+    private void InjuredIdleSoundEvent()
+    {
+        injuredAudioSource.PlayOneShot(injuredIdleAudioClip);
+    }
+
+    private void InjuredWalkSoundEvent()
+    {
+        injuredAudioSource.PlayOneShot(injuredWalkAudioClip);
+    }
+
 }
