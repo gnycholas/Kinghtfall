@@ -12,7 +12,10 @@ public class GameStateController : MonoBehaviour
     [Header("Referência às telas")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject gameCompletePanel;
+    [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject controlsPanel;
 
+    private bool isPaused = false;
     public float interactionRadius = 2f;
 
     // Start is called before the first frame update
@@ -34,9 +37,43 @@ public class GameStateController : MonoBehaviour
             gameOverPanel.SetActive(true);
         }
 
+        CheckPauseInput();
         CheckGameFinish(stageFinish);
     }
 
+    public void OpenControlsPanel()
+    {
+        pausePanel.SetActive(false);
+        controlsPanel.SetActive(true);
+    }
+
+    public void CloseControlsPanel()
+    {
+        pausePanel.SetActive(false);
+        controlsPanel.SetActive(true);
+    }
+
+    #region Pause
+    private void CheckPauseInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            TogglePause();
+        }
+    }
+
+    private void TogglePause()
+    {
+        isPaused = !isPaused;
+        pausePanel.SetActive(isPaused);
+
+        // Se estiver pausado, para o tempo do jogo.
+        // Se não, volta ao normal.
+        Time.timeScale = isPaused ? 0f : 1f;
+    }
+    #endregion
+
+    #region Fim de jogo
     private void CheckGameFinish(GameObject interactible)
     {
         if (interactible == null) return;
@@ -49,4 +86,5 @@ public class GameStateController : MonoBehaviour
             gameCompletePanel.SetActive(true);
         }
     }
+    #endregion
 }
