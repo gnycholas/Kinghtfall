@@ -7,6 +7,7 @@ public class MainMenuController : MonoBehaviour
     public GameObject panelCredits; // Painel de créditos
     public GameObject mainMenuPanel; // Painel do menu principal
     public GameObject panelOptions; // Painel de opções
+    public GameObject gameCompletePanel; // Painel de jogo completo
 
     void Update()
     {
@@ -29,7 +30,7 @@ public class MainMenuController : MonoBehaviour
 
     public void NewGame()
     {
-        SceneManager.LoadScene("Game"); 
+        SceneManager.LoadScene("Game");
     }
 
     public void LoadGame()
