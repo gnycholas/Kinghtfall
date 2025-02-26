@@ -4,41 +4,89 @@ using UnityEngine;
 
 public class GameStateController : MonoBehaviour
 {
+    // Máquina de estado simples para o jogo
+    private enum GameState
+    {
+        Playing,
+        Paused,
+        GameOver,
+        GameComplete
+    }
+    private GameState currentState = GameState.Playing;
+
     [Header("Referência aos objetos")]
     [SerializeField] private PlayerModel playerModel;
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject stageFinish;
-    
+
     [Header("Referência às telas")]
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject gameCompletePanel;
     [SerializeField] private GameObject pausePanel;
     [SerializeField] private GameObject controlsPanel;
 
-    private bool isPaused = false;
+    [Header("Configurações")]
     public float interactionRadius = 2f;
 
-    // Start is called before the first frame update
+    // Flag para evitar acionar game complete logo após retomar
+    private bool justResumed = false;
+
     void Start()
     {
         if (playerModel == null || gameOverPanel == null)
         {
-            Debug.Log("Player model ou Game over panel não identificado no Game state controller. O fluxo de telas pode não funcionar...");
+            Debug.LogWarning("Player model ou GameOver panel não identificado no GameStateController. O fluxo de telas pode não funcionar...");
+        }
+
+        // Certifica-se de que as telas iniciais estejam desativadas
+        gameOverPanel.SetActive(false);
+        gameCompletePanel.SetActive(false);
+        pausePanel.SetActive(false);
+        controlsPanel.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+    void Update()
+    {
+        // Atualiza os estados apenas se o jogo estiver ativo (Playing ou Paused)
+        if (currentState == GameState.Playing || currentState == GameState.Paused)
+        {
+            // Se o jogador morreu, muda para GameOver
+            int playerLife = playerModel.currentHealth;
+            if (playerLife <= 0 && currentState != GameState.GameOver)
+            {
+                currentState = GameState.GameOver;
+                gameOverPanel.SetActive(true);
+                Time.timeScale = 1f;
+            }
+
+            CheckPauseInput();
+            CheckGameFinish(stageFinish);
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    #region Controles de Tela
+    /// <summary>
+    /// Método chamado pelo botão "Continuar" para retomar o jogo.
+    /// </summary>
+    public void ResumeGame()
     {
-        int playerLife = playerModel.currentHealth;
-
-        if (playerLife <= 0)
+        if (currentState == GameState.Paused)
         {
-            gameOverPanel.SetActive(true);
+            currentState = GameState.Playing;
+            pausePanel.SetActive(false);
+            controlsPanel.SetActive(false);
+            Time.timeScale = 1f;
+            // Protege a verificação do fim de jogo por 2 segundos
+            justResumed = true;
+            StartCoroutine(ResetJustResumed());
         }
+    }
 
-        CheckPauseInput();
-        CheckGameFinish(stageFinish);
+    private IEnumerator ResetJustResumed()
+    {
+        yield return new WaitForSeconds(2f);
+        justResumed = false;
     }
 
     public void OpenControlsPanel()
@@ -49,40 +97,51 @@ public class GameStateController : MonoBehaviour
 
     public void CloseControlsPanel()
     {
-        pausePanel.SetActive(false);
-        controlsPanel.SetActive(true);
+        controlsPanel.SetActive(false);
+        pausePanel.SetActive(true);
     }
+    #endregion
 
     #region Pause
     private void CheckPauseInput()
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            TogglePause();
+            // Se os controles estiverem abertos, fecha-os e retoma o jogo
+            if (controlsPanel.activeSelf)
+            {
+                ResumeGame();
+            }
+            else if (currentState == GameState.Playing)
+            {
+                PauseGame();
+            }
+            else if (currentState == GameState.Paused)
+            {
+                ResumeGame();
+            }
         }
     }
 
-    private void TogglePause()
+    private void PauseGame()
     {
-        isPaused = !isPaused;
-        pausePanel.SetActive(isPaused);
-
-        // Se estiver pausado, para o tempo do jogo.
-        // Se não, volta ao normal.
-        Time.timeScale = isPaused ? 0f : 1f;
+        currentState = GameState.Paused;
+        pausePanel.SetActive(true);
+        Time.timeScale = 0f;
     }
     #endregion
 
-    #region Fim de jogo
+    #region Fim de Jogo
     private void CheckGameFinish(GameObject interactible)
     {
         if (interactible == null) return;
         if (!interactible.activeInHierarchy) return;
 
         float distance = Vector3.Distance(player.transform.position, interactible.transform.position);
-
-        if (distance <= interactionRadius)
+        // Só dispara o fim de jogo se estiver no estado Playing e se a flag justResumed for false
+        if (distance <= interactionRadius && currentState == GameState.Playing && !justResumed)
         {
+            currentState = GameState.GameComplete;
             gameCompletePanel.SetActive(true);
         }
     }

@@ -96,6 +96,14 @@ public class InteractiblesController : MonoBehaviour
                             HideInteractiblesMessage();
                             openingDoorPlayableDirector.Play();
                             interactible.tag = "Untagged";
+
+                            // Desativa o MeshCollider para liberar a passagem
+                            MeshCollider doorCollider = interactible.GetComponent<MeshCollider>();
+                            if (doorCollider != null)
+                            {
+                                doorCollider.enabled = false;
+                            }
+
                             Debug.Log("Abrindo porta!");
                             StartCoroutine(HideTextForSeconds(5f));
                         }
