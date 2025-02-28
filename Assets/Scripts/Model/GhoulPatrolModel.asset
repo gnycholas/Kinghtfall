@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GhoulPatrolModel
   m_EditorClassIdentifier: 
   walkSpeed: 1.5
-  idleTime: 8
+  idleTime: 4
   minRandomDistance: 6
   maxRandomDistance: 8
   patrolCenter: {fileID: 0}

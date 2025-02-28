@@ -89,8 +89,4 @@ public class GhoulPatrolView : MonoBehaviour
     {
         ghoulAudioSource.PlayOneShot(dieAudioClip);
     }
-
-    
-
-    
 }
