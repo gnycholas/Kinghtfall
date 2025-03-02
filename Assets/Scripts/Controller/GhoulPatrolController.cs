@@ -39,6 +39,9 @@ public class GhoulPatrolController : MonoBehaviour
     private float _chaseTimer;
     private Coroutine damageCoroutine;  // Corrotina que gerencia o ataque contínuo
 
+    // Flag para indicar se o ghoul já foi alertado (por detecção ou dano)
+    private bool hasBeenAlerted = false;
+
     private void Start()
     {
         if (!agent) agent = GetComponent<NavMeshAgent>();
@@ -80,14 +83,23 @@ public class GhoulPatrolController : MonoBehaviour
     #region Patrol & Idle
     private void EnterPatrolState()
     {
-        _currentState = GhoulState.Patrol;
-        if (agent)
+        // Se o ghoul já foi alertado, ele não deve voltar ao estado Patrol para reexecutar o scream.
+        if (!hasBeenAlerted)
         {
-            agent.speed = model.walkSpeed;
-            agent.isStopped = false;
+            _currentState = GhoulState.Patrol;
+            if (agent)
+            {
+                agent.speed = model.walkSpeed;
+                agent.isStopped = false;
+            }
+            if (view) view.PlayWalkAnimation();
+            ChooseNewDestination();
         }
-        if (view) view.PlayWalkAnimation();
-        ChooseNewDestination();
+        else
+        {
+            // Se já foi alertado, mantenha o estado de chase.
+            EnterChaseState();
+        }
     }
 
     private void PatrolUpdate()
@@ -141,8 +153,11 @@ public class GhoulPatrolController : MonoBehaviour
 
         if (HasLineOfSightToPlayer())
         {
-            if (_currentState == GhoulState.Patrol || _currentState == GhoulState.Idle)
+            // Só dispara o scream se ainda não foi alertado
+            if (!_currentState.Equals(GhoulState.Chasing) && !_currentState.Equals(GhoulState.Attacking) && !hasBeenAlerted)
+            {
                 StartCoroutine(ScreamRoutine());
+            }
         }
     }
 
@@ -160,6 +175,7 @@ public class GhoulPatrolController : MonoBehaviour
     private IEnumerator ScreamRoutine()
     {
         _currentState = GhoulState.Screaming;
+        hasBeenAlerted = true; // Marca que o ghoul foi alertado
         agent.SetDestination(transform.position);
         agent.velocity = Vector3.zero;
 
@@ -203,7 +219,13 @@ public class GhoulPatrolController : MonoBehaviour
         {
             _chaseTimer += Time.deltaTime;
             if (_chaseTimer >= model.chaseTimeout)
-                EnterPatrolState();
+            {
+                // Se o ghoul já foi alertado, não volta para Patrol; simplesmente reseta o timer e continua perseguindo
+                if (!hasBeenAlerted)
+                    EnterPatrolState();
+                else
+                    _chaseTimer = 0f;
+            }
         }
         else
         {
@@ -224,7 +246,7 @@ public class GhoulPatrolController : MonoBehaviour
     private IEnumerator ContinuousAttack()
     {
         _currentState = GhoulState.Attacking;
-        agent.SetDestination(transform.position); // Bloqueia movimento durante o ataque
+        agent.SetDestination(transform.position); // Bloqueia o movimento durante o ataque
 
         do
         {
@@ -246,8 +268,10 @@ public class GhoulPatrolController : MonoBehaviour
         } while (Vector3.Distance(transform.position, playerTransform.position) <= model.attackRange);
 
         damageCoroutine = null;
-        _currentState = GhoulState.Chasing;
+        // Em vez de apenas definir o estado como Chasing, chamamos EnterChaseState() para configurar a velocidade e a animação
+        EnterChaseState();
     }
+
     #endregion
 
     #region Vida e Dano (Ghoul)
@@ -262,6 +286,8 @@ public class GhoulPatrolController : MonoBehaviour
         model.currentHealth -= damage;
         if (model.currentHealth > 0)
         {
+            // Se for atingido, marca como alertado
+            hasBeenAlerted = true;
             StartCoroutine(HitRoutine());
         }
         else
@@ -298,14 +324,13 @@ public class GhoulPatrolController : MonoBehaviour
         // Instancia o drop da chave e garante que ele esteja ativo
         if (keyDropPrefab != null)
         {
-            Vector3 dropPosition = transform.position + new Vector3(0, 0.2f, 0); // Ajuste o offset conforme necessário
+            Vector3 dropPosition = transform.position + new Vector3(0, 0.2f, 0);
             GameObject droppedKey = Instantiate(keyDropPrefab, dropPosition, Quaternion.Euler(90, 90, 90));
             droppedKey.SetActive(true);
         }
         // Opcional: destruir o ghoul após algum tempo
         // Destroy(gameObject, 3f);
     }
-
     #endregion
 
     #region Editor Gizmos

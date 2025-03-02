@@ -14,17 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   walkSpeed: 2
   runSpeed: 4
-  isWalking: 0
-  isRunning: 0
+  isWalking: 1
+  isRunning: 1
   isTurningLeft: 0
   isTurningRight: 0
   isBacking: 0
   maxHealth: 5
-  currentHealth: 3
+  currentHealth: 5
   isInjured: 0
   isDead: 0
   isKnifeEquipped: 0
-  inventory: []
+  inventory:
+  - {fileID: 7468341001736170661, guid: 7ee2230b5fffcd04abaa25c6ba9c27ed, type: 3}
   isPotionEquipped: 0
   isKeyEquipped: 0
   isHit: 0
