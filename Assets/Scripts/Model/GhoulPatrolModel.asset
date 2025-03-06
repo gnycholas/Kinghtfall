@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GhoulPatrolModel
   m_EditorClassIdentifier: 
   walkSpeed: 1.5
-  idleTime: 8
+  idleTime: 3
   minRandomDistance: 6
   maxRandomDistance: 8
   patrolCenter: {fileID: 0}
@@ -25,5 +25,5 @@ MonoBehaviour:
   attackRange: 1.85
   attackDamage: 1
   attackCooldown: 1.5
-  maxHealth: 3
-  currentHealth: 43
+  maxHealth: 2
+  currentHealth: 2

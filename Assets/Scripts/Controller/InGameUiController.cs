@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 public class InGameUiController : MonoBehaviour
 {
     public PlayerModel playerModel;
+    public GhoulPatrolModel ghoulModel;
 
     public GameObject gameCompletePanel; // Painel de jogo completo
     public GameObject gameOverPanel; // Painel de fim de jogo
@@ -11,7 +12,8 @@ public class InGameUiController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        if (gameCompletePanel.activeInHierarchy || gameOverPanel.activeInHierarchy)
+        if (gameCompletePanel.activeInHierarchy || gameOverPanel.activeInHierarchy
+            )
         {
             gameCompletePanel.SetActive(false);
             gameOverPanel.SetActive(false);
@@ -43,10 +45,12 @@ public class InGameUiController : MonoBehaviour
         playerModel.isTurningRight = false;
         playerModel.isDrinking = false;
 
+        ghoulModel.currentHealth = ghoulModel.maxHealth;
+
         // Zera o inventário
         playerModel.inventory.Clear();
 
-        SceneManager.LoadScene("Game");
+        SceneManager.LoadScene("GameTest");
     }
 
     public void MainMenu()
