@@ -645,7 +645,7 @@ PrefabInstance:
     - target: {fileID: 3103120390442800823, guid: a42ce9f9d5d030e4baf4b74038d53eca,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.016354198
+      value: -0.99995637
       objectReference: {fileID: 0}
     - target: {fileID: 3103120390442800823, guid: a42ce9f9d5d030e4baf4b74038d53eca,
         type: 3}
@@ -655,7 +655,7 @@ PrefabInstance:
     - target: {fileID: 3103120390442800823, guid: a42ce9f9d5d030e4baf4b74038d53eca,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.99986625
+      value: -0.009342637
       objectReference: {fileID: 0}
     - target: {fileID: 3103120390442800823, guid: a42ce9f9d5d030e4baf4b74038d53eca,
         type: 3}
@@ -670,12 +670,22 @@ PrefabInstance:
     - target: {fileID: 3103120390442800823, guid: a42ce9f9d5d030e4baf4b74038d53eca,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 178.126
+      value: 361.071
       objectReference: {fileID: 0}
     - target: {fileID: 3103120390442800823, guid: a42ce9f9d5d030e4baf4b74038d53eca,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6695933186436553398, guid: a42ce9f9d5d030e4baf4b74038d53eca,
+        type: 3}
+      propertyPath: playerTransform
+      value: 
+      objectReference: {fileID: 1269340406}
+    - target: {fileID: 6855432347147268962, guid: a42ce9f9d5d030e4baf4b74038d53eca,
+        type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1666,6 +1676,71 @@ PrefabInstance:
       propertyPath: potionGameObject
       value: 
       objectReference: {fileID: 1303313774}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: equipKnifeAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: f2d4c3d6d7d539740a9680fc40c36bfc, type: 3}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: injuredIdleAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2ca1bf7a8ffa04b48aa209ad0b4c89af, type: 3}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: injuredWalkAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 2ca1bf7a8ffa04b48aa209ad0b4c89af, type: 3}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: hitAudioClips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: dyingAudioClips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: hitAudioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 45d2c552aaa97f742b0719e5044658c9, type: 3}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: runningAudioClips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: walkingAudioClips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: dyingAudioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: ba49ff8c5f5654b469741d7878be7e60, type: 3}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: attackingAudioClips.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: runningAudioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 505a015d5525e0442ae4a62d5bac304d, type: 3}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: walkingAudioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 8e001351cd7065543a068386cde4c960, type: 3}
+    - target: {fileID: 2177868409362718139, guid: 1b3fabc35753a0d41b374be4b5a051d8,
+        type: 3}
+      propertyPath: attackingAudioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 45d2c552aaa97f742b0719e5044658c9, type: 3}
     - target: {fileID: 2509474737661548839, guid: 1b3fabc35753a0d41b374be4b5a051d8,
         type: 3}
       propertyPath: attackPoint
@@ -1717,10 +1792,10 @@ SceneRoots:
   - {fileID: 69843443}
   - {fileID: 1164404093}
   - {fileID: 1112315087}
-  - {fileID: 9053924122743469196}
   - {fileID: 1135282215}
   - {fileID: 272633391}
   - {fileID: 1230046521}
   - {fileID: 1445176028}
   - {fileID: 8112736872681248608}
   - {fileID: 508123948}
+  - {fileID: 9053924122743469196}

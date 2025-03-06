@@ -19,11 +19,11 @@ MonoBehaviour:
   patrolCenter: {fileID: 0}
   detectionRadius: 5
   fieldOfViewAngle: 120
-  screamDuration: 2
+  screamDuration: 1.2
   runSpeed: 4
   chaseTimeout: 5
   attackRange: 1.85
   attackDamage: 1
   attackCooldown: 1.5
   maxHealth: 3
-  currentHealth: 3
+  currentHealth: 43
