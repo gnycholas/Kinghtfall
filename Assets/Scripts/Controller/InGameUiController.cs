@@ -50,7 +50,7 @@ public class InGameUiController : MonoBehaviour
         // Zera o inventário
         playerModel.inventory.Clear();
 
-        SceneManager.LoadScene("GameTest");
+        SceneManager.LoadScene("GameDemo");
     }
 
     public void MainMenu()

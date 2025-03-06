@@ -20,8 +20,8 @@ MonoBehaviour:
   isTurningRight: 0
   isBacking: 0
   maxHealth: 5
-  currentHealth: 1
-  isInjured: 1
+  currentHealth: 5
+  isInjured: 0
   isDead: 0
   isKnifeEquipped: 0
   inventory: []
