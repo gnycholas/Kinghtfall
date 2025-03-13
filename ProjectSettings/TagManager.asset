@@ -4,13 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Chest
+  - Dagger
   - Potion
   - Key
-  - Dagger
-  - Lever
-  - ExitDoor
-  - Paper
-  - Chest
   layers:
   - Default
   - TransparentFX

@@ -35,15 +35,7 @@ public class InGameUiController : MonoBehaviour
         }
 
         playerModel.currentHealth = playerModel.maxHealth;
-        playerModel.isDead = false;
-        playerModel.isKnifeEquipped = false;
-        playerModel.isAttacking = false;
-        playerModel.isInjured = false;
-        playerModel.isWalking = false;
-        playerModel.isRunning = false;
-        playerModel.isTurningLeft = false;
-        playerModel.isTurningRight = false;
-        playerModel.isDrinking = false;
+        playerModel.isDead = false; 
 
         ghoulModel.currentHealth = ghoulModel.maxHealth;
 

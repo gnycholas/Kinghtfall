@@ -87,8 +87,8 @@ public class InteractiblesController : MonoBehaviour
                 PlayerController playerController = player.GetComponent<PlayerController>();
                 if (playerController != null)
                 {
-                    bool collectedKey = playerController.HasKeyInInventory();
-                    if (collectedKey)
+                    //bool collectedKey = playerController.HasKeyInInventory();
+                    /*if (collectedKey)
                     {
                         ShowInteractiblesMessage($"Pressione E para interagir com {interactibleName}");
                         if (Input.GetKeyDown(KeyCode.E))
@@ -117,7 +117,7 @@ public class InteractiblesController : MonoBehaviour
                             StartCoroutine(HideTextForSeconds(3f));
                         }
                         Debug.Log("Ainda não coletou a chave...");
-                    }
+                    }*/
                 }
             }
             // PAPEL

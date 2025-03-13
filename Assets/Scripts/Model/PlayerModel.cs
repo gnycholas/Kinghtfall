@@ -6,14 +6,7 @@ public class PlayerModel : ScriptableObject
 {
     [Header("Configurações de Velocidade")]
     public float walkSpeed = 2f;
-    public float runSpeed = 4f;
-
-    [Header("Estados de Movimento")]
-    public bool isWalking;
-    public bool isRunning;
-    public bool isTurningLeft;
-    public bool isTurningRight;
-    public bool isBacking;
+    public float runSpeed = 4f; 
 
     [Header("Estados do Personagem")]
     public int maxHealth = 5;
