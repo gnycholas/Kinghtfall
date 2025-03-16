@@ -107,8 +107,7 @@ public class PlayerController : MonoBehaviour,ITarget
         ToggleMove(!_canMove);
     }
     #region Inventário e Itens (Poção, Chave e Faca)
-     
-
+      
     public bool AddItemToInventory(ItemView item, AnimatorOverrideController animator, float timeMove)
     {
         if (item == null)

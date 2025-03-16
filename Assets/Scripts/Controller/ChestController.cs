@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using Zenject;
 
 public class ChestController : MonoBehaviour
 {
@@ -18,13 +19,9 @@ public class ChestController : MonoBehaviour
 
     // Flag para evitar múltiplas interações
     private bool isOpened = false; 
-    private PlayerController _playerController;
+    [Inject] private SpawnerController _spawner;
     [SerializeField] private AnimatorOverrideController _animation;
-    [SerializeField] private float _time;
-    private void Start()
-    {
-        _playerController = FindAnyObjectByType<PlayerController>();
-    }
+    [SerializeField] private float _time; 
 
     // Método a ser chamado quando o jogador interage com o baú
     public void Interact()
@@ -45,7 +42,7 @@ public class ChestController : MonoBehaviour
     private IEnumerator AddItemAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
-        _playerController.AddItemToInventory(storedItem,_animation,_time); 
+        _spawner.Player.AddItemToInventory(storedItem,_animation,_time); 
         if (storedItem != null)
         {
             storedItem.gameObject.SetActive(false);
