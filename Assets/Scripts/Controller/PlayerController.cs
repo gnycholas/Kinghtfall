@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 [RequireComponent(typeof(PlayerView))]
 public class PlayerController : MonoBehaviour
@@ -24,6 +26,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackRange = 1.5f;      // Alcance do ataque
     [SerializeField] private LayerMask enemyLayer;          // Layer dos inimigos
 
+    [Header("UI")]
+    [SerializeField] private TextMeshProUGUI itemCollectedMessageText;
+
     private Vector3 lastMovementDirection;
 
     private void Awake()
@@ -42,6 +47,13 @@ public class PlayerController : MonoBehaviour
             potionGameObject.SetActive(false);
         if (keyGameObject != null)
             keyGameObject.SetActive(false);
+
+        // Comça com a mensagem de coleta desativada
+        if (itemCollectedMessageText != null)
+        {
+            itemCollectedMessageText.text = "";
+            itemCollectedMessageText.gameObject.SetActive(false);
+        }
     }
 
     private void Update()
@@ -418,13 +430,35 @@ public class PlayerController : MonoBehaviour
             playerModel.inventory = new List<GameObject>();
         playerModel.inventory.Add(item);
         item.SetActive(false);
+
+        // Mensagem de coleta
+        ShowCollectedMessage($"Coletou {item.name}"); // Mostra a mensagem
+        HideCollectedMessage(); // Esconde a mensagem
+
         Debug.Log($"Item '{item.name}' adicionado ao inventário. Total de itens: {playerModel.inventory.Count}");
         return true;
     }
-    public void SetCatching(bool state)
+
+        public void SetCatching(bool state)
     {
         playerModel.isCatching = state;
         playerView.UpdateCatching(state);
+    }
+
+    private void ShowCollectedMessage(string message)
+    {
+        if (!itemCollectedMessageText) return;
+        itemCollectedMessageText.gameObject.SetActive(true);
+        itemCollectedMessageText.text = message;
+    }
+
+     private void HideCollectedMessage()
+    {
+        if (!itemCollectedMessageText) return;
+        itemCollectedMessageText.gameObject.SetActive(false);
+        itemCollectedMessageText.text = "";
+        Debug.Log("Escondendo mensegem");
+
     }
     #endregion
 }
