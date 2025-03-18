@@ -4,6 +4,9 @@ public sealed class WeaponView : MonoBehaviour
 {
     public float DamageBase;
     protected GameObject owner;
+    [SerializeField] private WeaponGrip _weaponGrip;
+
+    public WeaponGrip WeaponGrip => _weaponGrip;
 
     private void Awake()
     {

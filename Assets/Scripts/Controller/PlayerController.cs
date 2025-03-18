@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
+using Zenject;
 
 [RequireComponent(typeof(PlayerAnimationController))]
 public class PlayerController : MonoBehaviour,ITarget
@@ -40,7 +42,11 @@ public class PlayerController : MonoBehaviour,ITarget
     private void Update()
     { 
         HandleCombat();
-        HandleMovement(); 
+        HandleMovement();
+        if (Keyboard.current.hKey.wasPressedThisFrame)
+        {
+            OnEquipWeapon?.Invoke(new Item() { Amount = 1, Name = "Sword", Type = ItemType.WEAPON });
+        }
     }
 
     #region Movimentação
@@ -140,6 +146,11 @@ public class PlayerController : MonoBehaviour,ITarget
     internal void EquipItem(Item item)
     {
         OnEquipWeapon?.Invoke(item);
+    }
+
+    public class Factory : PlaceholderFactory<PlayerController>
+    {
+
     }
 }
 public struct Damage

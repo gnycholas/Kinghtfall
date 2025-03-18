@@ -7,7 +7,7 @@ public class SpawnerController : MonoBehaviour
     public Action<PlayerController> OnSpawn;
     public Action<PlayerController> OnDespawn;
     private PlayerController _player;
-    [Inject(Id = "Player")] private GameObject _prefabPlayerController;
+    [Inject(Id = "Player")] private PlayerController.Factory _playerFactory;
     [SerializeField] private bool _spawnOnAwake;
     [SerializeField] private Transform _spawnPoint;
 
@@ -23,7 +23,9 @@ public class SpawnerController : MonoBehaviour
 
     public void SpawnPlayer(Vector3 position, Quaternion rotation)
     {
-        _player = Instantiate(_prefabPlayerController, position, rotation).GetComponent<PlayerController>();
+        var player = _playerFactory.Create();
+        player.transform.SetPositionAndRotation(position, rotation);
+        _player = player.GetComponent<PlayerController>();
         OnSpawn?.Invoke(_player);
         OnDespawn?.Invoke(_player);
     }

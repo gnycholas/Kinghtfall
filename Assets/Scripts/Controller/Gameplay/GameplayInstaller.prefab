@@ -46,3 +46,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _prefabLudvic: {fileID: 275734427178622016, guid: 1b3fabc35753a0d41b374be4b5a051d8,
     type: 3}
+  _weaponsRef:
+  - Name: Dagger
+    Ref:
+      m_AssetGUID: 7ee2230b5fffcd04abaa25c6ba9c27ed
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  - Name: Sword
+    Ref:
+      m_AssetGUID: 920149e2d66f3194188a706ee09ffb25
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
