@@ -26,8 +26,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackRange = 1.5f;      // Alcance do ataque
     [SerializeField] private LayerMask enemyLayer;          // Layer dos inimigos
 
-    [Header("UI")]
-    [SerializeField] private TextMeshProUGUI itemCollectedMessageText;
 
     private Vector3 lastMovementDirection;
 
@@ -48,12 +46,7 @@ public class PlayerController : MonoBehaviour
         if (keyGameObject != null)
             keyGameObject.SetActive(false);
 
-        // Comça com a mensagem de coleta desativada
-        if (itemCollectedMessageText != null)
-        {
-            itemCollectedMessageText.text = "";
-            itemCollectedMessageText.gameObject.SetActive(false);
-        }
+
     }
 
     private void Update()
@@ -431,10 +424,6 @@ public class PlayerController : MonoBehaviour
         playerModel.inventory.Add(item);
         item.SetActive(false);
 
-        // Mensagem de coleta
-        ShowCollectedMessage($"Coletou {item.name}"); // Mostra a mensagem
-        HideCollectedMessage(); // Esconde a mensagem
-
         Debug.Log($"Item '{item.name}' adicionado ao inventário. Total de itens: {playerModel.inventory.Count}");
         return true;
     }
@@ -445,20 +434,7 @@ public class PlayerController : MonoBehaviour
         playerView.UpdateCatching(state);
     }
 
-    private void ShowCollectedMessage(string message)
-    {
-        if (!itemCollectedMessageText) return;
-        itemCollectedMessageText.gameObject.SetActive(true);
-        itemCollectedMessageText.text = message;
-    }
 
-     private void HideCollectedMessage()
-    {
-        if (!itemCollectedMessageText) return;
-        itemCollectedMessageText.gameObject.SetActive(false);
-        itemCollectedMessageText.text = "";
-        Debug.Log("Escondendo mensegem");
-
-    }
+    
     #endregion
 }

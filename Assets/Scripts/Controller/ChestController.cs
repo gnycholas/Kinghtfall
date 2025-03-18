@@ -1,4 +1,5 @@
 using System.Collections;
+using UnityEditor.VersionControl;
 using UnityEngine;
 
 public class ChestController : MonoBehaviour
@@ -15,6 +16,9 @@ public class ChestController : MonoBehaviour
 
     [Tooltip("Tempo de espera após disparar a animação para adicionar o item ao inventário.")]
     [SerializeField] private float addItemDelay = 1f;
+
+    [Tooltip("Controle dos coletáveis para exibir mensagem de coleta")]
+    [SerializeField] CollectiblesController collectiblesController;
 
     // Flag para evitar múltiplas interações
     private bool isOpened = false;
@@ -37,6 +41,15 @@ public class ChestController : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        if (collectiblesController.itemCollectedMessageText !=null && collectiblesController.itemCollectedMessageText.isActiveAndEnabled)
+        {
+            StartCoroutine(collectiblesController.DelayToReadMessage(5f));
+        }
+
+    }
+
     // Método a ser chamado quando o jogador interage com o baú
     public void Interact()
     {
@@ -56,8 +69,10 @@ public class ChestController : MonoBehaviour
             playerController.SetCatching(true);
         }
 
+
         // Inicia a coroutine que, após um delay, adiciona o item ao inventário
         StartCoroutine(AddItemAfterDelay(addItemDelay));
+
     }
 
     private IEnumerator AddItemAfterDelay(float delay)
@@ -67,6 +82,9 @@ public class ChestController : MonoBehaviour
         {
             Debug.Log("Tentando adicionar o item: " + storedItem.name);
             playerController.AddItemToInventory(storedItem);
+            // Mostrar mensagem de coleta
+            collectiblesController.ShowItemCollectedMessage($"Coletou {storedItem.name}");
+            
         }
         // Opcional: desativa o objeto do item no baú para que ele não seja coletado novamente
         if (storedItem != null)
@@ -79,4 +97,6 @@ public class ChestController : MonoBehaviour
             playerController.SetCatching(false);
         }
     }
+
+
 }
