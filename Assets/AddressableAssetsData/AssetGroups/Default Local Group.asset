@@ -22,6 +22,11 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 920149e2d66f3194188a706ee09ffb25
+    m_Address: Assets/Prefabs/Itens/Weapons/model/Sword/Sword.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 5b84c0085d58685428a907e14fb82c6b, type: 2}
   m_SchemaSet:
