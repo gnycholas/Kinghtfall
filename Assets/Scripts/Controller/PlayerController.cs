@@ -287,7 +287,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log("Poção consumida: vida restaurada para 5");
     }
 
-    private bool HasPotionInInventory()
+    public bool HasPotionInInventory()
     {
         if (playerModel.inventory == null)
             return false;
@@ -341,7 +341,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private bool HasKnifeInInventory()
+    public bool HasKnifeInInventory()
     {
         if (playerModel.inventory == null)
             return false;
