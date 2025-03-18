@@ -127,6 +127,9 @@ public class CollectiblesController : MonoBehaviour
         if (!itemCollectedMessageText) return;
         itemCollectedMessageText.gameObject.SetActive(true);
         itemCollectedMessageText.text = message;
+
+        //Bug aqui 
+
     }
     // Oculta e reseta a mensagem de item coletado
     public IEnumerator DelayToReadMessage(float delay)

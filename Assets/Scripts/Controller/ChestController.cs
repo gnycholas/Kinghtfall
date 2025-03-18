@@ -8,6 +8,7 @@ public class ChestController : MonoBehaviour
     [Tooltip("Item que será armazenado no baú (ex.: adaga).")]
     [SerializeField] private GameObject storedItem;
 
+
     [Tooltip("Animator que controla a animação do baú (geralmente no GameObject 'Pivot').")]
     [SerializeField] private Animator chestAnimator;
 
@@ -28,6 +29,7 @@ public class ChestController : MonoBehaviour
     [SerializeField] private GameObject player;
     private PlayerController playerController;
 
+
     private void Start()
     {
         // Se o jogador não foi atribuído no Inspector, tenta encontrá-lo pela tag "Player"
@@ -39,11 +41,12 @@ public class ChestController : MonoBehaviour
         {
             playerController = player.GetComponent<PlayerController>();
         }
+
     }
 
     private void Update()
     {
-        if (collectiblesController.itemCollectedMessageText !=null && collectiblesController.itemCollectedMessageText.isActiveAndEnabled)
+        if (collectiblesController !=null && collectiblesController.itemCollectedMessageText.isActiveAndEnabled)
         {
             StartCoroutine(collectiblesController.DelayToReadMessage(5f));
         }
