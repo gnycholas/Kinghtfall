@@ -1,5 +1,7 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEditor.VersionControl;
 
 public class CollectiblesController : MonoBehaviour
 {
@@ -19,6 +21,11 @@ public class CollectiblesController : MonoBehaviour
     [Header("UI")]
     [Tooltip("Texto que exibe mensagens de coleta.")]
     [SerializeField] private TextMeshProUGUI collectMessageText;
+
+    [Tooltip("Texto que exibe mensagens de coleta.")]
+    public TextMeshProUGUI itemCollectedMessageText;
+
+
 
     private void Start()
     {
@@ -54,13 +61,23 @@ public class CollectiblesController : MonoBehaviour
             ShowCollectionMessage($"Pressione E para coletar {collectibleName}");
             if (Input.GetKeyDown(KeyCode.E))
             {
+                //Zerar a mensagem de coleta
+                HideCollectionMessage();
+               
+                //Player coleta o item
                 PlayerController playerController = player.GetComponent<PlayerController>();
                 if (playerController != null)
                 {
                     playerController.StartCoroutine(playerController.CatchItemRoutine(collectible));
                     Debug.Log($"{collectibleName} sendo coletado!");
+                    // Mensagem de coleta
+                    ShowItemCollectedMessage($"Coletou {collectibleName}");
+                    StartCoroutine(DelayToReadMessage(5f));
+
+
                 }
             }
+            
         }
     }
 
@@ -88,6 +105,8 @@ public class CollectiblesController : MonoBehaviour
         }
     }
 
+
+
     private void ShowCollectionMessage(string message)
     {
         if (collectMessageText == null) return;
@@ -101,4 +120,30 @@ public class CollectiblesController : MonoBehaviour
         collectMessageText.gameObject.SetActive(false);
         collectMessageText.text = "";
     }
+
+    // Para mostrar a mensagem de item coletado
+   public void ShowItemCollectedMessage(string message)
+    {
+        if (!itemCollectedMessageText) return;
+        itemCollectedMessageText.gameObject.SetActive(true);
+        itemCollectedMessageText.text = message;
+
+        //Bug aqui 
+
+    }
+    // Oculta e reseta a mensagem de item coletado
+    public IEnumerator DelayToReadMessage(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (itemCollectedMessageText != null)
+        {
+            itemCollectedMessageText.gameObject.SetActive(false);
+            itemCollectedMessageText.text = "";
+            Debug.Log("Escondendo mensegem");
+        }
+
+    }
+ 
+
+
 }
