@@ -627,6 +627,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: ghoul
       objectReference: {fileID: 0}
+    - target: {fileID: 2331649789657943053, guid: a42ce9f9d5d030e4baf4b74038d53eca,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3103120390442800823, guid: a42ce9f9d5d030e4baf4b74038d53eca,
         type: 3}
       propertyPath: m_LocalPosition.x
