@@ -24,6 +24,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float attackRange = 1.5f;      // Alcance do ataque
     [SerializeField] private LayerMask enemyLayer;          // Layer dos inimigos
 
+    // Variável para controlar a rotação suave de 180° (estado transitório no Controller)
+    private bool isTurningAround = false;
+
     private Vector3 lastMovementDirection;
 
     private void Awake()
@@ -66,24 +69,38 @@ public class PlayerController : MonoBehaviour
 
         // Inputs
         float vertical = Input.GetAxis("Vertical");    // W/S – avanço/recuo
-        float horizontal = Input.GetAxis("Horizontal"); // A/D – rotação
+        float horizontal = Input.GetAxis("Horizontal"); // A/D – rotação ou strafe
 
         // Reset dos estados de giro
         playerModel.isTurningLeft = false;
         playerModel.isTurningRight = false;
         playerModel.isBacking = false;
 
-        // Rotação:
+        Vector3 moveDirection = Vector3.zero;
+
         if (vertical > 0.1f)
         {
-            // Avanço: rotação livre
+            // Avanço: rotação livre e movimento para frente
             float rotationSpeed = 150f;
             transform.Rotate(0, horizontal * rotationSpeed * Time.deltaTime, 0);
+            moveDirection = transform.forward * vertical;
         }
         else if (vertical < -0.1f)
         {
-            // Recuo: bloqueia rotação; não se altera a orientação
-            playerModel.isBacking = true;
+            // Se o jogador estiver andando para trás e pressionar Shift, inicia a rotação suave de 180°
+            if ((Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift)) && !isTurningAround)
+            {
+                StartCoroutine(TurnAroundRoutine());
+                moveDirection = Vector3.zero; // Pausa o movimento durante a rotação
+            }
+            else if (!isTurningAround)
+            {
+                // Permite rotação normal enquanto se move para trás
+                float rotationSpeed = 150f;
+                transform.Rotate(0, horizontal * rotationSpeed * Time.deltaTime, 0);
+                playerModel.isBacking = true;
+                moveDirection = transform.forward * vertical;
+            }
         }
         else
         {
@@ -94,9 +111,8 @@ public class PlayerController : MonoBehaviour
                 playerModel.isTurningLeft = true;
             else if (horizontal > 0.1f)
                 playerModel.isTurningRight = true;
+            moveDirection = transform.forward * vertical; // próximo de zero se vertical está perto de 0
         }
-
-        Vector3 moveDirection = transform.forward * vertical;
 
         bool isRunning = false;
         if (vertical > 0.1f)
@@ -121,6 +137,26 @@ public class PlayerController : MonoBehaviour
 
         playerView.UpdateTurning(playerModel.isTurningLeft, playerModel.isTurningRight, playerModel.isBacking);
         playerView.UpdateAnimations(playerModel.isWalking, playerModel.isRunning, playerModel.isInjured);
+    }
+
+    // Coroutine para realizar uma rotação suave de 180° ao virar
+    private IEnumerator TurnAroundRoutine()
+    {
+        isTurningAround = true;
+        float duration = 0.5f; // duração da rotação (em segundos) – ajuste conforme necessário
+        float elapsed = 0f;
+        Quaternion initialRotation = transform.rotation;
+        // Calcula a rotação alvo: adiciona 180° ao ângulo Y atual
+        Quaternion targetRotation = Quaternion.Euler(transform.eulerAngles + new Vector3(0, 180, 0));
+
+        while (elapsed < duration)
+        {
+            transform.rotation = Quaternion.Slerp(initialRotation, targetRotation, elapsed / duration);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.rotation = targetRotation;
+        isTurningAround = false;
     }
     #endregion
 
@@ -353,8 +389,7 @@ public class PlayerController : MonoBehaviour
         return false;
     }
 
-    // Nova rotina de coleta: o player rotaciona para o item, ativa o estado de "catching" e, durante a rotação,
-    // verifica se está virando para a esquerda ou para a direita, atualizando os parâmetros do animator.
+    // Rotina de coleta: o player rotaciona para o item, ativa o estado de "catching" e atualiza a animação
     public IEnumerator CatchItemRoutine(GameObject item)
     {
         // Calcula a direção até o item ignorando a componente vertical
@@ -367,7 +402,6 @@ public class PlayerController : MonoBehaviour
         // Enquanto o player não estiver alinhado com o alvo
         while (Quaternion.Angle(transform.rotation, targetRotation) > 1f)
         {
-            // Calcula o ângulo assinado para determinar se está virando para a direita ou para a esquerda
             float signedAngle = Vector3.SignedAngle(transform.forward, targetRotation * Vector3.forward, Vector3.up);
             if (signedAngle > 0f)
             {
@@ -384,24 +418,18 @@ public class PlayerController : MonoBehaviour
                 playerModel.isTurningLeft = false;
                 playerModel.isTurningRight = false;
             }
-            // Atualiza o animator com os parâmetros de giro
             playerView.UpdateTurning(playerModel.isTurningLeft, playerModel.isTurningRight, false);
-
-            // Realiza a rotação suave
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
             yield return null;
         }
-        // Reseta os parâmetros de giro após a rotação
         playerModel.isTurningLeft = false;
         playerModel.isTurningRight = false;
         playerView.UpdateTurning(false, false, false);
 
-        // Ativa o estado de coleta, bloqueando a movimentação
         playerModel.isCatching = true;
         playerView.UpdateCatching(true);
         float catchDuration = 1f;
         yield return new WaitForSeconds(catchDuration);
-        // Coleta o item e desativa o objeto do mundo
         AddItemToInventory(item);
         playerModel.isCatching = false;
         playerView.UpdateCatching(false);
