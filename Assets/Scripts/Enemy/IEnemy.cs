@@ -12,15 +12,20 @@ public interface IDamageable
 }
 public struct Damage
 {
-    public int Amount;
+    public float Amount;
+
+    public Damage(float amount)
+    {
+        Amount = amount;
+    }
 }
 public struct DamageInfo
 {
-    public int Damage;
+    public float Damage;
     public float PercentDamage;
     public bool Critical;
 
-    public DamageInfo(int damage, float percentDamage, bool critical)
+    public DamageInfo(float damage, float percentDamage, bool critical)
     {
         Damage = damage;
         PercentDamage = percentDamage;

@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayerView))]
-public class PlayerController : MonoBehaviour
+public class PlayerController : MonoBehaviour,IDamageable
 {
     [Header("Referências ao Model e View")]
     [SerializeField] private PlayerModel playerModel;
@@ -178,12 +179,12 @@ public class PlayerController : MonoBehaviour
     #endregion
 
     #region Vida e Dano
-    public void TakeDamage(int damage)
+    public DamageInfo TakeDamage(Damage damage)
     {
         if (playerModel.isDead)
-            return;
+            return default;
 
-        playerModel.ApplyDamage(damage);
+        playerModel.ApplyDamage(Convert.ToInt32(damage.Amount));
 
         if (playerModel.isDead)
         {
@@ -199,6 +200,7 @@ public class PlayerController : MonoBehaviour
             float duration = (hitAnimationClip != null) ? hitAnimationClip.length : playerModel.hitDuration;
             StartCoroutine(ResetHit(duration));
         }
+        return new DamageInfo(damage.Amount, 0, false);
     }
 
     private IEnumerator ResetHit(float duration)

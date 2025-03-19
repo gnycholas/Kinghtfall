@@ -11,4 +11,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Factory/GameDemo.unity
     guid: dbba2a647cc6dc043af07de8d51b471b
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 7419998df42e33f4a8ed0b546c91e42e,
+      type: 2}
