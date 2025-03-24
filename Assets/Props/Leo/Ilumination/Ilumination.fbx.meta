@@ -7,6 +7,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: M_Ilumination_1
+    second: {fileID: 2100000, guid: ee567b51001eb614ea769c7ab79bf39c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: No Name
     second: {fileID: 2100000, guid: ee567b51001eb614ea769c7ab79bf39c, type: 2}
   materials:
