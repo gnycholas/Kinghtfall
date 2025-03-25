@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using TMPro;
-using UnityEditor.VersionControl;
+using TMPro; 
 
 public class CollectiblesController : MonoBehaviour
 {
@@ -25,23 +24,26 @@ public class CollectiblesController : MonoBehaviour
     [Tooltip("Texto que exibe mensagens de coleta.")]
     public TextMeshProUGUI itemCollectedMessageText;
 
+    private GameInputs _inputs;
 
 
+    private void Awake()
+    {
+        _inputs = new GameInputs();
+        _inputs.Gameplay.Enable();
+    }
     private void Start()
     {
         if (collectMessageText != null)
         {
-            collectMessageText.text = "";
-            collectMessageText.gameObject.SetActive(false);
+            collectMessageText.text = ""; 
         }
     }
 
     private void Update()
     {
         if (player == null)
-            return;
-
-        HideCollectionMessage();
+            return; 
 
         CheckCollectible(dagger, "<Adaga>");
         CheckCollectible(potion, "<Poção>");
@@ -55,15 +57,12 @@ public class CollectiblesController : MonoBehaviour
         if (!collectible.activeInHierarchy)
             return;
 
-        float distance = Vector3.Distance(player.transform.position, collectible.transform.position);
-        if (distance <= collectionRadius)
+        float distance = Vector3.SqrMagnitude(collectible.transform.position- player.transform.position);
+        if (distance <= collectionRadius * collectionRadius)
         {
             ShowCollectionMessage($"Pressione E para coletar {collectibleName}");
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                //Zerar a mensagem de coleta
-                HideCollectionMessage();
-               
+            if (_inputs.Gameplay.Interact.WasPressedThisFrame())
+            { 
                 //Player coleta o item
                 PlayerController playerController = player.GetComponent<PlayerController>();
                 if (playerController != null)
@@ -72,9 +71,7 @@ public class CollectiblesController : MonoBehaviour
                     Debug.Log($"{collectibleName} sendo coletado!");
                     // Mensagem de coleta
                     ShowItemCollectedMessage($"Coletou {collectibleName}");
-                    StartCoroutine(DelayToReadMessage(5f));
-
-
+                    StartCoroutine(DelayToReadMessage(5f)); 
                 }
             }
             
@@ -92,7 +89,7 @@ public class CollectiblesController : MonoBehaviour
             if (distance <= collectionRadius)
             {
                 ShowCollectionMessage("Pressione E para coletar Key");
-                if (Input.GetKeyDown(KeyCode.E))
+                if (_inputs.Gameplay.Interact.WasPressedThisFrame())
                 {
                     PlayerController playerController = player.GetComponent<PlayerController>();
                     if (playerController != null)
@@ -109,23 +106,14 @@ public class CollectiblesController : MonoBehaviour
 
     private void ShowCollectionMessage(string message)
     {
-        if (collectMessageText == null) return;
-        collectMessageText.gameObject.SetActive(true);
+        if (collectMessageText == null) return; 
         collectMessageText.text = message;
-    }
-
-    private void HideCollectionMessage()
-    {
-        if (collectMessageText == null) return;
-        collectMessageText.gameObject.SetActive(false);
-        collectMessageText.text = "";
-    }
+    } 
 
     // Para mostrar a mensagem de item coletado
    public void ShowItemCollectedMessage(string message)
     {
-        if (!itemCollectedMessageText) return;
-        itemCollectedMessageText.gameObject.SetActive(true);
+        if (!itemCollectedMessageText) return; 
         itemCollectedMessageText.text = message;
 
         //Bug aqui 
@@ -136,8 +124,7 @@ public class CollectiblesController : MonoBehaviour
     {
         yield return new WaitForSeconds(delay);
         if (itemCollectedMessageText != null)
-        {
-            itemCollectedMessageText.gameObject.SetActive(false);
+        { 
             itemCollectedMessageText.text = "";
             Debug.Log("Escondendo mensegem");
         }

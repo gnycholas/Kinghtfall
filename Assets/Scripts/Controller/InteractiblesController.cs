@@ -35,28 +35,22 @@ public class InteractiblesController : MonoBehaviour
     private GameInputs _inputs;
     private void Awake()
     {
-        _inputs = new GameInputs();
-        _inputs.Gameplay.Enable();
+        _inputs = new GameInputs(); 
     }
-    private void Start()
+    private void OnDisable()
     {
-        if (interactiblesMessageText != null)
-        {
-            interactiblesMessageText.text = "";
-            interactiblesMessageText.gameObject.SetActive(false);
-        }
+        _inputs.Gameplay.Disable();
+    }
+    private void OnEnable()
+    {
+        _inputs.Gameplay.Enable();
     }
 
     private void Update()
     {
         if (player == null || ghoul == null) return;
 
-        // Se não estivermos no modo "escondendo temporariamente", limpa a mensagem
-        if (!isHidingTemporarily)
-        {
-            HideInteractiblesMessage();
-        }
-
+      
         CheckCollectible(lever, "<Alavanca>");
         CheckCollectible(leverDisabled, "<Alavanca>");
         CheckCollectible(exitDoor, "<Porta de saída>");
@@ -71,8 +65,8 @@ public class InteractiblesController : MonoBehaviour
         if (interactible == null) return;
         if (!interactible.activeInHierarchy) return;
 
-        float distance = Vector3.Distance(player.transform.position, interactible.transform.position);
-        if (distance <= interactionRadius)
+        float distance = Vector3.SqrMagnitude(interactible.transform.position - player.transform.position);
+        if (distance <= interactionRadius * interactionRadius)
         {
             // ALAVANCA
             if (interactible.CompareTag("Lever"))
@@ -166,15 +160,13 @@ public class InteractiblesController : MonoBehaviour
 
     private void ShowInteractiblesMessage(string message)
     {
-        if (!interactiblesMessageText) return;
-        interactiblesMessageText.gameObject.SetActive(true);
+        if (!interactiblesMessageText) return; 
         interactiblesMessageText.text = message;
     }
 
     private void HideInteractiblesMessage()
     {
-        if (!interactiblesMessageText) return;
-        interactiblesMessageText.gameObject.SetActive(false);
+        if (!interactiblesMessageText) return; 
         interactiblesMessageText.text = "";
     }
 

@@ -46,3 +46,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _drops:
   - {fileID: 7519230835507225528, guid: ccdfa906bfbcbd04683a4d9eb87b82a0, type: 3}
+  _items:
+  - {fileID: 11400000, guid: 68a2d4c2d841e3145a30699f9c89b2a0, type: 2}
+  - {fileID: 11400000, guid: a59eb95a338518b458c7a30bb4408d34, type: 2}
+  - {fileID: 11400000, guid: 66e639eeb74a9c94785b98085a4811cd, type: 2}
+  _hudItemViewFactory: {fileID: 7173118435421819454, guid: a1e71ad6eda577041b113849121f0c28,
+    type: 3}

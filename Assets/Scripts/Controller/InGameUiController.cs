@@ -6,8 +6,7 @@ public class InGameUiController : MonoBehaviour
     [Header("Models")]
     public PlayerModel playerModel;       // Arraste o ScriptableObject do Player
     public PlayerController playerController;
-    public GhoulPatrolModel ghoulModel;   // Se for necessário
-    public InGameUiModel uiModel;         // Arraste o ScriptableObject de UI
+    public GhoulPatrolModel ghoulModel;   // Se for necessário 
 
     [Header("View")]
     public InGameUiView uiView;           // Arraste o objeto que tem o InGameUiView
@@ -23,60 +22,7 @@ public class InGameUiController : MonoBehaviour
             gameCompletePanel.SetActive(false);
             gameOverPanel.SetActive(false);
         }
-    }
-
-    void Update()
-    {
-        UpdateInventoryUI();
-    }
-
-    private void UpdateInventoryUI()
-    {
-        // Exemplo de pseudo-lógica:
-        // Se o PlayerController tiver algo como "HasPotionInInventory()" ou "inventory.Contains("potion")"
-        bool hasPotion = playerController.HasPotionInInventory();
-        bool hasKey = playerController.HasKeyInInventory();
-        bool hasKnife = playerController.HasKnifeInInventory();
-
-        if (hasPotion)
-        {
-            uiView.ShowItem(
-                "potion",                         // identificação do item
-                uiModel.potionSprite,            // sprite do Model de UI
-                playerModel.isPotionEquipped     // define se está equipado (alpha 100%)
-            );
-        }
-        else
-        {
-            uiView.HideItem("potion");
-        }
-
-        if (hasKey)
-        {
-            uiView.ShowItem(
-                "key",
-                uiModel.keySprite,
-                playerModel.isKeyEquipped
-            );
-        }
-        else
-        {
-            uiView.HideItem("key");
-        }
-
-        if (hasKnife)
-        {
-            uiView.ShowItem(
-                "knife",
-                uiModel.daggerSprite,
-                playerModel.isKnifeEquipped
-            );
-        }
-        else
-        {
-            uiView.HideItem("knife");
-        }
-    }
+    } 
 
     public void PlayAgain()
     {

@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(PlayerView))]
 public class PlayerController : MonoBehaviour,IDamageable
 {
+    public UnityEvent<string> OnCollect;
     [Header("Referências ao Model e View")]
     [SerializeField] private PlayerModel playerModel;
     [SerializeField] private PlayerView playerView;
@@ -428,6 +430,7 @@ public class PlayerController : MonoBehaviour,IDamageable
         if (playerModel.inventory == null)
             playerModel.inventory = new List<GameObject>();
         playerModel.inventory.Add(item);
+        OnCollect?.Invoke(item.name);
         item.SetActive(false);
         Debug.Log($"Item '{item.name}' adicionado ao inventário. Total de itens: {playerModel.inventory.Count}");
         return true;

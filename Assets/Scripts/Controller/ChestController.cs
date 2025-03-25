@@ -43,15 +43,7 @@ public class ChestController : MonoBehaviour
         }
 
     }
-
-    private void Update()
-    {
-        if (collectiblesController !=null && collectiblesController.itemCollectedMessageText.isActiveAndEnabled)
-        {
-            StartCoroutine(collectiblesController.DelayToReadMessage(5f));
-        }
-
-    }
+     
 
     // Método a ser chamado quando o jogador interage com o baú
     public void Interact()
@@ -99,6 +91,8 @@ public class ChestController : MonoBehaviour
         {
             playerController.SetCatching(false);
         }
+        yield return (collectiblesController.DelayToReadMessage(5f));
+
     }
 
 
