@@ -31,7 +31,12 @@ public class InteractiblesController : MonoBehaviour
 
     // Flag para indicar se estamos escondendo a mensagem temporariamente
     private bool isHidingTemporarily = false;
-
+    private GameInputs _inputs;
+    private void Awake()
+    {
+        _inputs = new GameInputs();
+        _inputs.Gameplay.Enable();
+    }
     private void Start()
     {
         if (interactiblesMessageText != null)
@@ -72,7 +77,7 @@ public class InteractiblesController : MonoBehaviour
             if (interactible.CompareTag("Lever"))
             {
                 ShowInteractiblesMessage($"Pressione E para interagir com {interactibleName}");
-                if (Input.GetKeyDown(KeyCode.E))
+                if (_inputs.Gameplay.Interact.WasPressedThisFrame())
                 {
                     leverPlayableDirector.Play();
                     interactible.SetActive(false);
@@ -91,7 +96,7 @@ public class InteractiblesController : MonoBehaviour
                     if (collectedKey)
                     {
                         ShowInteractiblesMessage($"Pressione E para interagir com {interactibleName}");
-                        if (Input.GetKeyDown(KeyCode.E))
+                        if (_inputs.Gameplay.Interact.WasPressedThisFrame())
                         {
                             HideInteractiblesMessage();
                             openingDoorPlayableDirector.Play();
@@ -111,7 +116,7 @@ public class InteractiblesController : MonoBehaviour
                     else
                     {
                         ShowInteractiblesMessage($"Pressione E para interagir com {interactibleName}");
-                        if (Input.GetKeyDown(KeyCode.E))
+                        if (_inputs.Gameplay.Interact.WasPressedThisFrame())
                         {
                             closedDoorPlayableDirector.Play();
                             StartCoroutine(HideTextForSeconds(3f));
@@ -124,7 +129,7 @@ public class InteractiblesController : MonoBehaviour
             else if (interactible.CompareTag("Paper"))
             {
                 ShowInteractiblesMessage($"Pressione E para olhar {interactibleName}");
-                if (Input.GetKeyDown(KeyCode.E))
+                if (_inputs.Gameplay.Interact.WasPressedThisFrame())
                 {
                     Debug.Log("Lendo papel...");
                     // Aqui você pode abrir uma tela de texto ou outra interação
@@ -135,7 +140,7 @@ public class InteractiblesController : MonoBehaviour
             else if (interactible.CompareTag("Chest"))
             {
                 ShowInteractiblesMessage($"Pressione E para abrir {interactibleName}");
-                if (Input.GetKeyDown(KeyCode.E))
+                if (_inputs.Gameplay.Interact.WasPressedThisFrame())
                 {
                     // Busca o ChestController no GameObject do baú
                     ChestController chestController = interactible.GetComponent<ChestController>();

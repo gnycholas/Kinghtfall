@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour,IDamageable
     [SerializeField] private LayerMask enemyLayer;          // Layer dos inimigos
 
     private Vector3 lastMovementDirection;
-
+    private GameInputs _inputs;
     public bool IsDead => playerModel.isDead;
 
     private void Awake()
@@ -45,6 +45,9 @@ public class PlayerController : MonoBehaviour,IDamageable
             potionGameObject.SetActive(false);
         if (keyGameObject != null)
             keyGameObject.SetActive(false);
+
+        _inputs = new GameInputs();
+        _inputs.Gameplay.Enable();
     }
 
     private void Update()
@@ -68,8 +71,10 @@ public class PlayerController : MonoBehaviour,IDamageable
         playerModel.isInjured = (playerModel.currentHealth < 3 && !playerModel.isDead);
 
         // Inputs
-        float vertical = Input.GetAxis("Vertical");    // W/S – avanço/recuo
-        float horizontal = Input.GetAxis("Horizontal"); // A/D – rotação
+        var direction = _inputs.Gameplay.Move.ReadValue<Vector2>();
+        Debug.Log(direction);
+        float vertical = direction.y;    // W/S – avanço/recuo
+        float horizontal = direction.x; // A/D – rotação
 
         // Reset dos estados de giro
         playerModel.isTurningLeft = false;
@@ -104,7 +109,7 @@ public class PlayerController : MonoBehaviour,IDamageable
         bool isRunning = false;
         if (vertical > 0.1f)
         {
-            isRunning = Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift);
+            isRunning = _inputs.Gameplay.Run.WasPressedThisFrame();
             playerModel.isWalking = true;
         }
         else if (Mathf.Abs(vertical) > 0.1f)
@@ -147,7 +152,7 @@ public class PlayerController : MonoBehaviour,IDamageable
 
         if (playerModel.isKnifeEquipped && !playerModel.isAttacking)
         {
-            if (Input.GetMouseButtonDown(0))
+            if (_inputs.Gameplay.Attack.WasPerformedThisFrame())
             {
                 playerModel.isAttacking = true;
                 playerView.SetAttacking(true);
@@ -244,7 +249,7 @@ public class PlayerController : MonoBehaviour,IDamageable
             }
         }
 
-        if (playerModel.isPotionEquipped && Input.GetMouseButtonDown(0))
+        if (playerModel.isPotionEquipped && _inputs.Gameplay.Attack.WasPerformedThisFrame())
         {
             playerModel.isDrinking = true;
             playerView.UpdateDrinking(true);
