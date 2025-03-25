@@ -15,10 +15,12 @@ public interface IDamageable:IEquatable<GameObject>
 public struct Damage
 {
     public float Amount;
+    public GameObject Origin;
 
-    public Damage(float amount)
+    public Damage(float amount, GameObject origin)
     {
         Amount = amount;
+        Origin = origin;
     }
 }
 public struct DamageInfo

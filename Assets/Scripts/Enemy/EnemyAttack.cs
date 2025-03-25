@@ -29,7 +29,7 @@ public sealed class EnemyAttack : EnemyState
             {
                 if(_controller.Target.TryGetComponent(out IDamageable damageable))
                 {
-                    damageable.TakeDamage(new Damage(_controller.Model.attackDamage));
+                    damageable.TakeDamage(new Damage(_controller.Model.attackDamage,gameObject));
                     if (damageable.IsDead)
                     {
                         _controller.RequestStateChange("Enemy Idle");

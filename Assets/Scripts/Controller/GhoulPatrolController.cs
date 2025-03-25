@@ -261,7 +261,7 @@ public class GhoulPatrolController : MonoBehaviour
             {
                 PlayerController playerCtrl = playerTransform.GetComponent<PlayerController>();
                 if (playerCtrl != null)
-                    playerCtrl.TakeDamage(new Damage(model.attackDamage));
+                    playerCtrl.TakeDamage(new Damage(model.attackDamage,gameObject));
             }
 
             yield return new WaitForSeconds(model.attackCooldown - attackAnimDuration);

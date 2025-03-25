@@ -175,7 +175,7 @@ public class PlayerController : MonoBehaviour,IDamageable
             {
                 if(!damageable.Equals(gameObject) && !damageable.IsDead)
                 {
-                    damageable.TakeDamage(new Damage(1));
+                    damageable.TakeDamage(new Damage(1,gameObject));
                 }
             } 
         }
