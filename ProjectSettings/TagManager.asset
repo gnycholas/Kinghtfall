@@ -11,11 +11,12 @@ TagManager:
   - ExitDoor
   - Paper
   - Chest
+  - Print
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - lights
   - Water
   - UI
   - Ghoul
