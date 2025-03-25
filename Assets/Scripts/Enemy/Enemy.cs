@@ -12,6 +12,9 @@ public abstract class Enemy : MonoBehaviour, IEnemy
     protected string lastState;
     public UnityEvent<string> OnPlayAnimation = new();
     protected PlayerController player;
+    private int _currentLife;
+    public UnityEvent<DamageInfo> OnTakeDamage;
+    public UnityEvent OnDie;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] protected GhoulPatrolModel model;
     [SerializeField] protected string _startState;
@@ -22,10 +25,11 @@ public abstract class Enemy : MonoBehaviour, IEnemy
 
     public string LastState => lastState;
 
-    public bool IsDead => model.currentHealth <= 0;
+    public bool IsDead => _currentLife <= 0;
 
     protected virtual void Awake()
     {
+        _currentLife = model.maxHealth;
         stateMachine = new StateMachine();
         player = FindAnyObjectByType<PlayerController>();
     }
@@ -48,20 +52,41 @@ public abstract class Enemy : MonoBehaviour, IEnemy
     {
         if (player.IsDead)
             return false;
-        Vector3 origin = transform.position + new Vector3(0, _lineSighOffset.y,0);
-        Vector3 target = player.transform.position + new Vector3(0, _lineSighOffset.y,0);
-        if (Physics.Linecast(origin, target, out RaycastHit hit))
-            return (hit.collider.gameObject == player.gameObject);
-        return true;
+        var direction = (player.transform.position - transform.position);
+        if(direction.sqrMagnitude <= (model.detectionRadius * model.detectionRadius))
+        {
+            var angle = Vector3.Angle(transform.forward, direction.normalized);
+            if(angle <= model.fieldOfViewAngle * 0.5f)
+            { 
+                Vector3 origin = transform.position + new Vector3(0, _lineSighOffset.y, 0);
+                Vector3 target = player.transform.position + new Vector3(0, _lineSighOffset.y, 0);
+                if (Physics.Linecast(origin, target, out RaycastHit hit))
+                    return (hit.collider.gameObject == player.gameObject);
+            } 
+        }
+        return false;
     }
     public DamageInfo TakeDamage(Damage damage)
     {
         var realDamage = damage.Amount;
         if (realDamage > 0)
-        { 
+        {
+            _currentLife -= Convert.ToInt32(realDamage);
             RequestStateChange("Enemy TakeDamage");
+        } 
+        
+        var info = new DamageInfo() { Critical = false, Damage =realDamage, PercentDamage = 0 };
+        OnTakeDamage?.Invoke(info);
+        if(_currentLife <= 0)
+        {
+            Die();
         }
-        return new DamageInfo() { Critical = false, Damage =realDamage, PercentDamage = 0 };
+        return info;
+    }
+    protected void Die()
+    {
+        Play("Die");
+        OnDie?.Invoke();
     }
 
     public void MoveTo(Vector3 point)
@@ -88,5 +113,10 @@ public abstract class Enemy : MonoBehaviour, IEnemy
         lastState = stateMachine.ActiveStateName;
         await Task.Delay(TimeSpan.FromSeconds(delay));
         stateMachine.RequestStateChange(v); 
+    }
+
+    public bool Equals(GameObject other)
+    {
+        return other == gameObject;
     }
 }

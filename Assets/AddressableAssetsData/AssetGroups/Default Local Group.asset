@@ -22,6 +22,16 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c700ca33d0387341bd0f36c5271d37a
+    m_Address: Assets/Audio/Dubbing/Ghoul/GhoulHit.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5f4bbd24c8a21e4ea59df7bf307b315
+    m_Address: Assets/Audio/Dubbing/Ghoul/GhoulDie.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 99f2b7565b85742408affdd3bb065b91, type: 2}
   m_SchemaSet:

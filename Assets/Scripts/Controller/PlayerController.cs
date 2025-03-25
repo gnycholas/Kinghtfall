@@ -152,6 +152,7 @@ public class PlayerController : MonoBehaviour,IDamageable
                 playerModel.isAttacking = true;
                 playerView.SetAttacking(true);
                 playerView.TriggerAttack();
+                PerformAttack();
                 float attackDuration = (attackAnimationClip != null) ? attackAnimationClip.length : 1.3f;
                 StartCoroutine(ResetAttack(attackDuration));
             }
@@ -168,14 +169,15 @@ public class PlayerController : MonoBehaviour,IDamageable
     public void PerformAttack()
     {
         Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
-        foreach (Collider enemy in hitEnemies)
+        foreach (Collider target in hitEnemies)
         {
-            GhoulPatrolController ghoul = enemy.GetComponent<GhoulPatrolController>();
-            if (ghoul != null)
+            if(target.TryGetComponent(out IDamageable damageable))
             {
-                ghoul.TakeDamage(1);
-                Debug.Log("ghoul sofreu o dano");
-            }
+                if(!damageable.Equals(gameObject) && !damageable.IsDead)
+                {
+                    damageable.TakeDamage(new Damage(1));
+                }
+            } 
         }
     }
     #endregion
@@ -429,6 +431,11 @@ public class PlayerController : MonoBehaviour,IDamageable
     {
         playerModel.isCatching = state;
         playerView.UpdateCatching(state);
+    }
+
+    public bool Equals(GameObject other)
+    {
+        return gameObject == other;
     }
     #endregion
 }

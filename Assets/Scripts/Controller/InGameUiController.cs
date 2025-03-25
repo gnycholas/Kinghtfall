@@ -43,14 +43,12 @@ public class InGameUiController : MonoBehaviour
         playerModel.isRunning = false;
         playerModel.isTurningLeft = false;
         playerModel.isTurningRight = false;
-        playerModel.isDrinking = false;
-
-        ghoulModel.currentHealth = ghoulModel.maxHealth;
+        playerModel.isDrinking = false; 
 
         // Zera o inventário
         playerModel.inventory.Clear();
 
-        SceneManager.LoadScene("GameDemo");
+        SceneManager.LoadScene("Game");
     }
 
     public void MainMenu()

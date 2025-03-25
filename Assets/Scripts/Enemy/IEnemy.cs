@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,7 @@ public interface IEnemy:IDamageable
 {
     public void MoveTo(Vector3 point);
 }
-public interface IDamageable
+public interface IDamageable:IEquatable<GameObject>
 {
     public bool IsDead { get; }
     public DamageInfo TakeDamage(Damage damage);
