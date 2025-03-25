@@ -29,6 +29,7 @@ public class InteractiblesController : MonoBehaviour
     [Header("UI")]
     [SerializeField] private TextMeshProUGUI interactiblesMessageText;
 
+
     // Flag para indicar se estamos escondendo a mensagem temporariamente
     private bool isHidingTemporarily = false;
     private GameInputs _inputs;
@@ -64,7 +65,7 @@ public class InteractiblesController : MonoBehaviour
         CheckCollectible(chest2, "<Baú>");
     }
 
-    private void CheckCollectible(GameObject interactible, string interactibleName)
+    public void CheckCollectible(GameObject interactible, string interactibleName)
     {
         if (isHidingTemporarily) return;
         if (interactible == null) return;
@@ -147,6 +148,7 @@ public class InteractiblesController : MonoBehaviour
                     if (chestController != null)
                     {
                         chestController.Interact();
+
                     }
                     else
                     {
