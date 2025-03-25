@@ -8,6 +8,7 @@ public interface IEnemy:IDamageable
 }
 public interface IDamageable
 {
+    public bool IsDead { get; }
     public DamageInfo TakeDamage(Damage damage);
 }
 public struct Damage

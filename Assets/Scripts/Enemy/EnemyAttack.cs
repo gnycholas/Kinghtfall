@@ -13,7 +13,7 @@ public sealed class EnemyAttack : EnemyState
 
     public override State GetState()
     {
-        return new State(onEnter: SetupAttack, onLogic: Logic)
+        return new State(onEnter: SetupAttack, onLogic: Logic, onExit: ctx=>_isAttacking = false)
         {
             name = "Enemy Attack",
         };
@@ -24,18 +24,26 @@ public sealed class EnemyAttack : EnemyState
          if(state.timer.Elapsed > _delay && !_isAttacking)
         {
             _isAttacking = true;
-            if (Vector3.SqrMagnitude(_controller.Target.position - transform.position) <= _controller.Model.attackRange * _controller.Model.attackRange)
+            var range = _controller.Model.attackRange * _controller.Model.attackRange;
+            if (Vector3.SqrMagnitude(_controller.Target.position - transform.position) <= range)
             {
                 if(_controller.Target.TryGetComponent(out IDamageable damageable))
                 {
                     damageable.TakeDamage(new Damage(_controller.Model.attackDamage));
+                    if (damageable.IsDead)
+                    {
+                        _controller.RequestStateChange("Enemy Idle");
+                        return;
+                    }
                 } 
-            } 
-        }
+            }    
+            _controller.RequestStateChange("Enemy Chase", _controller.Model.attackCooldown); 
+        } 
     }
 
     private void SetupAttack(State<string, string> state)
     {
+        _controller.Agent.isStopped = true;
         _controller.Play("Attack");
     }
 }

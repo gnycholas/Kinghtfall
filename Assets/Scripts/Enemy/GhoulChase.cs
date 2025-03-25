@@ -5,7 +5,7 @@ using UnityHFSM;
 public sealed class GhoulChase : EnemyState
 {
     private Enemy _controller;
-    private bool _startedMove;
+    private bool _isReady;
     [SerializeField] private float _chaseSpeed;
     [SerializeField] private float _delay;
 
@@ -16,7 +16,7 @@ public sealed class GhoulChase : EnemyState
 
     public override State GetState()
     {
-        return new State(onEnter: SetupIdle, onLogic: Logic, onExit: Exit)
+        return new State(onEnter: SetupChase, onLogic: Logic, onExit: Exit)
         {
             name = "Enemy Chase",
         };
@@ -24,31 +24,47 @@ public sealed class GhoulChase : EnemyState
 
     private void Exit(State<string, string> state)
     {
-        _controller.Agent.isStopped = false;
+        _controller.Agent.isStopped = true;
+        _controller.Agent.speed = _controller.Model.walkSpeed;
+        _isReady = false;
     }
 
     private void Logic(State<string, string> state)
-    {
-        if (state.timer.Elapsed > _delay && !_startedMove)
+    { 
+        if ((state.timer.Elapsed > _delay) && !_isReady)
+        { 
+            _controller.Agent.isStopped = false;
+            _controller.Agent.speed = _controller.Model.runSpeed;
+            _controller.Play("Run");
+            _isReady = true; 
+        }else if( (_controller.LastState == "Enemy Attack" || _controller.LastState == "Enemy Chase") && !_isReady)
         {
-            _startedMove = true; 
-            _controller.Agent.SetDestination(_controller.Target.position);
-            _controller.Agent.speed = _chaseSpeed;
             _controller.Agent.isStopped = false;
             _controller.Play("Run");
-        } else if (_startedMove)
-        {
-            float sqrDist = Vector3.SqrMagnitude(_controller.Target.position - transform.position);
-            if (sqrDist <= _controller.Model.attackRange * _controller.Model.attackRange)
-            {
-                _controller.RequestStateChange("Enemy Attack");
-            } 
+            _controller.Agent.SetDestination(_controller.Target.position);
+            _isReady = true;
         }
+        else if(_isReady)
+        { 
+            float sqrDist = Vector3.SqrMagnitude(_controller.Target.position - transform.position);
+
+            if(!_controller.Agent.pathPending && _controller.Agent.remainingDistance <= _controller.Agent.stoppingDistance)
+            {
+                if (sqrDist <= (_controller.Model.attackRange * _controller.Model.attackRange))
+                {
+                    _controller.RequestStateChange("Enemy Attack");
+                }
+                else
+                { 
+                    _controller.RequestStateChange("Enemy Chase");
+                } 
+            }
+        } 
     }
 
-    private void SetupIdle(State<string, string> state)
-    { 
-        if (_controller.Target == null)
+    private void SetupChase(State<string, string> state)
+    {  
+        if (_controller.LastState == "Enemy Patrol" || _controller.LastState == "Enemy Idle")
         { 
             ((Ghoul)_controller).Screaming();
         } 

@@ -27,6 +27,8 @@ public class PlayerController : MonoBehaviour,IDamageable
 
     private Vector3 lastMovementDirection;
 
+    public bool IsDead => playerModel.isDead;
+
     private void Awake()
     {
         if (playerModel == null)

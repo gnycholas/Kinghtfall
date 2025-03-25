@@ -28,6 +28,10 @@ public sealed class EnemyAreaPatrol : EnemyState
         if(!_controller.Agent.pathPending && _controller.Agent.remainingDistance <= _controller.Agent.stoppingDistance)
         {
             _controller.RequestStateChange("Enemy Idle");
+        } 
+        if (_controller.HasLineOfSightToPlayer())
+        {
+            _controller.RequestStateChange("Enemy Chase"); 
         }
     }
 

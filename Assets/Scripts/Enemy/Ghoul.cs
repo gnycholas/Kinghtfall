@@ -8,12 +8,13 @@ public sealed class Ghoul : Enemy
     [SerializeField] private AudioSource _audioSource;
     public void Screaming()
     {
-        _audioSource.PlayOneShot(_audioScreamRef.LoadAssetAsync<AudioClip>().WaitForCompletion());
+        _audioSource.PlayOneShot(Addressables.LoadAssetAsync<AudioClip>(_audioScreamRef).WaitForCompletion());
         Agent.enabled = false;
         transform.LookAt(Target, Vector3.up);
         Agent.enabled = true;
         Agent.isStopped = true;
         Play("GhoulScream");
-        target = player;
+        target = player.transform;
+        Agent.SetDestination(target.position);
     }
 }

@@ -9,20 +9,25 @@ public abstract class Enemy : MonoBehaviour, IEnemy
 {
     private StateMachine stateMachine;
     protected Transform target;
+    protected string lastState;
     public UnityEvent<string> OnPlayAnimation = new();
-    protected Transform player;
+    protected PlayerController player;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] protected GhoulPatrolModel model;
     [SerializeField] protected string _startState;
     [SerializeField] private Vector2 _lineSighOffset;
-    public GhoulPatrolModel Model => model; 
+    public GhoulPatrolModel Model =>model; 
     public NavMeshAgent Agent { get => agent; }
     public Transform Target { get => target;}
+
+    public string LastState => lastState;
+
+    public bool IsDead => model.currentHealth <= 0;
 
     protected virtual void Awake()
     {
         stateMachine = new StateMachine();
-        player = FindAnyObjectByType<PlayerController>().transform;
+        player = FindAnyObjectByType<PlayerController>();
     }
     protected virtual void Start()
     {
@@ -37,27 +42,16 @@ public abstract class Enemy : MonoBehaviour, IEnemy
     }
     private void Update()
     { 
-        stateMachine.OnLogic();
-        if (HasLineOfSightToPlayer() && stateMachine.ActiveState.name != "Enemy Chase")
-        {
-            float sqrDist = Vector3.SqrMagnitude(player.position - transform.position); 
-            if(sqrDist < model.detectionRadius * model.detectionRadius)
-            {
-                Vector3 dirToPlayer = (player.position - transform.position).normalized;
-                float angle = Vector3.Angle(transform.forward, dirToPlayer);
-                if (angle > model.fieldOfViewAngle * 0.5f)
-                {
-                    stateMachine.RequestStateChange("Enemy Chase");
-                }
-            }
-        }
+        stateMachine.OnLogic(); 
     }
-    private bool HasLineOfSightToPlayer()
+    public bool HasLineOfSightToPlayer()
     {
+        if (player.IsDead)
+            return false;
         Vector3 origin = transform.position + new Vector3(0, _lineSighOffset.y,0);
-        Vector3 target = player.position + new Vector3(0, _lineSighOffset.y,0);
+        Vector3 target = player.transform.position + new Vector3(0, _lineSighOffset.y,0);
         if (Physics.Linecast(origin, target, out RaycastHit hit))
-            return (hit.transform == player);
+            return (hit.collider.gameObject == player.gameObject);
         return true;
     }
     public DamageInfo TakeDamage(Damage damage)
@@ -65,7 +59,7 @@ public abstract class Enemy : MonoBehaviour, IEnemy
         var realDamage = damage.Amount;
         if (realDamage > 0)
         { 
-            stateMachine.RequestStateChange("Enemy TakeDamage");
+            RequestStateChange("Enemy TakeDamage");
         }
         return new DamageInfo() { Critical = false, Damage =realDamage, PercentDamage = 0 };
     }
@@ -91,7 +85,8 @@ public abstract class Enemy : MonoBehaviour, IEnemy
 
     public async void RequestStateChange(string v, float delay = 0)
     {
+        lastState = stateMachine.ActiveStateName;
         await Task.Delay(TimeSpan.FromSeconds(delay));
-        stateMachine.RequestStateChange(v);
+        stateMachine.RequestStateChange(v); 
     }
 }
