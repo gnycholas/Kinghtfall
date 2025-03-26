@@ -56,50 +56,8 @@ public class ChestController : MonoBehaviour
     // Método a ser chamado quando o jogador interage com o baú
     public void Interact()
     {
-        if (isOpened)
-            return;
-
-        // Dispara a animação de abertura no Animator
-        if (chestAnimator != null)
-        {
-            chestAnimator.SetTrigger(openTriggerName);
-        }
-        isOpened = true;
-
-        // Ativa o estado de catching no player para tocar a animação de coleta
-        if (playerController != null)
-        {
-            playerController.SetCatching(true);
-        }
-
-
-        // Inicia a coroutine que, após um delay, adiciona o item ao inventário
-        StartCoroutine(AddItemAfterDelay(addItemDelay));
+         
 
     }
-
-    private IEnumerator AddItemAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
-        if (playerController != null && storedItem != null)
-        {
-            Debug.Log("Tentando adicionar o item: " + storedItem.name);
-            playerController.AddItemToInventory(storedItem);
-            // Mostrar mensagem de coleta
-            collectiblesController.ShowItemCollectedMessage($"Coletou {storedItem.name}");
-            
-        }
-        // Opcional: desativa o objeto do item no baú para que ele não seja coletado novamente
-        if (storedItem != null)
-        {
-            storedItem.SetActive(false);
-        }
-        // Desativa o estado de catching no player
-        if (playerController != null)
-        {
-            playerController.SetCatching(false);
-        }
-    }
-
-
+     
 }
