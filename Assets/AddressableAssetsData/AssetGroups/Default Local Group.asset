@@ -22,13 +22,48 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c852196773309c4ba081f8f76e43418
+    m_Address: Assets/Sprites/UI/adaga.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 6c700ca33d0387341bd0f36c5271d37a
     m_Address: Assets/Audio/Dubbing/Ghoul/GhoulHit.wav
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ee2230b5fffcd04abaa25c6ba9c27ed
+    m_Address: Assets/Prefabs/Itens/Weapons/Dagger.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1e71ad6eda577041b113849121f0c28
+    m_Address: Assets/Prefabs/HUDItem.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae81d38ee9462a644a87b172e78d2c68
+    m_Address: Assets/Sprites/UI/chave.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae85be3c092d4f840be50cc355db5d94
+    m_Address: Assets/Prefabs/Itens/Colectibles/Potion.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b5f4bbd24c8a21e4ea59df7bf307b315
     m_Address: Assets/Audio/Dubbing/Ghoul/GhoulDie.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccdfa906bfbcbd04683a4d9eb87b82a0
+    m_Address: Assets/Prefabs/Itens/Colectibles/key.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cef0ba6ed10eaed41b2999ae96dd95f5
+    m_Address: Assets/Sprites/UI/pocao.png
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0

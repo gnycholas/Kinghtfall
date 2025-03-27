@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a2e88a513f7c514baafbe82a99ed2a6, type: 3}
+  m_Name: PotionSO
+  m_EditorClassIdentifier: 
+  _name: Potion
+  _icon:
+    m_AssetGUID: cef0ba6ed10eaed41b2999ae96dd95f5
+    m_SubObjectName: pocao
+    m_SubObjectType: UnityEngine.Sprite, UnityEngine.CoreModule, Version=0.0.0.0,
+      Culture=neutral, PublicKeyToken=null
+    m_EditorAssetChanged: 1
+  _gameObject:
+    m_AssetGUID: ae85be3c092d4f840be50cc355db5d94
+    m_SubObjectName: 
+    m_SubObjectType: 
+    m_EditorAssetChanged: 0
