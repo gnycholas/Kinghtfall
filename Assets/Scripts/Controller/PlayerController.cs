@@ -1,32 +1,20 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
-using Zenject.ReflectionBaking;
 
 [RequireComponent(typeof(PlayerAnimationController))]
 public class PlayerController : MonoBehaviour,IDamageable
 {
     public UnityEvent<UpdateAnimation> OnUpdateAnimation;
     public UnityEvent OnDead;
-    public UnityEvent<DamageInfo> OnTakeDamage;
+    public UnityEvent<DamageInfo> OnTakeDamage; 
+    public UnityEvent<ItemCollectibleSO, int> OnCollectItem; 
+ 
     [Header("Referências ao Model e View")]
-    [SerializeField] private PlayerModel playerModel;
-    [SerializeField] private PlayerAnimationController playerView;
-    [SerializeField] private CharacterController characterController; 
-
-    [Header("Configurações de Animação")]
-    [SerializeField] private AnimationClip hitAnimationClip;    // Animação de hit
-    [SerializeField] private AnimationClip attackAnimationClip;   // Animação de ataque
-
-    [Header("Configurações de Ataque")]
-    [SerializeField] private Transform attackPoint;       // Ponto de origem do ataque
-    [SerializeField] private float attackRange = 1.5f;      // Alcance do ataque
-    [SerializeField] private LayerMask enemyLayer;    
+    [SerializeField] private PlayerModel playerModel; 
+    [SerializeField] private CharacterController characterController;  
 
     private GameInputs _inputs;
     #region Properties
@@ -38,14 +26,13 @@ public class PlayerController : MonoBehaviour,IDamageable
     private bool _isInjured;
     private bool _isAttacking;
     private bool _isRun;
+    private bool _hasWeapon;
     private Vector2 _moveDirection;
     #endregion
     private void Awake()
     {
         if (playerModel == null)
-            playerModel = Resources.Load<PlayerModel>("PlayerModel");
-        if (playerView == null)
-            playerView = GetComponent<PlayerAnimationController>();
+            playerModel = Resources.Load<PlayerModel>("PlayerModel"); 
         if (characterController == null)
             characterController = GetComponent<CharacterController>(); 
 
@@ -54,12 +41,14 @@ public class PlayerController : MonoBehaviour,IDamageable
     }
 
     private void Update()
-    {
-        HandleInventoryInput();
+    { 
         HandleCombat();
-        HandleMovement();
-        Debug.Log(_moveDirection);
-        OnUpdateAnimation?.Invoke(new UpdateAnimation(_moveDirection.x, _moveDirection.y,_isInjured));
+        HandleMovement(); 
+        OnUpdateAnimation?.Invoke(new UpdateAnimation(_moveDirection.x,
+            _moveDirection.y,
+            _isInjured,
+            _isRun,
+            _isAttacking));
     }
 
     #region Movimentação
@@ -80,7 +69,7 @@ public class PlayerController : MonoBehaviour,IDamageable
 
         Vector3 moveDirection = transform.forward * vertical;
 
-        _isRun = _inputs.Gameplay.Run.WasPressedThisFrame();  
+        _isRun = _inputs.Gameplay.Run.IsPressed(); 
 
         float currentSpeed = _isRun ? playerModel.runSpeed : playerModel.walkSpeed;
         characterController.SimpleMove(moveDirection * currentSpeed); 
@@ -90,12 +79,11 @@ public class PlayerController : MonoBehaviour,IDamageable
     #region Combate
     private void HandleCombat()
     {
-        if (!_isAttacking)
+        if (!_isAttacking || !_hasWeapon)
             return;
         if (_inputs.Gameplay.Attack.WasPerformedThisFrame())
         {
-            ToggleAttack(true, 1.3f);  
-            PerformAttack(); 
+            ToggleAttack(true, 1.3f);   
         }
     }
 
@@ -104,23 +92,7 @@ public class PlayerController : MonoBehaviour,IDamageable
         _isAttacking = active;
         await Task.Delay(TimeSpan.FromSeconds(time));
         _isAttacking = !active;
-    }
-
-    public void PerformAttack()
-    {
-        Collider[] hitEnemies = Physics.OverlapSphere(attackPoint.position, attackRange, enemyLayer);
-        foreach (Collider target in hitEnemies)
-        {
-            if(target.TryGetComponent(out IDamageable damageable))
-            {
-                if(!damageable.Equals(gameObject) && !damageable.IsDead)
-                {
-                    damageable.TakeDamage(new Damage(1,gameObject));
-                    break;
-                }
-            } 
-        }
-    }
+    } 
     #endregion
 
     #region Vida e Dano
@@ -150,19 +122,11 @@ public class PlayerController : MonoBehaviour,IDamageable
     } 
     #endregion
 
-    #region Inventário e Itens (Poção, Chave e Faca)
-    private void HandleInventoryInput()
+    #region Inventário e Itens (Poção, Chave e Faca) 
+    public void AddItemToInventory(ItemCollectibleSO item, int amount)
     {
-        
-    }     
-    public bool AddItemToInventory(GameObject item)
-    {
-        if (item == null)
-        {
-            Debug.LogWarning("Tentativa de adicionar item nulo ao inventário.");
-            return false;
-        } 
-        return false;
+        OnCollectItem?.Invoke(item, amount); 
+        ToggleMove(false, item.Time);
     } 
 
     public bool Equals(GameObject other)
@@ -170,4 +134,4 @@ public class PlayerController : MonoBehaviour,IDamageable
         return gameObject == other;
     }
     #endregion
-}
+} 
