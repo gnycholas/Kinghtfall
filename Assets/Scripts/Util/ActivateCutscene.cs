@@ -3,27 +3,22 @@ using UnityEngine.Playables;
 
 public class ActivateCutscene : MonoBehaviour
 {
-
-    [SerializeField] private PlayableDirector playableDirector;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    private bool _firstTime = true;
+    [SerializeField] private PlayableDirector playableDirector; 
     private void OnTriggerEnter(Collider other)
     {
+        if (!_firstTime)
+            return;
         if (other.CompareTag("Player"))
         {
-            playableDirector.Play();
-            GetComponent<BoxCollider>().enabled = false;
+            _firstTime = false;
+            Active();
         }
+    }
+
+    public void Active()
+    {
+        playableDirector.Play();
+        GetComponent<BoxCollider>().enabled = false;
     }
 }

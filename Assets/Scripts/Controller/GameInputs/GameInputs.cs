@@ -80,6 +80,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Equip"",
+                    ""type"": ""Button"",
+                    ""id"": ""fc2b4fce-f353-4a54-956c-a4a1560f41fe"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -97,7 +106,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""e42eb2a4-f76b-43f6-a8b6-0984464da266"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -173,8 +182,8 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""7ec157ce-2e28-49fb-bb7c-e371aec9f44e"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""id"": ""05870ee2-8a63-4994-b6e1-f770a0bf1a37"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -184,7 +193,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""05870ee2-8a63-4994-b6e1-f770a0bf1a37"",
+                    ""id"": ""ffb2fed1-8b34-444c-a377-86ff60089f38"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -291,6 +300,28 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bc1d74b2-4692-4f12-a713-a5b92e1fa4e7"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""77bab29b-3ccf-4d05-8c0e-5662c2efd44f"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Equip"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -305,6 +336,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Gameplay_SelectItem = m_Gameplay.FindAction("SelectItem", throwIfNotFound: true);
         m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
         m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
+        m_Gameplay_Equip = m_Gameplay.FindAction("Equip", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -372,6 +404,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_SelectItem;
     private readonly InputAction m_Gameplay_Run;
     private readonly InputAction m_Gameplay_Interact;
+    private readonly InputAction m_Gameplay_Equip;
     public struct GameplayActions
     {
         private @GameInputs m_Wrapper;
@@ -382,6 +415,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @SelectItem => m_Wrapper.m_Gameplay_SelectItem;
         public InputAction @Run => m_Wrapper.m_Gameplay_Run;
         public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
+        public InputAction @Equip => m_Wrapper.m_Gameplay_Equip;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -409,6 +443,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Interact.started += instance.OnInteract;
             @Interact.performed += instance.OnInteract;
             @Interact.canceled += instance.OnInteract;
+            @Equip.started += instance.OnEquip;
+            @Equip.performed += instance.OnEquip;
+            @Equip.canceled += instance.OnEquip;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -431,6 +468,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Interact.started -= instance.OnInteract;
             @Interact.performed -= instance.OnInteract;
             @Interact.canceled -= instance.OnInteract;
+            @Equip.started -= instance.OnEquip;
+            @Equip.performed -= instance.OnEquip;
+            @Equip.canceled -= instance.OnEquip;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -456,5 +496,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnSelectItem(InputAction.CallbackContext context);
         void OnRun(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnEquip(InputAction.CallbackContext context);
     }
 }

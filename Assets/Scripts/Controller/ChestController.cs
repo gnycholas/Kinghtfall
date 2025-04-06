@@ -1,63 +1,27 @@
+using System;
 using System.Collections;
 using UnityEditor.VersionControl;
 using UnityEngine;
+using Zenject;
 
-public class ChestController : MonoBehaviour
+public class ChestController : MonoBehaviour,IInteract
 {
-    [Header("Configuração do Baú")]
-    [Tooltip("Item que será armazenado no baú (ex.: adaga).")]
-    [SerializeField] private GameObject storedItem;
+    [SerializeField] private ItemSO _item;
+    [SerializeField] private int _amount;
+    [Inject] private GameplayController _gameplayController;
 
-
-    [Tooltip("Animator que controla a animação do baú (geralmente no GameObject 'Pivot').")]
-    [SerializeField] private Animator chestAnimator;
-
-    [Tooltip("Nome do trigger que dispara a animação de abertura no Animator.")]
-    [SerializeField] private string openTriggerName = "OpenChest";
-
-    [Tooltip("Tempo de espera após disparar a animação para adicionar o item ao inventário.")]
-    [SerializeField] private float addItemDelay = 1f;
-
-    [Tooltip("Controle dos coletáveis para exibir mensagem de coleta")]
-    [SerializeField] CollectiblesController collectiblesController;
-
-    // Flag para evitar múltiplas interações
-    private bool isOpened = false;
-
-    [Header("Referência ao Jogador")]
-    [Tooltip("Referência ao GameObject do jogador (com o PlayerController).")]
-    [SerializeField] private GameObject player;
-    private PlayerController playerController;
-
-
-    private void Start()
+    public async System.Threading.Tasks.Task Execute()
     {
-        // Se o jogador não foi atribuído no Inspector, tenta encontrá-lo pela tag "Player"
-        if (player == null)
-        {
-            player = GameObject.FindGameObjectWithTag("Player");
-        }
-        if (player != null)
-        {
-            playerController = player.GetComponent<PlayerController>();
-        }
-
+        await Open();
     }
 
-    private void Update()
+    private async System.Threading.Tasks.Task Open()
     {
-        if (collectiblesController !=null && collectiblesController.itemCollectedMessageText.isActiveAndEnabled)
-        {
-            StartCoroutine(collectiblesController.DelayToReadMessage(5f));
-        }
-
+        _gameplayController.AddItemToInventory(_item, _amount);
     }
 
-    // Método a ser chamado quando o jogador interage com o baú
-    public void Interact()
+    public Transform GetTarget()
     {
-         
-
+        return transform;
     }
-     
 }

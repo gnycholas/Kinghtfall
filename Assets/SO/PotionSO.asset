@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2e88a513f7c514baafbe82a99ed2a6, type: 3}
   m_Name: PotionSO
   m_EditorClassIdentifier: 
-  _name: Potion
+  _name: "Po\xE7\xE3o de cura"
+  _id: Potion
+  _description: 
   _icon:
     m_AssetGUID: cef0ba6ed10eaed41b2999ae96dd95f5
     m_SubObjectName: pocao

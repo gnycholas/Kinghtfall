@@ -12,7 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2e88a513f7c514baafbe82a99ed2a6, type: 3}
   m_Name: KeySO
   m_EditorClassIdentifier: 
-  _name: Key
+  _name: Chave da masmorra
+  _id: Key
+  _description: 
   _icon:
     m_AssetGUID: ae81d38ee9462a644a87b172e78d2c68
     m_SubObjectName: chave

@@ -52,3 +52,17 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 66e639eeb74a9c94785b98085a4811cd, type: 2}
   _hudItemViewFactory: {fileID: 7173118435421819454, guid: a1e71ad6eda577041b113849121f0c28,
     type: 3}
+  _weapons:
+  - Id: Dagger
+    Ref:
+      m_AssetGUID: 7ee2230b5fffcd04abaa25c6ba9c27ed
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  _consumibles:
+  - Id: Potion
+    Ref:
+      m_AssetGUID: ae85be3c092d4f840be50cc355db5d94
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0

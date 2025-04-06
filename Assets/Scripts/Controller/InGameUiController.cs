@@ -10,7 +10,7 @@ public class InGameUiController : MonoBehaviour
     public InGameUiModel uiModel;         // Arraste o ScriptableObject de UI
 
     [Header("View")]
-    public InGameUiView uiView;           // Arraste o objeto que tem o InGameUiView
+    public GameplayUIView uiView;           // Arraste o objeto que tem o InGameUiView
 
     [Header("Paineis de tela")]
     public GameObject gameCompletePanel;

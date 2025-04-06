@@ -7,14 +7,41 @@ using Zenject;
 public class HUDItemView : MonoBehaviour
 {
     private static Action onSelect;
-    private ItemCollectibleSO _item; 
+    private ItemSO _item;
+    private int _amount;
+    private int _position;
+    private bool _equiped;
+    [Inject] private ItemFactory _itemFactory; 
     [SerializeField] private Image _moldure;
     [SerializeField] private Image _icon;
     [SerializeField] private TextMeshProUGUI _amountView;
 
-    private void Awake()
+    public string Name =>_item.Name;
+    public int Position =>_position;
+
+    public int Amount
+    {
+        get => _amount; set
+        {
+            _amount = value;
+            if (Amount == 1)
+            {
+                _amountView.text = "";
+                return;
+            }
+            _amountView.text = $"X{Amount}";
+        }
+    }
+
+    public bool Equiped { get => _equiped; }
+
+    private void OnEnable()
     {
         onSelect += Deselect;
+    }
+    private void OnDisable()
+    {
+        onSelect -= Deselect;
     }
     public void Select()
     {
@@ -27,22 +54,30 @@ public class HUDItemView : MonoBehaviour
     }
     public void Equip(InventoryController inventoryController)
     {
-
+        _icon.color = Color.white;
+        _equiped = true;
+        inventoryController.Equip(_position);
     } 
-    private void Setup(ItemCollectibleSO item, int amount)
+    public void UnEquip(InventoryController inventoryController)
     {
-        _item = item;
-        _amountView.text = $"amount";
-        _icon.sprite = item.Sprite;
+        _equiped = false;
+        _icon.color = new Color(1, 1, 1, 0.25f);
+        inventoryController.UnEquip(_position); 
     }
-    public class Factory : PlaceholderFactory<ItemCollectibleSO,int,HUDItemView> 
+    public void Setup(string item, int amount, int index)
     {
-        [Inject] private DiContainer _container;
-        public override HUDItemView Create(ItemCollectibleSO item, int amount)
-        {
-            var hudItem = _container.Instantiate<HUDItemView>();
-            hudItem.Setup(item, amount);
-            return hudItem;
+        _item = _itemFactory.Create(item);
+        _position = index;
+        _amount = amount;
+        if(amount > 1)
+        { 
+            _amountView.text = $"X{amount}";
         }
+        _icon.sprite = _item.Icon;  
+        _icon.color = new Color(1, 1, 1, 0.25f);
+        _icon.sprite = _item.Icon;
+    }
+    public class Factory : PlaceholderFactory<HUDItemView> 
+    { 
     } 
 } 

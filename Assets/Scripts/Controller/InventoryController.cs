@@ -1,59 +1,120 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using Zenject;
 
 public class InventoryController : MonoBehaviour
 {
-    public UnityEvent<Weapon> OnWeaponEquip;
+    [Inject] private WeaponFactory _weaponFactory;
+    [Inject] private ConsumibleFactory _consumibleFactory;  
+    public UnityEvent<Weapon> OnWeaponEquip;  
+    public UnityEvent OnWeaponUnEquip; 
     public UnityEvent<Consumible> OnConsumibleEquip; 
-    private LinkedList<HUDItemView> _inventory = new();
-    private LinkedListNode<HUDItemView> _selectedItem;
-    [SerializeField] private RectTransform _container;
-    [Inject] private HUDItemView.Factory _hUDItemViewFactory;
-    public void Equip(Weapon weapon)
+    public UnityEvent OnConsumibleUnEquip; 
+    public UnityEvent<ItemInventory> OnUpdateInventory;
+    private List<ItemInventory> _items = new();
+
+    public void UnEquip(int index)
     {
-        OnWeaponEquip?.Invoke(weapon);
+        var item = _items.FirstOrDefault(x=>x.Position == index);
+        if(item.Type == ItemInventory.ItemType.EQUIPMENT)
+        {
+            UnEquipWeapon();
+        }
+        else if(item.Type == ItemInventory.ItemType.CONSUMIBLE)
+        {
+            UnEquipConsumible();
+        }
     }
-    public void Equip(Consumible consumible)
+    public void Equip(int index)
     {
-        OnConsumibleEquip?.Invoke(consumible);
+        var item = _items.FirstOrDefault(x => x.Position == index);
+        if (item.Type == ItemInventory.ItemType.EQUIPMENT)
+        {
+            EquipWeapon(item);
+        }else if(item.Type == ItemInventory.ItemType.CONSUMIBLE)
+        {
+            EquipConsumible(item);
+        }
+    }
+    private void EquipWeapon(ItemInventory weapon)
+    { 
+        var weaponSelected = _weaponFactory.Create(weapon.Info); 
+        OnWeaponEquip?.Invoke(weaponSelected);
+    }
+    private void UnEquipWeapon()
+    {
+        OnWeaponUnEquip?.Invoke(); 
+    }
+    private void EquipConsumible(ItemInventory item)
+    { 
+        var itemSelected = _consumibleFactory.Create(item.Info);
+        OnConsumibleEquip?.Invoke(itemSelected);
+    }
+    private void UnEquipConsumible()
+    {
+        OnConsumibleUnEquip?.Invoke();
     }
 
     public void Select(HUDItemView item)
     {
         item.Equip(this);
-    }
-
-    private void NextItem()
-    {
-        if(_selectedItem.Next != null)
-        {
-            _selectedItem = _selectedItem.Next;
-
-        }
-        else
-        {
-            _selectedItem = _inventory.First;
-        }
-        _selectedItem.Value.Select();
-    }
-    private void PreviusItem()
-    {
-        if (_selectedItem.Previous != null)
-        {
-            _selectedItem = _selectedItem.Previous;
-
-        }
-        else
-        {
-            _selectedItem = _inventory.Last;
-        }
-        _selectedItem.Value.Select();
-    }
-    public void Collect(ItemCollectibleSO item, int amount)
-    {
-        var hudItem = _hUDItemViewFactory.Create(item,amount);
-        hudItem.transform.SetParent(_container);
     } 
+    public void Collect(ItemSO item, int amount)
+    {
+        var selectedItem = _items.FirstOrDefault(x => x.Equals(item.Id)); 
+        if (selectedItem != default)
+        {
+            var index = _items.IndexOf(selectedItem); 
+            selectedItem = selectedItem with { Amount = selectedItem.Amount+amount };
+            _items[index] = selectedItem; 
+        }
+        else
+        {
+            selectedItem = new ItemInventory(item, amount, _items.Count + 1);
+            _items.Add(selectedItem);  
+        }
+        UpdateInventory(selectedItem); 
+    }
+
+    public Tuple<bool,string> CheckItem(ItemSO requiredItem, int amount)
+    {
+        var item = _items.FirstOrDefault(x=>x.Equals(requiredItem.Id));
+        if (item == default)
+        {
+            return new Tuple<bool, string>(false, $"Você não possui {requiredItem.Name}");
+        }
+        else
+        {
+            if(item.Amount - amount < 0)
+            {
+                return new Tuple<bool, string>(false, $"Você não possui {requiredItem.Name} suficiente");
+            }
+            else
+            {
+                return new Tuple<bool, string>(true, "");
+            }
+        }
+    }
+
+    public void ConsumeItem(PlayerController player)
+    {
+        var selectedItem = _items.FirstOrDefault(x => x.Equals(player.CurrentItem.Info.Id));
+        if(selectedItem != default)
+        {
+            if ((selectedItem.Amount - 1) >= 0)
+            {
+                var index = _items.IndexOf(selectedItem);
+                _items[index] = selectedItem with { Amount = selectedItem.Amount - 1 };
+                UpdateInventory(_items[index]);
+            } 
+        } 
+    }
+
+    private void UpdateInventory(ItemInventory item)
+    {
+        OnUpdateInventory?.Invoke(item);
+    }
 } 

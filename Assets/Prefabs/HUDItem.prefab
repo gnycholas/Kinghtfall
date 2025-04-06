@@ -92,8 +92,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 17
+  m_fontSizeBase: 17
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -181,17 +181,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7173118435421819454}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0350e40feff9b79479fbbdd87bf5fce0, type: 3}
+  m_Script: {fileID: 11500000, guid: e79d26cfb87879c4ba8b03810e510001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnEquip:
-    m_PersistentCalls:
-      m_Calls: []
-  OnUnEquip:
-    m_PersistentCalls:
-      m_Calls: []
+  _moldure: {fileID: 1856151554509402395}
   _icon: {fileID: 1976458567309803980}
-  _foreground: {fileID: 1856151554509402395}
   _amountView: {fileID: 8444762051971588147}
 --- !u!1 &7418681915291474376
 GameObject:

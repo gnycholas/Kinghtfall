@@ -58,6 +58,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Equip",
+                    "type": "Button",
+                    "id": "fc2b4fce-f353-4a54-956c-a4a1560f41fe",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -75,7 +84,7 @@
                 {
                     "name": "",
                     "id": "e42eb2a4-f76b-43f6-a8b6-0984464da266",
-                    "path": "<Gamepad>/buttonSouth",
+                    "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -151,8 +160,8 @@
                 },
                 {
                     "name": "",
-                    "id": "7ec157ce-2e28-49fb-bb7c-e371aec9f44e",
-                    "path": "<Gamepad>/buttonNorth",
+                    "id": "05870ee2-8a63-4994-b6e1-f770a0bf1a37",
+                    "path": "<Gamepad>/rightShoulder",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -162,7 +171,7 @@
                 },
                 {
                     "name": "",
-                    "id": "05870ee2-8a63-4994-b6e1-f770a0bf1a37",
+                    "id": "ffb2fed1-8b34-444c-a377-86ff60089f38",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
@@ -267,6 +276,28 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bc1d74b2-4692-4f12-a713-a5b92e1fa4e7",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Equip",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "77bab29b-3ccf-4d05-8c0e-5662c2efd44f",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Equip",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
