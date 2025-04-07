@@ -29,6 +29,10 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 lastMovementDirection;
 
+    [Header("Referências ao UI View e Model")]
+    [SerializeField] private InGameUiView uiView;
+    [SerializeField] private InGameUiModel uiModel;
+
     private void Awake()
     {
         if (playerModel == null)
@@ -45,6 +49,18 @@ public class PlayerController : MonoBehaviour
             potionGameObject.SetActive(false);
         if (keyGameObject != null)
             keyGameObject.SetActive(false);
+
+        if (uiView != null)
+        {
+            uiModel.hasStarted = uiView.actionState;
+            uiView.actionState = true;
+            uiView.ShowTutorial(uiView.moveTutorial);
+            Debug.Log("Chamou uiView");
+        }
+          
+          
+                   
+    
     }
 
     private void Update()

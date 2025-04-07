@@ -25,6 +25,10 @@ public class CollectiblesController : MonoBehaviour
     [Tooltip("Texto que exibe mensagens de coleta.")]
     public TextMeshProUGUI itemCollectedMessageText;
 
+    [Header("Model")]
+    [SerializeField] private InGameUiModel uiModel;
+    [SerializeField] private InGameUiView uiView;
+    
 
 
     private void Start()
@@ -76,6 +80,8 @@ public class CollectiblesController : MonoBehaviour
 
 
                 }
+
+                
             }
             
         }

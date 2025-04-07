@@ -1,16 +1,28 @@
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using System.Collections;
 
 public class InGameUiView : MonoBehaviour
 {
     [Header("Referências ao Painel de Inventário")]
     [SerializeField] private Transform itensGridPanel; // Arraste seu "ItensGridPanel" aqui no Inspector
-    [SerializeField] private GameObject itemImagePrefab;
-    // Este prefab pode ser só uma Image (UnityEngine.UI.Image) com layout configurado.
+    [SerializeField] private GameObject itemImagePrefab;// Este prefab pode ser só uma Image (UnityEngine.UI.Image) com layout configurado.
 
     // Para armazenar dinamicamente as imagens criadas
     private Dictionary<string, Image> itemImages = new Dictionary<string, Image>();
+
+    [Header("Referências ao UI Model")]
+    [SerializeField] private InGameUiModel uiModel;
+
+    [Header("Referências aos Paineis de Tutorial")]
+    public GameObject moveTutorial;
+    public GameObject daggerTutorial;
+    public GameObject potionTutorial;
+
+    // Referente aos painéis de tutorial:
+    public bool actionState; // Referência às bools de InGameUiModel, definida nos scripts de movimento ou coleta de itens.
+    private GameObject tutorialPannel;
 
     /// <summary>
     /// Cria (ou reativa) a Image no grid. Ajusta o sprite e alpha.
@@ -53,5 +65,40 @@ public class InGameUiView : MonoBehaviour
             // Destroy(itemImages[itemKey].gameObject);
             // itemImages.Remove(itemKey);
         }
+    }
+
+    /// <summary>
+    /// Mostra o painel de tutrial
+    /// </summary>
+    public void ShowTutorial(GameObject tutorialToShow)
+    {
+        tutorialPannel = tutorialToShow;
+
+        //Ativando o painel de tutorial
+        if (actionState == true)
+        {
+            tutorialToShow.SetActive(true);
+            actionState = false;
+            Debug.Log("Mostrou Painel");
+        }
+        StartCoroutine(DelayToRead(5f));
+    }
+    /// <summary>
+    /// Esconde o painel de tutrial
+    /// </summary>
+    private void HideTutorial(GameObject tutorialToHide)
+    {
+        tutorialToHide.SetActive(false);
+        Debug.Log("Escondeu Painel");
+    }
+    /// <summary>
+    /// Delay para ler o tutrial
+    /// </summary>
+    public IEnumerator DelayToRead(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        HideTutorial(tutorialPannel);
+        Debug.Log("Leu Painel");
+
     }
 }

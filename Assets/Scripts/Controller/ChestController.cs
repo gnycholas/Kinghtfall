@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEditor.VersionControl;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugManager;
 
 public class ChestController : MonoBehaviour
 {
@@ -28,6 +29,10 @@ public class ChestController : MonoBehaviour
     [Tooltip("Referência ao GameObject do jogador (com o PlayerController).")]
     [SerializeField] private GameObject player;
     private PlayerController playerController;
+
+    [Header("Referências ao UI View e Model")]
+    [SerializeField] private InGameUiView uiView;
+    [SerializeField] private InGameUiModel uiModel;
 
 
     private void Start()
@@ -72,6 +77,26 @@ public class ChestController : MonoBehaviour
             playerController.SetCatching(true);
         }
 
+        //Mostra tutorial
+        if (uiView != null)
+        {
+            if(storedItem.tag == "Dagger")
+            {
+                uiModel.collectedDagger = uiView.actionState;
+                uiView.actionState = true;
+                uiView.ShowTutorial(uiView.daggerTutorial);
+                Debug.Log("Chamou uiView");
+            }
+
+            else if (storedItem.tag == "Potion")
+            {
+                uiModel.collectedPotion = uiView.actionState;
+                uiView.actionState = true;
+                uiView.ShowTutorial(uiView.potionTutorial);
+                Debug.Log("Chamou uiView");
+            }
+
+        }
 
         // Inicia a coroutine que, após um delay, adiciona o item ao inventário
         StartCoroutine(AddItemAfterDelay(addItemDelay));

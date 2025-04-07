@@ -27,7 +27,7 @@ public class InGameUiController : MonoBehaviour
 
     void Update()
     {
-        UpdateInventoryUI();
+        UpdateInventoryUI();        
     }
 
     private void UpdateInventoryUI()
@@ -116,4 +116,6 @@ public class InGameUiController : MonoBehaviour
 
         SceneManager.LoadScene("MainMenu");
     }
+
+    
 }
