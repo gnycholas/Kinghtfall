@@ -3,7 +3,17 @@ guid: ee2d14d339a67e74ba3afda15d834309
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Prison_Ladder
+    second: {fileID: 2100000, guid: 1918a14eeb633754ab7820f0548b7306, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: M_Wall_Details
+    second: {fileID: 2100000, guid: ae5569ad6946cd042a2061454682b440, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
