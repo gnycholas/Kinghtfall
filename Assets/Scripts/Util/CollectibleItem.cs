@@ -12,7 +12,7 @@ public class CollectibleItem : MonoBehaviour,IInteract
 
     public async Task Execute()
     {
-        _controller.AddItemToInventory(_item, _amount);
+        await _controller.AddItemToInventory(_item, _amount);
         await UniTask.CompletedTask;
         Destroy(gameObject);
     }

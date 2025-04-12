@@ -15,6 +15,7 @@ public abstract class Enemy : MonoBehaviour, IEnemy
     private int _currentLife;
     public UnityEvent<DamageInfo> OnTakeDamage;
     public UnityEvent OnDie;
+    [SerializeField] private LayerMask _mask;
     [SerializeField] private NavMeshAgent agent;
     [SerializeField] protected GhoulPatrolModel model;
     [SerializeField] protected string _startState;
@@ -48,11 +49,11 @@ public abstract class Enemy : MonoBehaviour, IEnemy
     { 
         stateMachine.OnLogic(); 
     }
-    public bool HasLineOfSightToPlayer()
+    public virtual bool HasLineOfSightToPlayer()
     {
         if (player.IsDead)
             return false;
-        var direction = (player.transform.position - transform.position);
+        var direction = (player.transform.position - transform.position); 
         if(direction.sqrMagnitude <= (model.detectionRadius * model.detectionRadius))
         {
             var angle = Vector3.Angle(transform.forward, direction.normalized);
@@ -60,7 +61,7 @@ public abstract class Enemy : MonoBehaviour, IEnemy
             { 
                 Vector3 origin = transform.position + new Vector3(0, _lineSighOffset.y, 0);
                 Vector3 target = player.transform.position + new Vector3(0, _lineSighOffset.y, 0);
-                if (Physics.Linecast(origin, target, out RaycastHit hit))
+                if (Physics.Linecast(origin, target, out RaycastHit hit, ~_mask))
                     return (hit.collider.gameObject == player.gameObject);
             } 
         }
@@ -68,6 +69,8 @@ public abstract class Enemy : MonoBehaviour, IEnemy
     }
     public DamageInfo TakeDamage(Damage damage)
     {
+        if (IsDead)
+            return default;
         var realDamage = damage.Amount;
         if (realDamage > 0)
         {

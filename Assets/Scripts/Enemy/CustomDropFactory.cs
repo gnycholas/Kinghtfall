@@ -4,9 +4,12 @@ using Zenject;
 
 public class CustomDropFactory : IFactory<string, GameObject>
 {
-    [Inject] private CollectibleItem.Factory[] _drops;
+    [Inject] private GameObject[] _drops;
+    [Inject] private DiContainer _container;
     public GameObject Create(string param)
     {
-        return _drops[0].Create().gameObject;
+        var drop = GameObject.Instantiate(_drops.First(x => x.name == param));
+        _container.InjectGameObject(drop.gameObject);
+        return drop.gameObject;
     }
 }

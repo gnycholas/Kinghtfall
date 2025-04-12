@@ -89,6 +89,15 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""82b98a63-9990-4747-8681-ae70275c699d"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -322,6 +331,28 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Equip"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b663a834-97d2-4bc9-909a-d8837eed801c"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2605bcea-6065-4285-9041-b8993c5991fb"",
+                    ""path"": ""<Keyboard>/p"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -337,6 +368,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         m_Gameplay_Run = m_Gameplay.FindAction("Run", throwIfNotFound: true);
         m_Gameplay_Interact = m_Gameplay.FindAction("Interact", throwIfNotFound: true);
         m_Gameplay_Equip = m_Gameplay.FindAction("Equip", throwIfNotFound: true);
+        m_Gameplay_Pause = m_Gameplay.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -405,6 +437,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Gameplay_Run;
     private readonly InputAction m_Gameplay_Interact;
     private readonly InputAction m_Gameplay_Equip;
+    private readonly InputAction m_Gameplay_Pause;
     public struct GameplayActions
     {
         private @GameInputs m_Wrapper;
@@ -416,6 +449,7 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         public InputAction @Run => m_Wrapper.m_Gameplay_Run;
         public InputAction @Interact => m_Wrapper.m_Gameplay_Interact;
         public InputAction @Equip => m_Wrapper.m_Gameplay_Equip;
+        public InputAction @Pause => m_Wrapper.m_Gameplay_Pause;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -446,6 +480,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Equip.started += instance.OnEquip;
             @Equip.performed += instance.OnEquip;
             @Equip.canceled += instance.OnEquip;
+            @Pause.started += instance.OnPause;
+            @Pause.performed += instance.OnPause;
+            @Pause.canceled += instance.OnPause;
         }
 
         private void UnregisterCallbacks(IGameplayActions instance)
@@ -471,6 +508,9 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
             @Equip.started -= instance.OnEquip;
             @Equip.performed -= instance.OnEquip;
             @Equip.canceled -= instance.OnEquip;
+            @Pause.started -= instance.OnPause;
+            @Pause.performed -= instance.OnPause;
+            @Pause.canceled -= instance.OnPause;
         }
 
         public void RemoveCallbacks(IGameplayActions instance)
@@ -497,5 +537,6 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
         void OnRun(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnEquip(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

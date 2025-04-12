@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.Events;
+using UnityEngine.AddressableAssets; 
 using Zenject;
 
 public class GameplayController : MonoBehaviour
-{
-    public UnityEvent<string,float,NotificationParams> OnNotify;
+{ 
     [Inject] private InventoryController _inventory;
+    [Inject] private NotificationController _notificationController;
     [Inject] private PlayerController _playerController;
+    [SerializeField] private AssetReference _gameoverPanelRef;
 
     public InventoryController Inventory => _inventory;
 
@@ -17,6 +20,8 @@ public class GameplayController : MonoBehaviour
     {
         _playerController.OnCollectItem.AddListener(_inventory.Collect);
         _playerController.OnConsumeStart.AddListener(_inventory.ConsumeItem);
+
+        _playerController.OnDead.AddListener(GameOver);
 
         _inventory.OnWeaponEquip.AddListener(_playerController.OnEquipWeapon);
         _inventory.OnWeaponUnEquip.AddListener(_playerController.OnUnEquipWeapon);
@@ -39,14 +44,25 @@ public class GameplayController : MonoBehaviour
     public bool CheckItem(ItemSO item, int amount)
     {
         var result = _inventory.CheckItem(item, amount);
-        OnNotify?.Invoke(result.Item2,3,default);
+        _notificationController?.ShowNotification(result.Item2);
         return result.Item1;
     }
 
-    public void AddItemToInventory(ItemSO item, int amount)
+    public async Task AddItemToInventory(ItemSO item, int amount)
     {
-        OnNotify?.Invoke($"{item.Name} obtido",3, default);
+        _notificationController.ShowNotification($"{item.Name} obtido");
         _playerController.AddItemToInventory(item, amount);
+        await UniTask.Delay(TimeSpan.FromSeconds(2));
+        _notificationController.HiddenNotification();
+    }
+    public async void GameOver()
+    {
+        await GameOverAsync();
+    }
+    private async Task GameOverAsync()
+    {
+        await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
+        Addressables.InstantiateAsync(_gameoverPanelRef).WaitForCompletion();
     }
 }
 public struct NotificationParams

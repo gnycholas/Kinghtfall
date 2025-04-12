@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,6 +10,8 @@ public class WarmView : MonoBehaviour
     public UnityEvent OnNear;
     public UnityEvent OnFarAway;
     private bool _visible;
+    private bool _active;
+    private CancellationTokenSource _cancellationWarmTokenSource;
     [Inject] private PlayerController _player;
     [Inject] private NotificationController _notification;
     [SerializeField] private string _warm;
@@ -17,26 +20,72 @@ public class WarmView : MonoBehaviour
 
     private void Start()
     {
+        _active = true;
         CheckDistance().Forget();
     }
-
+    private void OnDisable()
+    {
+        if(_cancellationWarmTokenSource != null)
+        {
+            _cancellationWarmTokenSource.Cancel();
+        }
+        _cancellationWarmTokenSource.Dispose();
+        _cancellationWarmTokenSource = null;    
+    }
+    public void ToggleActive()
+    {
+        if (_active)
+        {
+            _active = false;
+            _cancellationWarmTokenSource?.Cancel();
+            _visible = false;
+            _notification.HiddenNotification();
+        }
+        else
+        {
+            _active = true;
+            CheckDistance().Forget();
+        }
+    }
     private async UniTaskVoid CheckDistance()
     {
-        while (true)
+        if(_cancellationWarmTokenSource != null)
         {
-            var sqrDistance = (_player.transform.position - transform.position).sqrMagnitude;
-            if (sqrDistance < _distance * _distance && !_visible)
+            _cancellationWarmTokenSource.Cancel();
+        }
+        _cancellationWarmTokenSource = new CancellationTokenSource();
+        try
+        {
+
+            while (true)
             {
-                _visible = true;
-                _notification.ShowNotification(_warm);
-                OnNear?.Invoke();
-            }else if(sqrDistance > _distance * _distance && _visible)
-            {
-                _visible = false;
-                _notification.HiddenNotification();
-                OnFarAway?.Invoke(); 
+                var sqrDistance = (_player.transform.position - transform.position).sqrMagnitude;
+                if (sqrDistance < _distance * _distance && !_visible)
+                {
+                    _visible = true;
+                    _notification.ShowNotification(_warm);
+                    OnNear?.Invoke();
+                }
+                else if (sqrDistance > _distance * _distance && _visible)
+                {
+                    _visible = false;
+                    _notification.HiddenNotification();
+                    OnFarAway?.Invoke();
+                }
+                await UniTask.Delay(TimeSpan.FromSeconds(_delay), cancellationToken: _cancellationWarmTokenSource.Token);
             }
-            await UniTask.Delay(TimeSpan.FromSeconds(_delay));
+        }
+        catch (Exception ex) 
+        {
+            Debug.LogException(ex);
+        }
+        finally
+        {
+            if(_cancellationWarmTokenSource != null)
+            { 
+                _cancellationWarmTokenSource.Dispose();
+                _cancellationWarmTokenSource = null;
+            } 
         }
     }
 }

@@ -7,11 +7,9 @@ public class NotificationController : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI _messageView;
      
-    public async void ShowNoticationAsyn(string message, float time, NotificationParams param)
+    public void ShowNotification(string message, NotificationParams param)
     {
-        _messageView.text = message;
-        await Task.Delay(TimeSpan.FromSeconds(time));
-        HiddenNotification();
+        _messageView.text = message; 
     }
     public void HiddenNotification()
     {
@@ -20,6 +18,6 @@ public class NotificationController : MonoBehaviour
 
     public void ShowNotification(string message) 
     {
-        ShowNoticationAsyn(message, 2, default);
+        ShowNotification(message, default);
     }
 }
