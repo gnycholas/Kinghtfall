@@ -17,6 +17,11 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: 9000a9bdb41d4f046ba2a03caebed878
   m_SerializeEntries:
+  - m_GUID: 020168374d5a49f49a78f7f6c17b7fe0
+    m_Address: Assets/Prefabs/Pause.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 14ae0d8c97cfc1149b39b9b83c9d80c4
     m_Address: Assets/Audio/Dubbing/Ghoul/GhoulScream.wav
     m_ReadOnly: 0
@@ -64,6 +69,11 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cef0ba6ed10eaed41b2999ae96dd95f5
     m_Address: Assets/Sprites/UI/pocao.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f94c4859f2e8e7e449f3cf2a1d82fc18
+    m_Address: Assets/Prefabs/GameOver.prefab
     m_ReadOnly: 0
     m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
