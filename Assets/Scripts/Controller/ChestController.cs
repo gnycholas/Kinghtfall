@@ -14,6 +14,10 @@ public class ChestController : MonoBehaviour,IInteract
     [Inject] private GameplayController _gameplayController;
     [SerializeField] private Transform _lid;
 
+    private void Start()
+    {
+        Debug.Log(OnOpen.GetPersistentEventCount());
+    }
     public async Task Execute()
     {
         await Open();
@@ -23,7 +27,7 @@ public class ChestController : MonoBehaviour,IInteract
     {
         if (_isEmpty)
             return;
-        OnOpen?.Invoke();
+        OnOpen.Invoke();
         await _gameplayController.AddItemToInventory(_item, _amount);
         _isEmpty = true;
     }

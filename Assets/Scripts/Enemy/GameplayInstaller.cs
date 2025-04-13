@@ -8,9 +8,13 @@ public class GameplayInstaller : MonoInstaller
     [SerializeField] private GameObject _hudItemViewFactory;
     [SerializeField] private WeaponRef[] _weapons;
     [SerializeField] private ConsumibleRef[] _consumibles;
+    [SerializeField] private UIRef[] _hudItems;
 
     public override void InstallBindings()
     {
+        Container.Bind<UIRef[]>().FromInstance(_hudItems);
+        Container.Bind<PauseController>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<IUIFactory>().To<CustomUIFactory>().AsSingle();
         Container.Bind<ItemSO[]>().FromInstance(_items).AsSingle();
         Container.Bind<ConsumibleRef[]>().FromInstance(_consumibles).AsSingle();
         Container.Bind<WeaponRef[]>().FromInstance(_weapons).AsSingle();

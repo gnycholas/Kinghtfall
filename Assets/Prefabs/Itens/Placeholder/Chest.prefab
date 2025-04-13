@@ -256,8 +256,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb9d29229221f4b4f87d89a844d425e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnOpen:
+    m_PersistentCalls:
+      m_Calls: []
   _item: {fileID: 0}
   _amount: 0
+  _lid: {fileID: 0}
 --- !u!1 &6921783273323903960
 GameObject:
   m_ObjectHideFlags: 0
@@ -285,14 +289,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6921783273323903960}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.7071069, y: 2.3283062e-10, z: -0, w: 0.70710677}
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 19.292425, y: 0.264, z: 14.47}
   m_LocalScale: {x: 10.137649, y: 10.13765, z: 10.13765}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3989897647747877925}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!65 &7177566354603848887
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -326,8 +330,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb9d29229221f4b4f87d89a844d425e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _item: {fileID: 11400000, guid: a59eb95a338518b458c7a30bb4408d34, type: 2}
+  OnOpen:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5970320784014498276}
+        m_TargetAssemblyTypeName: WarmView, Assembly-CSharp
+        m_MethodName: ToggleActive
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  _item: {fileID: 11400000, guid: 68a2d4c2d841e3145a30699f9c89b2a0, type: 2}
   _amount: 1
+  _lid: {fileID: 0}
 --- !u!114 &5970320784014498276
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -347,5 +367,5 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   _warm: Aperte <E> para abrir o bau.
-  _distance: 4
+  _distance: 1.5
   _delay: 1

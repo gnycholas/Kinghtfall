@@ -2,6 +2,7 @@
 using UnityEngine.AddressableAssets;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using Zenject;
 
 public class PauseController : MonoBehaviour
 {
@@ -9,7 +10,7 @@ public class PauseController : MonoBehaviour
     private GameInputs _gameInputs;
     public UnityEvent OnPause;
     public UnityEvent OnResume;
-    [SerializeField] private AssetReference _pausePanelRef;
+    [Inject] private IUIFactory _uiFactory;  
 
     private void Start()
     {
@@ -26,15 +27,25 @@ public class PauseController : MonoBehaviour
     {
         if(_pausePanel != null)
         {
-            Addressables.ReleaseInstance(_pausePanel);
-            _pausePanel = null;
-            OnResume?.Invoke();
+            Resume();
         }
         else
         {
-            _pausePanel = Addressables.InstantiateAsync(_pausePanelRef).WaitForCompletion();
-            OnPause?.Invoke();
+            Pause();
         }
+    }
+
+    public void Pause()
+    {
+        _pausePanel = _uiFactory.Create("Pause");
+        OnPause?.Invoke();
+    }
+
+    public void Resume()
+    {
+        Addressables.ReleaseInstance(_pausePanel);
+        _pausePanel = null;
+        OnResume?.Invoke();
     }
 }
 

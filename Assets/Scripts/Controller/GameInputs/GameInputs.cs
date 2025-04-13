@@ -83,12 +83,12 @@ public partial class @GameInputs: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": ""Equip"",
-                    ""type"": ""Button"",
+                    ""type"": ""Value"",
                     ""id"": ""fc2b4fce-f353-4a54-956c-a4a1560f41fe"",
-                    ""expectedControlType"": ""Button"",
+                    ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
-                    ""initialStateCheck"": false
+                    ""initialStateCheck"": true
                 },
                 {
                     ""name"": ""Pause"",

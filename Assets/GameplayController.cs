@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.AddressableAssets; 
+using UnityEngine.SceneManagement;
 using Zenject;
 
 public class GameplayController : MonoBehaviour
@@ -10,7 +10,7 @@ public class GameplayController : MonoBehaviour
     [Inject] private InventoryController _inventory;
     [Inject] private NotificationController _notificationController;
     [Inject] private PlayerController _playerController;
-    [SerializeField] private AssetReference _gameoverPanelRef;
+    [Inject] private IUIFactory _uiFactory;
 
     public InventoryController Inventory => _inventory;
 
@@ -62,7 +62,11 @@ public class GameplayController : MonoBehaviour
     private async Task GameOverAsync()
     {
         await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
-        Addressables.InstantiateAsync(_gameoverPanelRef).WaitForCompletion();
+        _uiFactory.Create("GameOver");
+    } 
+    public void MainMenu()
+    {
+        SceneManager.LoadScene(0);
     }
 }
 public struct NotificationParams
