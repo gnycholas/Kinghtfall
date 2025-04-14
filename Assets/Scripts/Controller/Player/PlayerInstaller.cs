@@ -6,6 +6,7 @@ using Zenject;
 
 public class PlayerInstaller : MonoInstaller
 {
+    [SerializeField] private AudioClip[] _audios;
     public override void InstallBindings()
     {
         Container.Bind<GameInputs>().FromMethod(SetupInput).AsSingle();

@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour,IDamageable
 {
     public UnityEvent<UpdateAnimation> OnUpdateAnimation;
     public UnityEvent OnDead;
+    public UnityEvent<string> OnPlayAudio; 
     public UnityEvent<PlayerController> OnAttackStart;
     public UnityEvent<PlayerController> OnConsumeStart; 
     public UnityEvent<DamageInfo> OnTakeDamage; 
@@ -78,6 +79,17 @@ public class PlayerController : MonoBehaviour,IDamageable
         _isRun = _inputs.Gameplay.Run.IsPressed(); 
 
         float currentSpeed = _isRun ? playerModel.runSpeed : playerModel.walkSpeed;
+        if(Mathf.Abs(vertical) > 0)
+        {
+            if (_isRun)
+            {
+                OnPlayAudio?.Invoke("Run");
+            }
+            else
+            {
+                OnPlayAudio?.Invoke("Walk");
+            }
+        }
         _character.SetMovementDirection(transform.forward * vertical * currentSpeed); 
     }
     #endregion
