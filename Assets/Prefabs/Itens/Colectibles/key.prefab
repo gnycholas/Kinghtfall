@@ -210,6 +210,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3601740404770096632}
+  - component: {fileID: 8991311796057860238}
+  - component: {fileID: 7144492915184284530}
+  - component: {fileID: 342156850053542257}
   m_Layer: 0
   m_Name: key
   m_TagString: Key
@@ -234,3 +237,59 @@ Transform:
   - {fileID: 6230996440298034909}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: -90.2, z: 0}
+--- !u!114 &8991311796057860238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7519230835507225528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a5796d353491734fae9e64679369848, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _item: {fileID: 11400000, guid: a59eb95a338518b458c7a30bb4408d34, type: 2}
+  _amount: 1
+--- !u!114 &7144492915184284530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7519230835507225528}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e62a097a87f414a900610786a3e06d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnNear:
+    m_PersistentCalls:
+      m_Calls: []
+  OnFarAway:
+    m_PersistentCalls:
+      m_Calls: []
+  _warm: Precione <Interact> para pegar o item.
+  _distance: 2
+  _delay: 0.01
+--- !u!135 &342156850053542257
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7519230835507225528}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
