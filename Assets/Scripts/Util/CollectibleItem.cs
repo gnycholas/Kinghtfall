@@ -17,6 +17,11 @@ public class CollectibleItem : MonoBehaviour,IInteract
         Destroy(gameObject);
     }
 
+    public AnimatorOverrideController GetInteraction()
+    {
+        return null;
+    }
+
     public Transform GetTarget()
     {
         return null;

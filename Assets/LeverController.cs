@@ -96,7 +96,11 @@ public class LeverController : MonoBehaviour,IInteract
 
     public async Task Execute()
     {
-        ToggleAction();
-        await UniTask.CompletedTask;
+        await ToggleAction(); 
+    }
+
+    public AnimatorOverrideController GetInteraction()
+    {
+        return null;
     }
 }

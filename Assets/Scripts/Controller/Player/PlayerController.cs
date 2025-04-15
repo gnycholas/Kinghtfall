@@ -9,6 +9,7 @@ using Zenject;
 public class PlayerController : MonoBehaviour,IDamageable
 {
     public UnityEvent<UpdateAnimation> OnUpdateAnimation;
+    public UnityEvent<AnimatorOverrideController> OnInteract;
     public UnityEvent OnDead;
     public UnityEvent<string> OnPlayAudio; 
     public UnityEvent<PlayerController> OnAttackStart;
@@ -78,7 +79,7 @@ public class PlayerController : MonoBehaviour,IDamageable
 
         _isRun = _inputs.Gameplay.Run.IsPressed(); 
 
-        float currentSpeed = _isRun ? playerModel.runSpeed : playerModel.walkSpeed;
+        _character.maxWalkSpeed = _isRun ? playerModel.runSpeed : playerModel.walkSpeed;
         if(Mathf.Abs(vertical) > 0)
         {
             if (_isRun)
@@ -90,7 +91,7 @@ public class PlayerController : MonoBehaviour,IDamageable
                 OnPlayAudio?.Invoke("Walk");
             }
         }
-        _character.SetMovementDirection(transform.forward * vertical * currentSpeed); 
+        _character.SetMovementDirection(transform.forward * vertical); 
     }
     #endregion
 
@@ -102,6 +103,7 @@ public class PlayerController : MonoBehaviour,IDamageable
         if (_inputs.Gameplay.Attack.WasPerformedThisFrame() && _hasWeapon)
         {
             ToggleAttack(true);
+            OnPlayAudio?.Invoke("Attack");
             OnAttackStart?.Invoke(this);
         }
         if (_inputs.Gameplay.UseItem.WasPerformedThisFrame() && _hasConsumible)
@@ -189,11 +191,14 @@ public class PlayerController : MonoBehaviour,IDamageable
         if (IsDead)
         {
             OnDead?.Invoke();
+            OnPlayAudio?.Invoke("Die");
             ToggleMove(false,0);
             return default; 
         }
         ToggleMove(false, playerModel.hitDuration);
         var info = new DamageInfo(damage.Amount, 0, false);
+
+        OnPlayAudio?.Invoke("TakeDamage");
         OnTakeDamage?.Invoke(info);
         return info;
     }
@@ -236,7 +241,12 @@ public class PlayerController : MonoBehaviour,IDamageable
                     var position = interact.GetTarget().position;
                     position.y = transform.position.y;
                     transform.LookAt(position);
-                } 
+                }
+                var overrideAnimator = interact.GetInteraction();
+                if(interact != null)
+                {
+                    OnInteract?.Invoke(overrideAnimator);
+                }
                 await interact.Execute();
             }
         }

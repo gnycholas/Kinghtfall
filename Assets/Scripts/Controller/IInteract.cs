@@ -4,5 +4,7 @@ using UnityEngine;
 public interface IInteract
 {
     public Transform GetTarget();
-    public Task Execute();  
+    public Task Execute();
+
+    public AnimatorOverrideController GetInteraction();
 }

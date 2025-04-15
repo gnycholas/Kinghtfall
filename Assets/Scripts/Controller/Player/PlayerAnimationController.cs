@@ -21,17 +21,15 @@ public class PlayerAnimationController : MonoBehaviour
     private readonly int RUN_INJURED_HASH = Animator.StringToHash("Run_Injured");
     private readonly int ATTACK_HASH = Animator.StringToHash("Attack");
     private readonly int HIT_HASH = Animator.StringToHash("Hit");
-    private readonly int DIE_HASH = Animator.StringToHash("Die");
+    private readonly int DIE_HASH = Animator.StringToHash("Dying");
     private readonly int HEALING_HASH = Animator.StringToHash("Healing"); 
 
     private int _currentClip;
-    [Inject] private PlayerController _playerController;
-    [Inject] private Character _character;
-    private Animator _animator;
+    [Inject] private PlayerController _playerController; 
+    [Inject] private Animator _animator; 
 
     private void OnEnable()
-    {
-        _animator = _character.GetAnimator();
+    { 
         _playerController.OnUpdateAnimation.AddListener(UpdateAnimations);
         _playerController.OnDead.AddListener(Dead);
         _inventory.OnWeaponUnEquip.AddListener(OnUnEquipWeapon);

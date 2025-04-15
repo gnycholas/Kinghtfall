@@ -49,5 +49,10 @@ public class DoorController : MonoBehaviour,IInteract
     public Transform GetTarget()
     {
         return transform;
-    } 
+    }
+
+    public AnimatorOverrideController GetInteraction()
+    {
+        return null;
+    }
 }
