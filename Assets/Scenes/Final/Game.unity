@@ -11603,7 +11603,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 0.084549606, g: 0.33896148, b: 0.4716981, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -12794,7 +12794,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
+  m_StaticShadowCaster: 1
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -14419,27 +14419,27 @@ PrefabInstance:
     - target: {fileID: 361778961832954958, guid: ba14ea99754d1f84abd801c704257500,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 9.496709e-36
+      value: -3194988.2
       objectReference: {fileID: 0}
     - target: {fileID: 361778961832954958, guid: ba14ea99754d1f84abd801c704257500,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 1.02e-43
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 361778961832954958, guid: ba14ea99754d1f84abd801c704257500,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 5.2e-44
+      value: 2.384165e-17
       objectReference: {fileID: 0}
     - target: {fileID: 361778961832954958, guid: ba14ea99754d1f84abd801c704257500,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 1.6177e-41
+      value: -2.0047276e-30
       objectReference: {fileID: 0}
     - target: {fileID: 4026187992530222622, guid: ba14ea99754d1f84abd801c704257500,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.127
+      value: -12.686
       objectReference: {fileID: 0}
     - target: {fileID: 4026187992530222622, guid: ba14ea99754d1f84abd801c704257500,
         type: 3}
@@ -14449,7 +14449,7 @@ PrefabInstance:
     - target: {fileID: 4026187992530222622, guid: ba14ea99754d1f84abd801c704257500,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1.057
+      value: 0.57
       objectReference: {fileID: 0}
     - target: {fileID: 4026187992530222622, guid: ba14ea99754d1f84abd801c704257500,
         type: 3}
@@ -16262,7 +16262,7 @@ Light:
   serializedVersion: 10
   m_Type: 3
   m_Shape: 0
-  m_Color: {r: 1, g: 0.5686275, b: 0.10980393, a: 1}
+  m_Color: {r: 0.109803915, g: 0.95358455, b: 1, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
