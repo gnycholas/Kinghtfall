@@ -11,7 +11,7 @@ public class GameplayController : MonoBehaviour
     [Inject] private NotificationController _notificationController;
     [Inject] private PlayerController _playerController;
     [Inject] private IUIFactory _uiFactory;
-
+    [Inject] private FadeController _fadeController;
     public InventoryController Inventory => _inventory;
 
     public PlayerController PlayerController { get => _playerController;}
@@ -28,6 +28,10 @@ public class GameplayController : MonoBehaviour
 
         _inventory.OnConsumibleEquip.AddListener(_playerController.OnEquipItem);
         _inventory.OnWeaponUnEquip.AddListener(_playerController.OnUnEquipItem);  
+    }
+    private void Start()
+    {
+        _fadeController.FadeIn(0.5f);
     }
     private void OnDisable()
     {

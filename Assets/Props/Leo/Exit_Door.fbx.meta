@@ -8,7 +8,17 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: M_Exit_Door
-    second: {fileID: 2100000, guid: b776da40f92c4d243afb7221a094d305, type: 2}
+    second: {fileID: 2100000, guid: 3d4acf4517686bf40bf09c98bc0d3523, type: 2}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Exit_Door_M_Exit_Door_BaseMap
+    second: {fileID: 2800000, guid: e197e7ce1076d6948b23ce9acf85811e, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Exit_Door_M_Exit_Door_Normal
+    second: {fileID: 2800000, guid: 317cc896fe1b21e4597119bf15a27ab0, type: 3}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -98,7 +108,7 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
