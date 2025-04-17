@@ -10,6 +10,8 @@ public class DoorController : MonoBehaviour,IInteract
 {
     public UnityEvent OnOpenDoor;
     private Transform _door;
+    [SerializeField] private string _sceneName;
+    [SerializeField] private string _spawnName;
     [Inject] private GameplayController _gameplayController;
     [Inject] private SceneTransitionController _sceneTransitionController;
     [SerializeField] private Requirement _requirement;
@@ -25,7 +27,8 @@ public class DoorController : MonoBehaviour,IInteract
             _sceneTransitionController.LoadTransitionScene(0, new SceneLoadParams()
             {
                 FadeTime = 0.5f,
-                Scene ="Sei lá bicho"
+                Scene = _sceneName,
+                DoorIndex = 0,
             });
         }
     }
@@ -41,22 +44,12 @@ public class DoorController : MonoBehaviour,IInteract
     {
         OnOpenDoor?.Invoke();
         _gameplayController.PlayerController.ToggleMove(false);
-        Vector3 start = _door.localRotation.eulerAngles;
-        Vector3 final = start + new Vector3(0, -90, 0);
-        float elapsedTime = 0;
-        while (true)
+        _sceneTransitionController.LoadTransitionScene(0, new SceneLoadParams()
         {
-            elapsedTime += Time.deltaTime;
-            _door.localRotation = Quaternion.Euler(Vector3.Lerp(start, final, elapsedTime));
-            await UniTask.NextFrame();
-            if(elapsedTime >= 1)
-            {
-                break;
-            }
-        }
-        await Task.Delay(TimeSpan.FromSeconds(2));
-        _gameplayController.PlayerController.ToggleMove(true); 
-        OnOpenDoor?.Invoke();
+            FadeTime = 0.5f,
+            Scene = _sceneName,
+            DoorIndex = 0,
+        });
     }
 
     public Transform GetTarget()
