@@ -37,7 +37,7 @@ public sealed class GhoulChase : EnemyState
             _controller.Agent.speed = _controller.Model.runSpeed;
             _controller.Play("Run");
             _isReady = true; 
-        }else if( (_controller.LastState == "Enemy Attack" || _controller.LastState == "Enemy Chase") && !_isReady)
+        }else if( (_controller.LastState == "Enemy Attack" || _controller.LastState == "Enemy Chase" || _controller.LastState == "Enemy TakeDamage") && !_isReady)
         {
             _controller.Agent.isStopped = false;
             _controller.Play("Run");
@@ -67,6 +67,7 @@ public sealed class GhoulChase : EnemyState
         if (_controller.LastState == "Enemy Patrol" || _controller.LastState == "Enemy Idle")
         { 
             ((Ghoul)_controller).Screaming();
-        } 
+        }
+        _controller.Agent.speed = _chaseSpeed;
     }
 }

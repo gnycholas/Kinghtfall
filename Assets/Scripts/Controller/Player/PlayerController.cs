@@ -98,11 +98,11 @@ public class PlayerController : MonoBehaviour,IDamageable
     #region Combate
     private void HandleCombat()
     {
-        if (_isAttacking || _isConsuming)
+        if (_isAttacking || _isConsuming || IsDead)
             return;
         if (_inputs.Gameplay.Attack.WasPerformedThisFrame() && _hasWeapon)
         {
-            ToggleAttack(true);
+            ToggleAttackAsync(true,2);
             OnPlayAudio?.Invoke("Attack");
             OnAttackStart?.Invoke(this);
         }
@@ -166,15 +166,14 @@ public class PlayerController : MonoBehaviour,IDamageable
         Destroy(_consumibleSlot.GetChild(0).gameObject);
     }
 
-    private async void ToggleAttack(bool active, float time)
+    public async void ToggleAttackAsync(bool active, float time)
     {
-        ToggleAttack(active);
-        await Task.Delay(TimeSpan.FromSeconds(time));
-        ToggleAttack(!active);
+        ToggleAttack(active,time/2);
+        await Task.Delay(TimeSpan.FromSeconds(time)); 
     }
-    public void ToggleAttack(bool active)
+    private void ToggleAttack(bool active, float time)
     { 
-        CurrentWeapon?.ToggleAttack(active);
+        CurrentWeapon?.ToggleAttack(active, time);
         ToggleMove(!active);
         _isAttacking = active; 
     }
@@ -192,7 +191,7 @@ public class PlayerController : MonoBehaviour,IDamageable
         {
             OnDead?.Invoke();
             OnPlayAudio?.Invoke("Die");
-            ToggleMove(false,0);
+            ToggleMove(false);
             return default; 
         }
         ToggleMove(false, playerModel.hitDuration);

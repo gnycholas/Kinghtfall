@@ -220,7 +220,7 @@ public class PlayerAnimationController : MonoBehaviour
     private async void Attack(PlayerController callback)
     {
         await AsyncAttack();
-        callback?.ToggleAttack(false);
+        callback?.ToggleAttackAsync(false,2);
     }
     public async UniTaskVoid ToggleUpdate(bool update, float time)
     {

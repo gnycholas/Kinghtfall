@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -13,6 +14,7 @@ public abstract class Enemy : MonoBehaviour, IEnemy
     public UnityEvent<string> OnPlayAnimation = new();
     protected PlayerController player;
     private int _currentLife;
+    private bool _isInvencible;
     public UnityEvent<DamageInfo> OnTakeDamage;
     public UnityEvent OnDie;
     [SerializeField] private LayerMask _mask;
@@ -69,15 +71,16 @@ public abstract class Enemy : MonoBehaviour, IEnemy
     }
     public DamageInfo TakeDamage(Damage damage)
     {
-        if (IsDead)
+        if (IsDead || _isInvencible)
             return default;
+        ToggleInvencible(true, 0.5f).Forget();
         var realDamage = damage.Amount;
         if (realDamage > 0)
         {
             _currentLife -= Convert.ToInt32(realDamage);
             RequestStateChange("Enemy TakeDamage");
-        } 
-        
+            transform.rotation = Quaternion.LookRotation((damage.Origin.transform.position - transform.position).normalized, Vector3.up);
+        }  
         var info = new DamageInfo() { Critical = false, Damage =realDamage, PercentDamage = 0 };
         OnTakeDamage?.Invoke(info);
         if(_currentLife <= 0)
@@ -85,6 +88,12 @@ public abstract class Enemy : MonoBehaviour, IEnemy
             Die();
         }
         return info;
+    }
+    private async UniTaskVoid ToggleInvencible(bool isInvencible, float time)
+    {
+        _isInvencible = isInvencible;
+        await UniTask.Delay(TimeSpan.FromSeconds(time));
+        _isInvencible = !isInvencible;
     }
     protected void Die()
     {
@@ -117,7 +126,10 @@ public abstract class Enemy : MonoBehaviour, IEnemy
         await Task.Delay(TimeSpan.FromSeconds(delay));
         stateMachine.RequestStateChange(v); 
     }
-
+    public void RequestLastState()
+    {
+        stateMachine.RequestStateChange(lastState);
+    }
     public bool Equals(GameObject other)
     {
         return other == gameObject;

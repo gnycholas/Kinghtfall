@@ -23,7 +23,7 @@ public sealed class EnemyTakeDamage : EnemyState
     {
         if (state.timer.Elapsed > _time && !_controller.IsDead)
         {
-            _controller.RequestStateChange("Enemy Patrol");
+            _controller.RequestLastState();
         }
     }
 
