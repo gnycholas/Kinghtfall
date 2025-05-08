@@ -463,8 +463,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61d0bfb3422a0044fb99faadbf73ddb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _stepTime: 0.3
-  _stepRunTime: 0.2
+  _stepTime: 0.55
+  _stepRunTime: 0.45
 --- !u!1 &344311304065773217
 GameObject:
   m_ObjectHideFlags: 0
@@ -1812,6 +1812,7 @@ MonoBehaviour:
   _components:
   - {fileID: 3252375881765691942}
   - {fileID: 2509474737661548839}
+  - {fileID: 1598534118510427355}
   _identifier: 
   _useSceneContext: 0
   _context: {fileID: 0}
