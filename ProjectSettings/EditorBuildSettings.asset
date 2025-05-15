@@ -11,4 +11,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Factory/GameDemo.unity
     guid: dbba2a647cc6dc043af07de8d51b471b
-  m_configObjects: {}
+  - enabled: 1
+    path: Assets/Scenes/Final/Prison.unity
+    guid: a6a63e420d9951a42a9ec2f1d9027228
+  - enabled: 1
+    path: Assets/Scenes/Final/TransitionScene.unity
+    guid: caa22eab4d15d5741b421c00008116b8
+  - enabled: 1
+    path: Assets/Scenes/Final/MainHall.unity
+    guid: e1d70a1c208360f439d23db47a0342f0
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 7419998df42e33f4a8ed0b546c91e42e,
+      type: 2}

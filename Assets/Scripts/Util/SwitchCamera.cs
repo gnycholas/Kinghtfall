@@ -3,33 +3,18 @@ using Cinemachine;
 
 public class SwitchCamera : MonoBehaviour
 {
-    [SerializeField] private CinemachineVirtualCamera targetCamera;
-    [SerializeField] private int priorityIncrease = 10;
-
-    private int originalPriority;
-
-    private void Start()
-    {
-        if (targetCamera != null)
-        {
-            originalPriority = targetCamera.Priority;
-        }
-    }
-
+    private static CinemachineVirtualCamera _currentCamera;
+    [SerializeField] private CinemachineVirtualCamera targetCamera;  
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && targetCamera != null)
         {
-            targetCamera.Priority += priorityIncrease;
+            if(_currentCamera != null)
+            {
+                _currentCamera.Priority--;
+            }
+            _currentCamera = targetCamera;
+            _currentCamera.Priority++;
         }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player") && targetCamera != null)
-        {
-            targetCamera.Priority = originalPriority;
-        }
-    }
-
+    } 
 }

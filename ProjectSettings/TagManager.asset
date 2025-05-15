@@ -4,23 +4,21 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Potion
+  - Print
   - Key
-  - Dagger
   - Lever
-  - ExitDoor
-  - Paper
+  - Potion
   - Chest
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - lights
   - Water
   - UI
-  - Ghoul
-  - 
-  - 
+  - Weapon
+  - Player
+  - Trigger
   - 
   - 
   - 
