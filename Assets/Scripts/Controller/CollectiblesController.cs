@@ -1,7 +1,6 @@
 using System.Collections;
 using UnityEngine;
-using TMPro;
-using UnityEditor.VersionControl;
+using TMPro; 
 
 public class CollectiblesController : MonoBehaviour
 {
@@ -34,79 +33,8 @@ public class CollectiblesController : MonoBehaviour
             collectMessageText.text = "";
             collectMessageText.gameObject.SetActive(false);
         }
-    }
-
-    private void Update()
-    {
-        if (player == null)
-            return;
-
-        HideCollectionMessage();
-
-        CheckCollectible(dagger, "<Adaga>");
-        CheckCollectible(potion, "<Poção>");
-        CheckKeyCollectible();
-    }
-
-    private void CheckCollectible(GameObject collectible, string collectibleName)
-    {
-        if (collectible == null)
-            return;
-        if (!collectible.activeInHierarchy)
-            return;
-
-        float distance = Vector3.Distance(player.transform.position, collectible.transform.position);
-        if (distance <= collectionRadius)
-        {
-            ShowCollectionMessage($"Pressione E para coletar {collectibleName}");
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                //Zerar a mensagem de coleta
-                HideCollectionMessage();
-               
-                //Player coleta o item
-                PlayerController playerController = player.GetComponent<PlayerController>();
-                if (playerController != null)
-                {
-                    playerController.StartCoroutine(playerController.CatchItemRoutine(collectible));
-                    Debug.Log($"{collectibleName} sendo coletado!");
-                    // Mensagem de coleta
-                    ShowItemCollectedMessage($"Coletou {collectibleName}");
-                    StartCoroutine(DelayToReadMessage(5f));
-
-
-                }
-            }
-            
-        }
-    }
-
-    private void CheckKeyCollectible()
-    {
-        GameObject[] keys = GameObject.FindGameObjectsWithTag("Key");
-        foreach (GameObject key in keys)
-        {
-            if (!key.activeInHierarchy)
-                continue;
-            float distance = Vector3.Distance(player.transform.position, key.transform.position);
-            if (distance <= collectionRadius)
-            {
-                ShowCollectionMessage("Pressione E para coletar Key");
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    PlayerController playerController = player.GetComponent<PlayerController>();
-                    if (playerController != null)
-                    {
-                        playerController.StartCoroutine(playerController.CatchItemRoutine(key));
-                        Debug.Log("Key sendo coletada!");
-                    }
-                }
-            }
-        }
-    }
-
-
-
+    } 
+     
     private void ShowCollectionMessage(string message)
     {
         if (collectMessageText == null) return;

@@ -7,13 +7,11 @@ public class GhoulPatrolModel : ScriptableObject
     public float walkSpeed = 2f;
     public float idleTime = 2f;
     public float minRandomDistance = 3f;
-    public float maxRandomDistance = 8f;
-    public Transform patrolCenter;
+    public float maxRandomDistance = 8f; 
 
     [Header("Detecção do Jogador")]
     public float detectionRadius = 10f;
-    public float fieldOfViewAngle = 120f;
-    public float screamDuration = 2f;
+    public float fieldOfViewAngle = 120f; 
 
     [Header("Chase (Perseguição)")]
     public float runSpeed = 4f;
@@ -25,6 +23,5 @@ public class GhoulPatrolModel : ScriptableObject
     public float attackCooldown = 2f; // Tempo entre ataques
 
     [Header("Vida")]
-    public float maxHealth = 3f;
-    public float currentHealth = 3f;
+    public int maxHealth = 3; 
 }
