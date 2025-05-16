@@ -47,8 +47,8 @@ public class GhoulPatrolController : MonoBehaviour
         if (!agent) agent = GetComponent<NavMeshAgent>();
 
         // Define o centro de patrulha
-        if (model && model.patrolCenter)
-            _patrolCenter = model.patrolCenter.position;
+        /*if (model && model.patrolCenter)
+            _patrolCenter = model.patrolCenter.position;*/
         else
             _patrolCenter = transform.position;
 
@@ -182,8 +182,9 @@ public class GhoulPatrolController : MonoBehaviour
         if (view) view.PlayScreamAnimation();
         LookAtPlayer();
 
-        yield return new WaitForSeconds(model.screamDuration);
+        //yield return new WaitForSeconds(model.screamDuration);
         EnterChaseState();
+        yield return null;
     }
 
     private void LookAtPlayer()
@@ -260,7 +261,7 @@ public class GhoulPatrolController : MonoBehaviour
             {
                 PlayerController playerCtrl = playerTransform.GetComponent<PlayerController>();
                 if (playerCtrl != null)
-                    playerCtrl.TakeDamage((int)model.attackDamage);
+                    playerCtrl.TakeDamage(new Damage(model.attackDamage,gameObject));
             }
 
             yield return new WaitForSeconds(model.attackCooldown - attackAnimDuration);
@@ -283,7 +284,7 @@ public class GhoulPatrolController : MonoBehaviour
             damageCoroutine = null;
         }
 
-        model.currentHealth -= damage;
+        /*model.currentHealth -= damage;
         if (model.currentHealth > 0)
         {
             // Se for atingido, marca como alertado
@@ -293,7 +294,7 @@ public class GhoulPatrolController : MonoBehaviour
         else
         {
             Die();
-        }
+        }*/
     }
 
     private IEnumerator HitRoutine()

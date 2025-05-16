@@ -1,105 +1,61 @@
+using System;
 using System.Collections;
-using UnityEditor.VersionControl;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
+using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.Events;
+using Zenject;
 
-public class ChestController : MonoBehaviour
+public class ChestController : MonoBehaviour,IInteract
 {
-    [Header("Configuração do Baú")]
-    [Tooltip("Item que será armazenado no baú (ex.: adaga).")]
-    [SerializeField] private GameObject storedItem;
-
-
-    [Tooltip("Animator que controla a animação do baú (geralmente no GameObject 'Pivot').")]
-    [SerializeField] private Animator chestAnimator;
-
-    [Tooltip("Nome do trigger que dispara a animação de abertura no Animator.")]
-    [SerializeField] private string openTriggerName = "OpenChest";
-
-    [Tooltip("Tempo de espera após disparar a animação para adicionar o item ao inventário.")]
-    [SerializeField] private float addItemDelay = 1f;
-
-    [Tooltip("Controle dos coletáveis para exibir mensagem de coleta")]
-    [SerializeField] CollectiblesController collectiblesController;
-
-    // Flag para evitar múltiplas interações
-    private bool isOpened = false;
-
-    [Header("Referência ao Jogador")]
-    [Tooltip("Referência ao GameObject do jogador (com o PlayerController).")]
-    [SerializeField] private GameObject player;
-    private PlayerController playerController;
-
-
-    private void Start()
+    public UnityEvent OnOpen;
+    private bool _isEmpty = false;
+    [SerializeField] private ItemSO _item;
+    [SerializeField] private int _amount;
+    [Inject] private GameplayController _gameplayController;
+    [SerializeField] private Transform _lid;
+    [SerializeField] private AnimatorOverrideController _interact;
+    public async Task Execute()
     {
-        // Se o jogador não foi atribuído no Inspector, tenta encontrá-lo pela tag "Player"
-        if (player == null)
-        {
-            player = GameObject.FindGameObjectWithTag("Player");
-        }
-        if (player != null)
-        {
-            playerController = player.GetComponent<PlayerController>();
-        }
-
+        _gameplayController.PlayerController.ToggleMove(false);
+        await Open();
+        _gameplayController.PlayerController.ToggleMove(true); 
     }
 
-    private void Update()
+    private async Task Open()
     {
-        if (collectiblesController !=null && collectiblesController.itemCollectedMessageText.isActiveAndEnabled)
-        {
-            StartCoroutine(collectiblesController.DelayToReadMessage(5f));
-        }
-
-    }
-
-    // Método a ser chamado quando o jogador interage com o baú
-    public void Interact()
-    {
-        if (isOpened)
+        if (_isEmpty)
             return;
-
-        // Dispara a animação de abertura no Animator
-        if (chestAnimator != null)
-        {
-            chestAnimator.SetTrigger(openTriggerName);
-        }
-        isOpened = true;
-
-        // Ativa o estado de catching no player para tocar a animação de coleta
-        if (playerController != null)
-        {
-            playerController.SetCatching(true);
-        }
-
-
-        // Inicia a coroutine que, após um delay, adiciona o item ao inventário
-        StartCoroutine(AddItemAfterDelay(addItemDelay));
-
+        OnOpen.Invoke();
+        await Transition();
+        await _gameplayController.AddItemToInventory(_item, _amount);
+        _isEmpty = true;
     }
 
-    private IEnumerator AddItemAfterDelay(float delay)
+    public Transform GetTarget()
     {
-        yield return new WaitForSeconds(delay);
-        if (playerController != null && storedItem != null)
+        return transform;
+    }
+    private async Task Transition()
+    {
+        var start = _lid.localEulerAngles;
+        var end = new Vector3(-70, start.y, start.z);
+        float elapsedTime = 0;
+        while (true)
         {
-            Debug.Log("Tentando adicionar o item: " + storedItem.name);
-            playerController.AddItemToInventory(storedItem);
-            // Mostrar mensagem de coleta
-            collectiblesController.ShowItemCollectedMessage($"Coletou {storedItem.name}");
-            
-        }
-        // Opcional: desativa o objeto do item no baú para que ele não seja coletado novamente
-        if (storedItem != null)
-        {
-            storedItem.SetActive(false);
-        }
-        // Desativa o estado de catching no player
-        if (playerController != null)
-        {
-            playerController.SetCatching(false);
+            elapsedTime += Time.deltaTime/2;
+            _lid.localRotation = Quaternion.Lerp(Quaternion.Euler(start), Quaternion.Euler(end), elapsedTime);
+            if(elapsedTime >= 1)
+            {
+                break;
+            }
+            await UniTask.NextFrame();
         }
     }
 
-
+    public AnimatorOverrideController GetInteraction()
+    {
+        return _interact;
+    }
 }

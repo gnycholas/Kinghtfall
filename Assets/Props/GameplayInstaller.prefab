@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3804954070337810420
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5940944451185527543}
+  - component: {fileID: 2334876028985387095}
+  m_Layer: 0
+  m_Name: GameplayInstaller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5940944451185527543
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3804954070337810420}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2334876028985387095
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3804954070337810420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fedb41eae3294784a95ea6b7f9c57f3c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _drops:
+  - {fileID: 7519230835507225528, guid: ccdfa906bfbcbd04683a4d9eb87b82a0, type: 3}
+  _items:
+  - {fileID: 11400000, guid: 68a2d4c2d841e3145a30699f9c89b2a0, type: 2}
+  - {fileID: 11400000, guid: a59eb95a338518b458c7a30bb4408d34, type: 2}
+  - {fileID: 11400000, guid: 66e639eeb74a9c94785b98085a4811cd, type: 2}
+  _hudItemViewFactory: {fileID: 7173118435421819454, guid: a1e71ad6eda577041b113849121f0c28,
+    type: 3}
+  _weapons:
+  - Id: Dagger
+    Ref:
+      m_AssetGUID: 7ee2230b5fffcd04abaa25c6ba9c27ed
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  _consumibles:
+  - Id: Potion
+    Ref:
+      m_AssetGUID: ae85be3c092d4f840be50cc355db5d94
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  _hudItems:
+  - Name: GameOver
+    Ref:
+      m_AssetGUID: f94c4859f2e8e7e449f3cf2a1d82fc18
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0
+  - Name: Pause
+    Ref:
+      m_AssetGUID: 020168374d5a49f49a78f7f6c17b7fe0
+      m_SubObjectName: 
+      m_SubObjectType: 
+      m_EditorAssetChanged: 0

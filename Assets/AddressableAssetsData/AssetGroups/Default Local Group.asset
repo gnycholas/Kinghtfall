@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: 9000a9bdb41d4f046ba2a03caebed878
+  m_SerializeEntries:
+  - m_GUID: 020168374d5a49f49a78f7f6c17b7fe0
+    m_Address: Assets/Prefabs/Pause.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14ae0d8c97cfc1149b39b9b83c9d80c4
+    m_Address: Assets/Audio/Dubbing/Ghoul/GhoulScream.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4c852196773309c4ba081f8f76e43418
+    m_Address: Assets/Sprites/UI/adaga.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6c700ca33d0387341bd0f36c5271d37a
+    m_Address: Assets/Audio/Dubbing/Ghoul/GhoulHit.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 7ee2230b5fffcd04abaa25c6ba9c27ed
+    m_Address: Assets/Prefabs/Itens/Weapons/Dagger.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a1e71ad6eda577041b113849121f0c28
+    m_Address: Assets/Prefabs/HUDItem.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae81d38ee9462a644a87b172e78d2c68
+    m_Address: Assets/Sprites/UI/chave.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ae85be3c092d4f840be50cc355db5d94
+    m_Address: Assets/Prefabs/Itens/Colectibles/Potion.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b5f4bbd24c8a21e4ea59df7bf307b315
+    m_Address: Assets/Audio/Dubbing/Ghoul/GhoulDie.wav
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ccdfa906bfbcbd04683a4d9eb87b82a0
+    m_Address: Assets/Prefabs/Itens/Colectibles/key.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cef0ba6ed10eaed41b2999ae96dd95f5
+    m_Address: Assets/Sprites/UI/pocao.png
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f94c4859f2e8e7e449f3cf2a1d82fc18
+    m_Address: Assets/Prefabs/GameOver.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 99f2b7565b85742408affdd3bb065b91, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 60e8450de58bf14448dcace6e6ff964d, type: 2}
+    - {fileID: 11400000, guid: 3951154be7f459e40bd9a9bac7f40a2e, type: 2}
