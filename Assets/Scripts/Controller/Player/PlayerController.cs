@@ -47,7 +47,14 @@ public class PlayerController : MonoBehaviour,IDamageable
         _currentLife = playerModel.maxHealth;
         _inputs.Gameplay.Interact.started += ctx => Interact();
     }
-
+    private void OnDisable()
+    {
+        if(_inputs != null)
+        {
+            _inputs.Dispose();
+            _inputs = null;
+        }
+    }
     private void Update()
     { 
         HandleCombat();

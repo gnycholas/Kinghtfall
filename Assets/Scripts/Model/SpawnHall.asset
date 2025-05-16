@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6bd5abf09801bb44bc2457444458132, type: 3}
   m_Name: SpawnHall
   m_EditorClassIdentifier: 
-  sceneName: CenaSalao
+  sceneName: MainHall
   spawnID: EntradaSalao

@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6bd5abf09801bb44bc2457444458132, type: 3}
   m_Name: SpawnPrison
   m_EditorClassIdentifier: 
-  sceneName: CenaPrisao
+  sceneName: Prison
   spawnID: SaidaPrisao

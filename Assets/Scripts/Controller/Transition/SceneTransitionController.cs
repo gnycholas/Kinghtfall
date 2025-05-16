@@ -1,3 +1,4 @@
+using System;
 using Cysharp.Threading.Tasks; 
 using UnityEngine.SceneManagement;
 using Zenject;
@@ -7,25 +8,27 @@ public class SceneTransitionController
     [Inject] private FadeController _fadeController;
     
     private async UniTask LoadSceneAsync(string scene)
-    {
+    { 
         var sceneLoadTask = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single); 
-        await sceneLoadTask; 
+        await sceneLoadTask;  
     }
-    public async void LoadTransitionScene(int doorIndex,SceneLoadParams sceneLoadParams)
+    public async void LoadTransitionScene(int doorIndex,SceneLoadParams sceneLoadParams, Action afterTransition = null, Action beforeTransition = null)
     {
-        await LoadTransitionSceneAsync(doorIndex, sceneLoadParams);
+        afterTransition?.Invoke();
+        await LoadTransitionSceneAsync(doorIndex, sceneLoadParams,beforeTransition);
+        beforeTransition?.Invoke(); 
     }
 
-    private async UniTask LoadTransitionSceneAsync(int doorIndex, SceneLoadParams transitionParams)
-    {
-        TransitionController.DoorIndex = doorIndex; 
-        await _fadeController.FadeOut(transitionParams.FadeTime);
+    private async UniTask LoadTransitionSceneAsync(int doorIndex, SceneLoadParams transitionParams, Action beforeTransion)
+    { 
+        TransitionController.DoorIndex = doorIndex;  
+        await UniTask.Delay(TimeSpan.FromSeconds(transitionParams.Delay));
         await LoadSceneAsync("TransitionScene");
-        await _fadeController.FadeIn(transitionParams.FadeTime);
+        await _fadeController.FadeIn(0.25f);
         await UniTask.WaitUntil(()=>TransitionController.IsCompleted);
-        await UniTask.WhenAll(
-        _fadeController.FadeOut(transitionParams.FadeTime),
-        LoadSceneAsync(transitionParams.Scene));
+        await _fadeController.FadeOut(0.25f);
+        await LoadSceneAsync(transitionParams.Scene); 
+        beforeTransion?.Invoke();
     }
 }
 [System.Serializable]
@@ -33,6 +36,6 @@ public class SceneLoadParams
 {
     public string Scene;
     public int DoorIndex;
-    public float FadeTime;
+    public float Delay;
     public bool TransitionScene;
 }

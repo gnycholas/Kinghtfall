@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &657856537415558450
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5596046274102118475}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5596046274102118475
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 657856537415558450}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.54, y: 0, z: 1.13}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5646147896194757120}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &2099348657710352270
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -85,7 +116,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 84b7c15558ebf1843a30ef7337193450,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -4.13
+      value: -4.07
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 84b7c15558ebf1843a30ef7337193450,
         type: 3}
@@ -146,11 +177,27 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1921026061034430565}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 84b7c15558ebf1843a30ef7337193450,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5596046274102118475}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 84b7c15558ebf1843a30ef7337193450,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3018061857394833852}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 84b7c15558ebf1843a30ef7337193450,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5675911090854348873}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 84b7c15558ebf1843a30ef7337193450,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2376185253483008613}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 84b7c15558ebf1843a30ef7337193450,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7770377704620699881}
   m_SourcePrefab: {fileID: 100100000, guid: 84b7c15558ebf1843a30ef7337193450, type: 3}
 --- !u!1 &4976747193218214074 stripped
 GameObject:
@@ -172,8 +219,77 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   OnOpenDoor:
     m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5675911090854348873}
+        m_TargetAssemblyTypeName: UnityEngine.Collider, UnityEngine
+        m_MethodName: set_isTrigger
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  _requirement: {fileID: 0}
+  _spawnPoint: {fileID: 11400000, guid: c525efa78a89c7d459945369f893979a, type: 2}
+--- !u!65 &5675911090854348873
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4976747193218214074}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.056221, y: 3.4992416, z: 0.42437744}
+  m_Center: {x: -1.5453377, y: 1.7129875, z: -0.28781128}
+--- !u!114 &2376185253483008613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4976747193218214074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e62a097a87f414a900610786a3e06d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnNear:
+    m_PersistentCalls:
       m_Calls: []
-  _requirement: {fileID: 11400000, guid: 8325042ecbf9de1478a4dad5d8f83712, type: 2}
+  OnFarAway:
+    m_PersistentCalls:
+      m_Calls: []
+  _warm: Aperte <E> para interagir com a porta.
+  _distance: 4
+  _delay: 1
+--- !u!114 &7770377704620699881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4976747193218214074}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f845e5bb3d285a4baf36ce1d8772d4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data: {fileID: 11400000, guid: 06b444eeee9e3184ab30a92cf7aa1fce, type: 2}
+  _targetPosition: {fileID: 5596046274102118475}
 --- !u!4 &5646147896194757120 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 84b7c15558ebf1843a30ef7337193450,
