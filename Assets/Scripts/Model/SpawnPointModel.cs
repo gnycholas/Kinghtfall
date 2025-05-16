@@ -4,7 +4,15 @@ using UnityEngine;
 public class SpawnPointModel : ScriptableObject
 {
     [Tooltip("Nome exato da cena onde este spawn existe")]
-    public string sceneName;
+    [SerializeField] private string sceneName;
     [Tooltip("Identificador único dentro da cena")]
-    public string spawnID;
+    [SerializeField] private string spawnID;
+    private int _hash;
+    public int HashId { get => _hash;}
+    public string SceneName { get => sceneName;}
+
+    private void OnValidate()
+    {
+        _hash = spawnID.GetHashCode();
+    }
 }
