@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2283457184575078021}
   - component: {fileID: 7533903989781730941}
   - component: {fileID: 3943793012158867357}
+  - component: {fileID: 7297113178686570615}
   m_Layer: 0
   m_Name: Wall_Salon_3
   m_TagString: Untagged
@@ -83,3 +84,25 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!64 &7297113178686570615
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7665422333613596528}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: -6039353883332682668, guid: 5a97df9da21617549be603446633e2d9, type: 3}
