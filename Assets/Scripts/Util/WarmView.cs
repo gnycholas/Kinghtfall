@@ -27,10 +27,10 @@ public class WarmView : MonoBehaviour
     {
         if(_cancellationWarmTokenSource != null)
         {
-            _cancellationWarmTokenSource.Cancel();
-        }
-        _cancellationWarmTokenSource.Dispose();
-        _cancellationWarmTokenSource = null;    
+            _cancellationWarmTokenSource.Cancel(); 
+            _cancellationWarmTokenSource.Dispose();
+            _cancellationWarmTokenSource = null;
+        } 
     }
     public void ToggleActive()
     {
@@ -76,8 +76,7 @@ public class WarmView : MonoBehaviour
             }
         }
         catch (Exception ex) 
-        {
-            Debug.LogException(ex);
+        { 
         }
         finally
         {
