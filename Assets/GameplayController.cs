@@ -29,9 +29,9 @@ public class GameplayController : MonoBehaviour
         _inventory.OnConsumibleEquip.AddListener(_playerController.OnEquipItem);
         _inventory.OnWeaponUnEquip.AddListener(_playerController.OnUnEquipItem);  
     }
-    private void Start()
+    private async void Start()
     {
-        _fadeController.FadeIn(0.5f);
+        await _fadeController.FadeIn(0.5f);
     }
     private void OnDisable()
     {

@@ -1,27 +1,39 @@
 using System.Threading.Tasks; 
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.InputSystem; 
+using UnityEngine.Events; 
 using Zenject;
 
-public class DoorController : MonoBehaviour,IInteract
+public class DoorController : MonoBehaviour,IInteract,IEnvironmentState
 {
     public UnityEvent OnOpenDoor;
-    private Transform _door; 
+    private Transform _door;
+    private bool _isOpen;
     [Inject] private GameplayController _gameplayController;
     [Inject] private SceneTransitionController _sceneTransitionController;
     [Inject] private FadeController _fadeController;
     [SerializeField] private Requirement _requirement;
     [SerializeField] private SpawnPointModel _spawnPoint;
+    [SerializeField] private string _doorName;
+
+    public int Hash => _doorName.GetHashCode();
 
     private void Awake()
     {
         _door = transform.GetChild(0);
     } 
     public async Task Execute()
-    { 
-        if (_requirement == null || _requirement.Check(_gameplayController))
-        { 
+    {
+        bool state = false;
+        if (_requirement != null)
+        {
+            state = _requirement.Check(_gameplayController);
+        }
+        if (_isOpen || (_requirement == null || state))
+        {
+            if (string.IsNullOrEmpty(_doorName)) 
+            { 
+                GetComponent<EnviromentStateCheck>()?.ChangeState(Hash, true);
+            } 
             await Open();
         }
     }
@@ -63,5 +75,10 @@ public class DoorController : MonoBehaviour,IInteract
     public AnimatorOverrideController GetInteraction()
     {
         return null;
+    }
+
+    public void ChangeState(bool active)
+    {
+        _isOpen = active;
     }
 }
