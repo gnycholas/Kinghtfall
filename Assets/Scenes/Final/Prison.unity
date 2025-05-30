@@ -3215,6 +3215,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4237485353584959034, guid: c8584b6cfa850664d9836b4cece2c126,
+        type: 3}
+      propertyPath: _chestId
+      value: Bau_1_tutorial
+      objectReference: {fileID: 0}
     - target: {fileID: 6921783273323903960, guid: c8584b6cfa850664d9836b4cece2c126,
         type: 3}
       propertyPath: m_Name
@@ -3278,6 +3283,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2135653749}
+    - targetCorrespondingSourceObject: {fileID: 6921783273323903960, guid: c8584b6cfa850664d9836b4cece2c126,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2135653754}
   m_SourcePrefab: {fileID: 100100000, guid: c8584b6cfa850664d9836b4cece2c126, type: 3}
 --- !u!1 &320446975
 GameObject:
@@ -13972,6 +13981,24 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &895125766 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6652304413091391919, guid: a18ff65b1edda5f468f302e612a768d6,
+    type: 3}
+  m_PrefabInstance: {fileID: 4064254257812053041}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &895125767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 895125766}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfb9c804cc110254099763ce3ed59ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &896244150
 GameObject:
   m_ObjectHideFlags: 0
@@ -16713,6 +16740,24 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 725387ef54f422541864bad0ffb01c9a, type: 3}
+--- !u!1 &1135805204 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4976747193218214074, guid: bf86c13c135638344ba6e3a2588dec94,
+    type: 3}
+  m_PrefabInstance: {fileID: 2220834075957768261}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1135805205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1135805204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfb9c804cc110254099763ce3ed59ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1141095438
 GameObject:
   m_ObjectHideFlags: 0
@@ -17581,6 +17626,11 @@ PrefabInstance:
         type: 2}
     - target: {fileID: 4237485353584959034, guid: c8584b6cfa850664d9836b4cece2c126,
         type: 3}
+      propertyPath: _chestId
+      value: Bau_2_tutorial
+      objectReference: {fileID: 0}
+    - target: {fileID: 4237485353584959034, guid: c8584b6cfa850664d9836b4cece2c126,
+        type: 3}
       propertyPath: OnOpen.m_PersistentCalls.m_Calls.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -17647,6 +17697,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1188613983}
+    - targetCorrespondingSourceObject: {fileID: 6921783273323903960, guid: c8584b6cfa850664d9836b4cece2c126,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1188613984}
   m_SourcePrefab: {fileID: 100100000, guid: c8584b6cfa850664d9836b4cece2c126, type: 3}
 --- !u!1 &1188613982 stripped
 GameObject:
@@ -17669,6 +17723,18 @@ MonoBehaviour:
   _time: 5
   _warmPrefab: {fileID: 2270257678656613723, guid: 2a93102a8fb93fa45bed18dd9c10e80a,
     type: 3}
+--- !u!114 &1188613984
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1188613982}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfb9c804cc110254099763ce3ed59ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1189037221
 GameObject:
   m_ObjectHideFlags: 0
@@ -28748,6 +28814,18 @@ MonoBehaviour:
   _time: 5
   _warmPrefab: {fileID: 9221005903010574265, guid: 9184b8a6ad4e6d04fb4e05e9b6895d0b,
     type: 3}
+--- !u!114 &2135653754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2135653748}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfb9c804cc110254099763ce3ed59ccb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2137071707
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -29918,6 +29996,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 159241352}
     m_Modifications:
+    - target: {fileID: 3018061857394833852, guid: bf86c13c135638344ba6e3a2588dec94,
+        type: 3}
+      propertyPath: _doorName
+      value: Prison door
+      objectReference: {fileID: 0}
+    - target: {fileID: 3018061857394833852, guid: bf86c13c135638344ba6e3a2588dec94,
+        type: 3}
+      propertyPath: _requirement
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 4976747193218214074, guid: bf86c13c135638344ba6e3a2588dec94,
         type: 3}
       propertyPath: m_Name
@@ -29976,7 +30064,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4976747193218214074, guid: bf86c13c135638344ba6e3a2588dec94,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1135805205}
   m_SourcePrefab: {fileID: 100100000, guid: bf86c13c135638344ba6e3a2588dec94, type: 3}
 --- !u!1 &2332869804560715430
 GameObject:
@@ -30819,6 +30911,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5033180251519464896, guid: a18ff65b1edda5f468f302e612a768d6,
         type: 3}
+      propertyPath: _name
+      value: "Lever pris\xE3o"
+      objectReference: {fileID: 0}
+    - target: {fileID: 5033180251519464896, guid: a18ff65b1edda5f468f302e612a768d6,
+        type: 3}
       propertyPath: OnActive.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1091928544}
@@ -30895,7 +30992,11 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6652304413091391919, guid: a18ff65b1edda5f468f302e612a768d6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 895125767}
   m_SourcePrefab: {fileID: 100100000, guid: a18ff65b1edda5f468f302e612a768d6, type: 3}
 --- !u!4 &4072054343966353405
 Transform:
