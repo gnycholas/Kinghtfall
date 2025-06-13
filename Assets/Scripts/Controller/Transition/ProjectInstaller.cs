@@ -5,11 +5,12 @@ using Zenject;
 
 public class ProjectInstaller : MonoInstaller
 {
-    [SerializeField] private FadeController _fadeController;
+    [SerializeField] private FadeController _fadeController; 
 
     public override void InstallBindings()
     {
         Container.Bind<SceneTransitionController>().AsSingle();
         Container.Bind<FadeController>().FromComponentOn(_fadeController.gameObject).AsCached();
+        Container.Bind<SaveManager>().FromComponentsOn(gameObject).AsCached();
     }
 }

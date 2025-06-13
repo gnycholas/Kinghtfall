@@ -4,7 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Events;
 
-public class LeverController : MonoBehaviour,IInteract
+public class LeverController : MonoBehaviour,IInteract,IEnvironmentState
 {
     public UnityEvent OnActive;
     public UnityEvent OnEndInteraction;
@@ -16,10 +16,17 @@ public class LeverController : MonoBehaviour,IInteract
     [SerializeField] private bool _canSwitch;
     [SerializeField] private Transform _leverTransform; 
     [SerializeField] private float _time;
+    [SerializeField] private string _name;
+
+    public int Hash => _name.GetHashCode();
 
     public void ToggleActive()
     {
         _isActive = !_isActive;
+        if (_isActive)
+        {
+            GetComponent<EnviromentStateCheck>().ChangeState(Hash,true);
+        }
     }
     public async Task ToggleOnOrOff(bool action)
     {
@@ -102,5 +109,10 @@ public class LeverController : MonoBehaviour,IInteract
     public AnimatorOverrideController GetInteraction()
     {
         return null;
+    }
+
+    public void ChangeState(bool active)
+    {
+        _isActive = !active; 
     }
 }
