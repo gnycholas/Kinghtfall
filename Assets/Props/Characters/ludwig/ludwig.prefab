@@ -96,7 +96,7 @@ MonoBehaviour:
   _weaponSlot: {fileID: 4942957099244301097}
   _consumibleSlot: {fileID: 6363828521917142796}
   playerModel: {fileID: 11400000, guid: a38b726ae316b0b43aa4a7f19162e1c4, type: 2}
-  _currentLife: 0
+  _currentLife: 5
 --- !u!54 &2913818091537557554
 Rigidbody:
   m_ObjectHideFlags: 0

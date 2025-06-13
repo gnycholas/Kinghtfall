@@ -15,8 +15,8 @@ public class GameplayController : MonoBehaviour
     public InventoryController Inventory => _inventory;
 
     public PlayerController PlayerController { get => _playerController;}
-
-    private void OnEnable()
+     
+    private async void Start()
     {
         _playerController.OnCollectItem.AddListener(_inventory.Collect);
         _playerController.OnConsumeStart.AddListener(_inventory.ConsumeItem);
@@ -27,10 +27,7 @@ public class GameplayController : MonoBehaviour
         _inventory.OnWeaponUnEquip.AddListener(_playerController.OnUnEquipWeapon);
 
         _inventory.OnConsumibleEquip.AddListener(_playerController.OnEquipItem);
-        _inventory.OnWeaponUnEquip.AddListener(_playerController.OnUnEquipItem);  
-    }
-    private async void Start()
-    {
+        _inventory.OnWeaponUnEquip.AddListener(_playerController.OnUnEquipItem);
         await _fadeController.FadeIn(0.5f);
     }
     private void OnDisable()

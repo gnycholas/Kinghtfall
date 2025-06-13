@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Zenject;
 
 public class GameplayInstaller : MonoInstaller
@@ -13,7 +14,7 @@ public class GameplayInstaller : MonoInstaller
     public override void InstallBindings()
     {
         Container.Bind<UIRef[]>().FromInstance(_hudItems);
-        Container.Bind<PauseController>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<PauseController>().FromComponentInHierarchy().AsCached();
         Container.Bind<IUIFactory>().To<CustomUIFactory>().AsSingle();
         Container.Bind<ItemSO[]>().FromInstance(_items).AsSingle();
         Container.Bind<ConsumibleRef[]>().FromInstance(_consumibles).AsSingle();
@@ -22,12 +23,22 @@ public class GameplayInstaller : MonoInstaller
         Container.BindFactory<string, GameObject, DropFactory>().FromFactory<CustomDropFactory>(); 
         Container.Bind<GameObject[]>().FromInstance(_drops).AsSingle();
         Container.BindFactory<string,ItemSO,ItemFactory>().FromFactory<CustomItemFactory>();
-        Container.Bind<PlayerController>().FromComponentInHierarchy().AsSingle();
-        Container.Bind<InventoryController>().FromComponentInHierarchy().AsSingle();
-        Container.Bind<GameplayController>().FromComponentInHierarchy().AsSingle();
-        Container.Bind<NotificationController>().FromComponentInHierarchy().AsSingle();
+        Container.Bind<PlayerController>().FromComponentInHierarchy().AsCached();
+        Container.Bind<InventoryController>().FromComponentInHierarchy().AsCached();
+        Container.Bind<GameplayController>().FromMethod(FindOrCreate).AsCached();
+        Container.Bind<NotificationController>().FromComponentInHierarchy().AsCached();
         Container.BindFactory<ItemSO, Weapon, WeaponFactory>().FromFactory<CustomWeaponFactory>();
         Container.BindFactory<ItemSO, Consumible, ConsumibleFactory>().FromFactory<CustomConsumibleFactory>();
 
+    }
+
+    private GameplayController FindOrCreate()
+    {
+        var gameplayController = FindAnyObjectByType<GameplayController>();
+        if(gameplayController == null)
+        {
+            gameplayController = Container.InstantiateComponentOnNewGameObject<GameplayController>("GameplayController"); 
+        }
+        return gameplayController;
     }
 }
