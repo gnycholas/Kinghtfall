@@ -2599,7 +2599,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 659380098}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.12657285, y: -0.30308026, z: 0.04065264, w: 0.9436467}
+  m_LocalRotation: {x: 0.19921479, y: 0.12879112, z: -0.026420746, w: 0.97109646}
   m_LocalPosition: {x: -85.58, y: 5.43, z: -28.14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3288,6 +3288,95 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 950605464}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &951370062
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 951370066}
+  - component: {fileID: 951370065}
+  - component: {fileID: 951370064}
+  - component: {fileID: 951370063}
+  m_Layer: 0
+  m_Name: Box
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &951370063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951370062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f845e5bb3d285a4baf36ce1d8772d4e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _data: {fileID: 11400000, guid: 81c9aea071ea8974fb914b53d14be625, type: 2}
+  _targetPosition: {fileID: 1179307864}
+--- !u!114 &951370064
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951370062}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45d0f7215e62c2c4094ce8079e4aeb5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnOpenDoor:
+    m_PersistentCalls:
+      m_Calls: []
+  _doorIndex: 1
+  _requirement: {fileID: 0}
+  _spawnPoint: {fileID: 11400000, guid: e0b5d1fcdee90df4aaf3773cecb2e0cb, type: 2}
+  _doorName: Porta biblioteca
+--- !u!65 &951370065
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951370062}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 6.11, y: 2, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!4 &951370066
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 951370062}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.36, y: 3.33, z: 13.87}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1179307864}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &956789275
 GameObject:
   m_ObjectHideFlags: 0
@@ -3344,7 +3433,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 965898435}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.07102671, y: -0.40157768, z: 0.031256717, w: 0.9125315}
+  m_LocalRotation: {x: 0.14234751, y: -0.11785929, z: 0.017073603, w: 0.98262656}
   m_LocalPosition: {x: -78.7, y: 3.67, z: -28.42}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -4997,6 +5086,37 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1173674896}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1179307863
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1179307864}
+  m_Layer: 0
+  m_Name: Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1179307864
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179307863}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: -0.37, y: 0, z: -1.03}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 951370066}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &1184401568
 GameObject:
   m_ObjectHideFlags: 0
@@ -6410,7 +6530,7 @@ PrefabInstance:
     - target: {fileID: 619328153871156986, guid: 1b3fabc35753a0d41b374be4b5a051d8,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -18.13
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 619328153871156986, guid: 1b3fabc35753a0d41b374be4b5a051d8,
         type: 3}
@@ -6420,7 +6540,7 @@ PrefabInstance:
     - target: {fileID: 619328153871156986, guid: 1b3fabc35753a0d41b374be4b5a051d8,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 15.05
+      value: 10.8
       objectReference: {fileID: 0}
     - target: {fileID: 619328153871156986, guid: 1b3fabc35753a0d41b374be4b5a051d8,
         type: 3}
@@ -7865,7 +7985,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1848013362}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.044862363, y: -0.54565686, z: 0.029271321, w: 0.8362949}
+  m_LocalRotation: {x: 0.0988816, y: -0.46561626, z: 0.052445516, w: 0.8778801}
   m_LocalPosition: {x: -70, y: 2.85, z: -23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -8256,7 +8376,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1881388187}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.044862363, y: -0.54565686, z: 0.029271321, w: 0.8362949}
+  m_LocalRotation: {x: 0.09888161, y: -0.4656163, z: 0.052445527, w: 0.8778801}
   m_LocalPosition: {x: 10, y: 7.85, z: 2.6800003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -9437,3 +9557,4 @@ SceneRoots:
   - {fileID: 1340608512}
   - {fileID: 114334691}
   - {fileID: 1283961111}
+  - {fileID: 951370066}

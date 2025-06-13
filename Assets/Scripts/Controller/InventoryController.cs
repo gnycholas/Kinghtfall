@@ -14,7 +14,7 @@ public class InventoryController : MonoBehaviour
     public UnityEvent<Consumible> OnConsumibleEquip; 
     public UnityEvent OnConsumibleUnEquip; 
     public UnityEvent<ItemInventory> OnUpdateInventory;
-    private List<ItemInventory> _items = new();
+    [Inject] private List<ItemInventory> _items;
 
     public void UnEquip(int index)
     {

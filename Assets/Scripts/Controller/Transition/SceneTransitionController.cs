@@ -4,29 +4,25 @@ using UnityEngine.SceneManagement;
 using Zenject;
 
 public class SceneTransitionController
-{ 
-    [Inject] private FadeController _fadeController;
-    
+{  
     private async UniTask LoadSceneAsync(string scene)
     { 
         var sceneLoadTask = SceneManager.LoadSceneAsync(scene, LoadSceneMode.Single); 
         await sceneLoadTask;  
     }
-    public async void LoadTransitionScene(int doorIndex,SceneLoadParams sceneLoadParams, Action afterTransition = null, Action beforeTransition = null)
+    public async void LoadTransitionScene(SceneLoadParams sceneLoadParams, Action afterTransition = null, Action beforeTransition = null)
     {
         afterTransition?.Invoke();
-        await LoadTransitionSceneAsync(doorIndex, sceneLoadParams,beforeTransition);
+        await LoadTransitionSceneAsync(sceneLoadParams,beforeTransition);
         beforeTransition?.Invoke(); 
     }
 
-    private async UniTask LoadTransitionSceneAsync(int doorIndex, SceneLoadParams transitionParams, Action beforeTransion)
+    private async UniTask LoadTransitionSceneAsync(SceneLoadParams transitionParams, Action beforeTransion)
     { 
-        TransitionController.DoorIndex = doorIndex;  
+        TransitionController.DoorIndex = transitionParams.DoorIndex;  
         await UniTask.Delay(TimeSpan.FromSeconds(transitionParams.Delay));
-        await LoadSceneAsync("TransitionScene");
-        await _fadeController.FadeIn(0.25f);
-        await UniTask.WaitUntil(()=>TransitionController.IsCompleted);
-        await _fadeController.FadeOut(0.25f);
+        await LoadSceneAsync("TransitionScene"); 
+        await UniTask.WaitUntil(()=>TransitionController.IsCompleted); 
         await LoadSceneAsync(transitionParams.Scene); 
         beforeTransion?.Invoke();
     }
